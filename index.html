@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>">
     <style>
-        /* Aumentamos la escala base del body para que todo el contenido crezca un 25% */
         body { transform-origin: top center; }
         .loader { border-top-color: #3b82f6; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -16,6 +15,17 @@
     </style>
 </head>
 <body class="bg-slate-950 flex items-center justify-center min-h-screen p-2 scale-[1.03]">
+
+    <div id="modal-pass" class="hidden fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center">
+        <div class="bg-slate-900 p-8 rounded-3xl border border-slate-800 text-center shadow-2xl">
+            <h2 class="text-white text-xl font-black mb-6">AUTENTICACIÓN MÉDICA</h2>
+            <input type="password" id="pass-input" class="bg-slate-800 text-white border-none p-4 rounded-xl mb-4 w-64 block mx-auto text-center" placeholder="Ingrese contraseña">
+            <div class="flex gap-4 justify-center">
+                <button onclick="cerrarModal()" class="text-slate-500 font-bold text-xs uppercase">Cancelar</button>
+                <button onclick="validar()" class="bg-blue-700 text-white px-8 py-3 rounded-full font-black text-xs hover:bg-blue-600">ENTRAR</button>
+            </div>
+        </div>
+    </div>
 
     <div id="loader-screen" class="text-center">
         <div class="loader ease-linear rounded-full border-4 border-slate-900 h-16 w-16 mb-4 mx-auto"></div>
@@ -34,7 +44,7 @@
         <div class="flex flex-wrap gap-10 justify-center items-start">
             
             <div class="flex flex-col items-center">
-                <button onclick="location.href='lista_personal.html'" 
+                <button onclick="abrirModal()" 
                     class="w-52 py-12 bg-slate-900 rounded-[3rem] border border-slate-800 hover:border-blue-500 hover:bg-slate-900/80 transition-all duration-500 group flex flex-col items-center shadow-2xl shadow-black/50">
                     <div class="text-5xl mb-5 group-hover:scale-110 transition-transform duration-500">👨‍⚕️/👩‍⚕️</div>
                     <span class="text-[14px] font-bold text-slate-300 uppercase tracking-widest group-hover:text-blue-400 transition-colors">Médico</span>
@@ -66,10 +76,24 @@
     </div>
 
     <script>
+        // CAMBIO 3: Lógica de control para el modal y validación de contraseña
+        const CLAVE = "2026"; // Cambia este valor por tu contraseña real
+
         setTimeout(() => {
             document.getElementById('loader-screen').classList.add('hidden');
             document.getElementById('portal').classList.remove('hidden');
         }, 3000);
+
+        function abrirModal() { document.getElementById('modal-pass').classList.remove('hidden'); }
+        function cerrarModal() { document.getElementById('modal-pass').classList.add('hidden'); }
+
+        function validar() {
+            if(document.getElementById('pass-input').value === CLAVE) {
+                window.location.href = 'lista_personal.html';
+            } else {
+                alert('Acceso Denegado');
+            }
+        }
     </script>
 </body>
 </html>
