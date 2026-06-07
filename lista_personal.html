@@ -42,6 +42,17 @@
 
     <script>
         const BASE_API = 'https://historial-clinico-nube.onrender.com';
+        const PASSWORD_PROTEGIDA = "2026"; // Define aquí tu contraseña
+
+        function verificarAcceso() {
+            const pass = prompt("Por favor, ingrese la contraseña para acceder:");
+            if (pass !== PASSWORD_PROTEGIDA) {
+                alert("Contraseña incorrecta. Acceso denegado.");
+                window.location.href = "index.html"; // Redirige a donde desees si falla
+                return false;
+            }
+            return true;
+        }
         
         async function cargar() {
             const res = await fetch(`${BASE_API}/personal/`);
@@ -50,7 +61,7 @@
             t.innerHTML = '';
             
             const personal = [...data.doctores.map(d => ({...d, tipo: 'doctor', id: d.id_doc, ci: d.ci_doc, nom: d.nombre_doc, ap: d.appaterno_doc})), 
-                             ...data.enfermeras.map(e => ({...e, tipo: 'enfermera', id: e.id_enfe, ci: e.ci_enfe, nom: e.nombre_enfe, ap: e.appaterno_enfe}))];
+                            ...data.enfermeras.map(e => ({...e, tipo: 'enfermera', id: e.id_enfe, ci: e.ci_enfe, nom: e.nombre_enfe, ap: e.appaterno_enfe}))];
 
             personal.forEach(p => {
                 const color = p.tipo === 'doctor' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700';
@@ -95,7 +106,10 @@
             if(res.ok) cargar();
         }
 
-        cargar();
+        // Ejecución inicial con validación
+        if (verificarAcceso()) {
+            cargar();
+        }
     </script>
 </body>
 </html>
