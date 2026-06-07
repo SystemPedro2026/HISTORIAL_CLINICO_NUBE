@@ -14,14 +14,6 @@
     </style>
 </head>
 <body class="p-10">
-    <div id="modal-pass" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
-        <div class="text-center">
-            <h2 class="text-2xl font-black text-blue-900 mb-4">ACCESO RESTRINGIDO</h2>
-            <input type="password" id="pass-input" class="border-2 border-blue-200 p-3 rounded-lg mb-4 w-64 block mx-auto" placeholder="Ingrese contraseña">
-            <button onclick="validar()" class="bg-blue-700 text-white px-8 py-3 rounded-full font-black">ENTRAR</button>
-        </div>
-    </div>
-
     <div class="max-w-6xl mx-auto bg-white p-10 rounded-3xl shadow-xl">
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-black text-blue-900">PERSONAL MÉDICO</h1>
@@ -49,18 +41,19 @@
     </div>
 
     <script>
-        const BASE_API = 'https://historial-clinico-nube.onrender.com';
-        const CLAVE = "1234";
+        // const BASE_API = 'https://historial-clinico-nube.onrender.com';
+        const PASSWORD_PROTEGIDA = "2026"; // Define aquí tu contraseña
 
-        function validar() {
-            if(document.getElementById('pass-input').value === CLAVE) {
-                document.getElementById('modal-pass').style.display = 'none';
-                cargar();
-            } else {
-                alert('Contraseña incorrecta');
+        function verificarAcceso() {
+            const pass = prompt("Por favor, ingrese la contraseña para acceder:");
+            if (pass !== PASSWORD_PROTEGIDA) {
+                alert("Contraseña incorrecta. Acceso denegado.");
+                window.location.href = "index.html"; // Redirige a donde desees si falla
+                return false;
             }
+            return true;
         }
-
+        
         async function cargar() {
             const res = await fetch(`${BASE_API}/personal/`);
             const data = await res.json();
@@ -89,6 +82,10 @@
             });
         }
 
+        function ver(id, tipo) {
+            window.location.href = `ver_personal.html?id=${id}&tipo=${tipo}`;
+        }
+
         async function generarPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -107,6 +104,11 @@
             if(!confirm('¿ELIMINAR ESTE REGISTRO?')) return;
             const res = await fetch(`${BASE_API}/${tipo === 'doctor' ? 'doctores' : 'enfermeras'}/${id}`, { method: 'DELETE' });
             if(res.ok) cargar();
+        }
+
+        // Ejecución inicial con validación
+        if (verificarAcceso()) {
+            cargar();
         }
     </script>
 </body>
