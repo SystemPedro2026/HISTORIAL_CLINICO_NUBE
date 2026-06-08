@@ -77,32 +77,41 @@
     async function filtrar() {
         const campo = document.getElementById('patologiaSelect').value;
         const tbody = document.getElementById('listaPacientes');
-        tbody.innerHTML = "<tr><td colspan='5' class='text-center'>CARGANDO...</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='5' class='text-center'>CARGANDO DATOS...</td></tr>";
 
         try {
-            const res = await fetch(`${API}/pacientes`); 
-            const data = await res.json();
+            // 1. Obtener lista de todos los IDs de pacientes
+            const res = await fetch(`${API}/pacientes/`);
+            const pacientes = await res.json();
             
             tbody.innerHTML = "";
             let encontrados = 0;
 
-            data.forEach(p => {
-                // p representa el objeto Paciente que devuelve el backend
-                const valor = (p.p2 && p.p2[campo]) ? p.p2[campo] : "NORMAL";
-                
-                if (valor && valor.toUpperCase() !== "NORMAL") {
-                    encontrados++;
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${p.paciente?.codigo_paciente || '---'}</td>
-                            <td>${p.paciente?.apellido || ''} ${p.paciente?.nombre || ''}</td>
-                            <td>${p.filiacion?.edad || '---'}</td>
-                            <td>${p.filiacion?.profesion_oficio || '---'}</td>
-                            <td>${valor}</td>
-                        </tr>
-                    `;
+            // 2. Iterar sobre cada paciente para traer su ficha completa
+            for (let p of pacientes) {
+                try {
+                    const resDetalle = await fetch(`${API}/api/paciente-completo/${p.id}`);
+                    const detalle = await resDetalle.json();
+
+                    // 'detalle.antecedentes' es donde está la P2
+                    const valor = (detalle.antecedentes && detalle.antecedentes[campo]) ? detalle.antecedentes[campo] : "NORMAL";
+                    
+                    if (valor && valor.toUpperCase() !== "NORMAL") {
+                        encontrados++;
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${detalle.paciente.codigo_paciente || '---'}</td>
+                                <td>${detalle.paciente.apellido} ${detalle.paciente.nombre}</td>
+                                <td>${detalle.filiacion?.edad || '---'}</td>
+                                <td>${detalle.filiacion?.profesion_oficio || '---'}</td>
+                                <td>${valor}</td>
+                            </tr>
+                        `;
+                    }
+                } catch (err) {
+                    console.error("Error al traer detalle del paciente", p.id);
                 }
-            });
+            }
 
             if (encontrados === 0) tbody.innerHTML = "<tr><td colspan='5' class='text-center'>NO SE ENCONTRARON PACIENTES CON ESTA PATOLOGÍA</td></tr>";
             
