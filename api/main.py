@@ -73,20 +73,22 @@ def obtener_ficha_oftalmo(paciente_id: int, db: Session = Depends(get_db)):
 # ----------- FICHA PSICOLOGICA -----------
 @app.post("/guardar-psicologia/")
 def guardar_psicologia(data: dict, db: Session = Depends(get_db)):
+    # Buscamos el paciente por el código
     codigo = data.get("codigo_paciente")
     paciente = db.query(models.Paciente).filter(models.Paciente.codigo_paciente == codigo).first()
-    if not paciente: raise HTTPException(status_code=404, detail="Paciente no encontrado")
+    if not paciente:
+        raise HTTPException(status_code=404, detail="Paciente no encontrado")
     
+    # Preparamos el diccionario para el modelo, asegurando el paciente_id
     datos = data.copy()
+    datos.pop("codigo_paciente", None) # No está en la tabla, se usa para buscar
     datos["paciente_id"] = paciente.id
-    nueva = models.FichaPsicologia(**datos); db.add(nueva); db.commit(); db.refresh(nueva); return nueva
-
-@app.get("/ficha-psicologia/{paciente_id}")
-def obtener_ficha_psicologia(paciente_id: int, db: Session = Depends(get_db)):
-    ficha = db.query(models.FichaPsicologia).filter(models.FichaPsicologia.paciente_id == paciente_id).first()
-    if not ficha: raise HTTPException(status_code=404, detail="Ficha psicológica no encontrada")
-    return ficha
-
+    
+    nueva = models.FichaPsicologia(**datos)
+    db.add(nueva)
+    db.commit()
+    db.refresh(nueva)
+    return nueva
 
 
 # ----------- PERSONAL: DOCTORES -----------
