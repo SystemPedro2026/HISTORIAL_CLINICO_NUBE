@@ -80,14 +80,15 @@
         tbody.innerHTML = "<tr><td colspan='5' class='text-center'>CARGANDO...</td></tr>";
 
         try {
-            const res = await fetch(`${API}/api/pacientes`); 
+            const res = await fetch(`${API}/pacientes`); 
             const data = await res.json();
             
             tbody.innerHTML = "";
             let encontrados = 0;
 
             data.forEach(p => {
-                const valor = p.p2 ? p.p2[campo] : "NORMAL";
+                // p representa el objeto Paciente que devuelve el backend
+                const valor = (p.p2 && p.p2[campo]) ? p.p2[campo] : "NORMAL";
                 
                 if (valor && valor.toUpperCase() !== "NORMAL") {
                     encontrados++;
