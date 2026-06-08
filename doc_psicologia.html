@@ -69,13 +69,13 @@
 
     <div class="section">
         <div class="section-title">I. Historia Familiar</div>
-        <div class="line"><label>Persona:</label><input type="text" id="persona_historia"></div>
+        <div class="line"><label>Persona:</label><input type="text" id="historia_familiar"></div>
         <div class="line"><label>Personalidad:</label><input type="text" id="personalidad"></div>
         <div class="line"><label>Conducta sexual:</label><input type="text" id="conducta_sexual"></div>
     </div>
 
     <div class="section">
-        <div class="section-title">II. Hábitos (Alcohol, Tabaco, Drogas, Bolear coca)</div>
+        <div class="section-title">II. Hábitos</div>
         <div class="grid-2">
             <div>
                 <div class="line"><label>Alcohol:</label><input type="checkbox" name="alcohol" value="SI"> SI <input type="checkbox" name="alcohol" value="NO"> NO</div>
@@ -90,10 +90,7 @@
         <div class="line"><label>Coquear:</label><input type="text" id="coquear"></div>
     </div>
 
-    <div class="section">
-        <div class="section-title">III. Otras Observaciones</div>
-        <textarea id="otras_obs"></textarea>
-    </div>
+    <div class="section"><div class="section-title">III. Otras Observaciones</div><textarea id="otras_observaciones"></textarea></div>
 
     <div class="section">
         <div class="section-title">IV. Examen Mental</div>
@@ -115,20 +112,20 @@
         <table>
             <thead><tr><th>Nombre de la prueba</th><th>Puntaje</th><th>Observaciones</th></tr></thead>
             <tbody>
-                <tr><td>CUESTIONARIO SUSESO/ISTAS21</td><td><input type="text" id="test1_p"></td><td><input type="text" id="test1_o"></td></tr>
-                <tr><td>Inventario de la Ansiedad BECK (BAI)</td><td><input type="text" id="test2_p"></td><td><input type="text" id="test2_o"></td></tr>
-                <tr><td>Test de Acrofobia</td><td><input type="text" id="test3_p"></td><td><input type="text" id="test3_o"></td></tr>
-                <tr><td>MINI TEST PSIQUIATRICO</td><td><input type="text" id="test4_p"></td><td><input type="text" id="test4_o"></td></tr>
+                <tr><td>SUSESO/ISTAS21</td><td><input type="text" id="t1_p"></td><td><input type="text" id="t1_o"></td></tr>
+                <tr><td>BECK (BAI)</td><td><input type="text" id="t2_p"></td><td><input type="text" id="t2_o"></td></tr>
+                <tr><td>ACROFOBIA</td><td><input type="text" id="t3_p"></td><td><input type="text" id="t3_o"></td></tr>
+                <tr><td>MINI TEST</td><td><input type="text" id="t4_p"></td><td><input type="text" id="t4_o"></td></tr>
             </tbody>
         </table>
     </div>
 
-    <div class="section"><div class="section-title">VI. Exámenes Realizados</div><textarea id="examenes_realizados"></textarea></div>
+    <div class="section"><div class="section-title">VI. Exámenes Realizados</div><textarea id="examenes"></textarea></div>
     <div class="section">
         <div class="section-title">VII. Conclusiones</div>
         <div class="grid-2">
-            <div><div class="line"><label>Área Cognitiva:</label><input type="checkbox" name="cognitiva" value="NORMAL"> NORMAL <input type="checkbox" name="cognitiva" value="ANORMAL"> ANORMAL</div></div>
-            <div><div class="line"><label>Área Emocional:</label><input type="checkbox" name="emocional" value="NORMAL"> NORMAL <input type="checkbox" name="emocional" value="ANORMAL"> ANORMAL</div></div>
+            <div><div class="line"><label>Cognitiva:</label><input type="checkbox" name="cognitiva" value="NORMAL"> NORM <input type="checkbox" name="cognitiva" value="ANORMAL"> ANORM</div></div>
+            <div><div class="line"><label>Emocional:</label><input type="checkbox" name="emocional" value="NORMAL"> NORM <input type="checkbox" name="emocional" value="ANORMAL"> ANORM</div></div>
         </div>
     </div>
     <div class="section">
@@ -137,42 +134,34 @@
     </div>
     <div class="section"><div class="section-title">IX. Recomendaciones</div><textarea id="recomendaciones"></textarea></div>
 
-    <div class="signature">
-        <div class="signature-line"></div>
-        <div>PSICÓLOGO/A</div>
-    </div>
-
     <button class="btn-save" onclick="guardarFicha()">💾 GUARDAR REGISTRO FINAL</button>
 </div>
 
 <script>
+    document.querySelectorAll("input[type='checkbox']").forEach(chk => {
+        chk.addEventListener("change", function(){
+            let group = this.parentElement.querySelectorAll("input[type='checkbox']");
+            if(this.checked) group.forEach(el => { if(el !== this) el.checked = false; });
+        });
+    });
+
     async function guardarFicha() {
         const payload = {
             codigo_paciente: document.getElementById('codigo_paciente').value,
             historia_familiar: document.getElementById('historia_familiar').value,
+            personalidad: document.getElementById('personalidad').value,
+            conducta_sexual: document.getElementById('conducta_sexual').value,
             habitos_alcohol: document.querySelector("input[name='alcohol']:checked")?.value || "",
             habitos_tabaco: document.querySelector("input[name='tabaco']:checked")?.value || "",
             habitos_drogas: document.getElementById('drogas').value,
             habitos_coquear: document.getElementById('coquear').value,
             otras_observaciones: document.getElementById('otras_observaciones').value,
-            conducta: "PENDIENTE", // O mapea un campo específico
             presentacion: document.getElementById('presentacion').value,
             postura: document.querySelector("input[name='postura']:checked")?.value || "",
-            lucido_atento: "SI", // Ajusta según tu necesidad
-            pensamiento: document.getElementById('pensamiento').value,
             discurso: document.querySelector("input[name='discurso']:checked")?.value || "",
+            pensamiento: document.getElementById('pensamiento').value,
             percepcion: document.getElementById('percepcion').value,
-            memoria: "NORMAL",
-            articulacion_palabra: "NORMAL",
-            apetito: "NORMAL",
-            sueno: "NORMAL",
-            orientacion: "NORMAL",
-            personalidad: document.getElementById('personalidad').value,
-            afectividad: "NORMAL",
-            conducta_sexual: document.getElementById('conducta_sexual').value,
-            puntaje_test: document.getElementById('t1_p').value, // Ejemplo
-            nombre_prueba: "SUSESO/ISTAS21",
-            observaciones_test: document.getElementById('t1_o').value
+            psicologicamente: document.querySelector("input[name='psicologicamente']:checked")?.value || ""
         };
 
         const res = await fetch('https://historial-clinico-nube.onrender.com/guardar-psicologia/', {
@@ -181,12 +170,9 @@
             body: JSON.stringify(payload)
         });
 
-        if(res.ok) alert("GUARDADO CON ÉXITO");
+        if(res.ok) alert("REGISTRO GUARDADO CORRECTAMENTE");
         else alert("ERROR AL GUARDAR");
     }
 </script>
-
-
-   
 </body>
 </html>
