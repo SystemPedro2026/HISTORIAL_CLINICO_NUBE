@@ -80,8 +80,7 @@
         tbody.innerHTML = "<tr><td colspan='5' class='text-center'>CARGANDO...</td></tr>";
 
         try {
-            // Obtenemos todos los expedientes (ajusta la ruta según tu endpoint global)
-            const res = await fetch(`${API}/api/pacientes-completos`); 
+            const res = await fetch(`${API}/api/pacientes`); 
             const data = await res.json();
             
             tbody.innerHTML = "";
@@ -90,13 +89,12 @@
             data.forEach(p => {
                 const valor = p.p2 ? p.p2[campo] : "NORMAL";
                 
-                // Filtro: Solo mostrar si NO es NORMAL y existe
                 if (valor && valor.toUpperCase() !== "NORMAL") {
                     encontrados++;
                     tbody.innerHTML += `
                         <tr>
-                            <td>${p.paciente.codigo_paciente}</td>
-                            <td>${p.paciente.apellido} ${p.paciente.nombre}</td>
+                            <td>${p.paciente?.codigo_paciente || '---'}</td>
+                            <td>${p.paciente?.apellido || ''} ${p.paciente?.nombre || ''}</td>
                             <td>${p.filiacion?.edad || '---'}</td>
                             <td>${p.filiacion?.profesion_oficio || '---'}</td>
                             <td>${valor}</td>
@@ -108,6 +106,7 @@
             if (encontrados === 0) tbody.innerHTML = "<tr><td colspan='5' class='text-center'>NO SE ENCONTRARON PACIENTES CON ESTA PATOLOGÍA</td></tr>";
             
         } catch (e) {
+            console.error(e);
             alert("Error al conectar con la nube.");
             tbody.innerHTML = "";
         }
