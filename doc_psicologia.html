@@ -1,58 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Ficha Psicológica</title>
-<style>
-:root { --emerald: #28a745; }
-    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
-    body { background: #dcdcdc; padding: 20px; }
-    
-    /* Configuración para Impresión */
-    @media print {
-        body { background: white; padding: 0; }
-        .form-container { border: none !important; box-shadow: none !important; margin: 0; padding: 20px; width: 100%; }
-        .no-print, .top-action-bar, .btn-save { display: none !important; }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Ficha Psicológica</title>
+    <style>
+        :root { --emerald: #28a745; }
+        * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+        body { background: #dcdcdc; padding: 20px; }
         
-        /* Forzar salto de página y añadir margen superior */
-        .break-page { 
-            page-break-before: always !important; 
-            margin-top: 50px !important; 
-            display: block;
+        @media print {
+            body { background: white; padding: 0; }
+            .form-container { border: none !important; box-shadow: none !important; margin: 0; padding: 20px; width: 100%; }
+            .no-print, .top-action-bar, .btn-save { display: none !important; }
         }
-    }
 
-    .form-container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1.5px solid #000; }
-    
-    .top-action-bar { display: flex; justify-content: space-between; margin-bottom: 20px; }
-    .btn { padding: 8px 15px; border: none; cursor: pointer; color: white; font-weight: bold; font-size: 13px; text-decoration: none; display: flex; align-items: center; }
-    .btn-gray { background: #64748b; }
-    .btn-black { background: #212529; }
-    
-    .header-content { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--emerald); padding-bottom: 10px; margin-bottom: 20px; }
-    .header-content img { height: 50px; }
-    .title-area { text-align: right; }
-    .title-area h1 { font-size: 20px; margin: 0; color: #000; font-weight: 800; }
-    .title-area p { font-size: 12px; margin: 0; color: var(--emerald); font-weight: 800; }
+        .form-container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1.5px solid #000; }
+        .top-action-bar { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .btn { padding: 8px 15px; border: none; cursor: pointer; color: white; font-weight: bold; font-size: 13px; text-decoration: none; display: flex; align-items: center; }
+        .btn-gray { background: #64748b; }
+        .btn-black { background: #212529; }
+        
+        .header-content { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--emerald); padding-bottom: 10px; margin-bottom: 20px; }
+        .header-content img { height: 50px; }
+        .title-area { text-align: right; }
+        .title-area h1 { font-size: 20px; margin: 0; color: #000; font-weight: 800; }
+        .title-area p { font-size: 12px; margin: 0; color: var(--emerald); font-weight: 800; }
 
-    .codigo-container { background: #f8f9fa; border: 1px solid #ced4da; padding: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-    .codigo-container label { font-size: 12px; font-weight: bold; color: #333; }
-    .codigo-container input { border: 1px solid #ced4da; padding: 5px; width: 300px; color: #6c757d; }
+        .codigo-container { background: #f8f9fa; border: 1px solid #ced4da; padding: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .codigo-container label { font-size: 12px; font-weight: bold; color: #333; }
+        .codigo-container input { border: 1px solid #ced4da; padding: 5px; width: 300px; color: #6c757d; text-transform: uppercase; }
 
-    .section { margin-bottom: 20px; border: 1px solid #000; padding: 10px; page-break-inside: avoid; }
-    .section-title { font-weight: bold; font-size: 14px; margin-bottom: 10px; text-transform: uppercase; background: #f3f3f3; padding: 5px; }
-    .line { display: flex; align-items: center; margin-bottom: 8px; gap: 10px; }
-    input[type="text"], textarea { border: none; border-bottom: 1px solid #000; width: 100%; padding: 3px; font-size: 12px; outline: none; }
-    textarea { resize: none; border: 1px solid #000; min-height: 80px; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    table th, table td { border: 1px solid #000; padding: 5px; font-size: 11px; }
-    table th { background: #f3f3f3; }
-    .signature { margin-top: 60px; text-align: center; }
-    .signature-line { width: 250px; border-top: 1px solid #000; margin: 0 auto 5px; }
-    .btn-save { width: 100%; background: #2d73f5; color: white; padding: 15px; border: none; cursor: pointer; font-size: 16px; margin-top: 20px; }
-</style>
+        .section { margin-bottom: 20px; border: 1px solid #000; padding: 10px; page-break-inside: avoid; }
+        .section-title { font-weight: bold; font-size: 14px; margin-bottom: 10px; text-transform: uppercase; background: #f3f3f3; padding: 5px; }
+        .line { display: flex; align-items: center; margin-bottom: 8px; gap: 10px; }
+        input[type="text"], textarea { border: none; border-bottom: 1px solid #000; width: 100%; padding: 3px; font-size: 12px; outline: none; text-transform: uppercase; }
+        textarea { resize: none; border: 1px solid #000; min-height: 80px; text-transform: uppercase; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table th, table td { border: 1px solid #000; padding: 5px; font-size: 11px; }
+        table th { background: #f3f3f3; }
+        .signature { margin-top: 60px; text-align: center; }
+        .signature-line { width: 250px; border-top: 1px solid #000; margin: 0 auto 5px; }
+        .btn-save { width: 100%; background: #2d73f5; color: white; padding: 15px; border: none; cursor: pointer; font-size: 16px; margin-top: 20px; }
+    </style>
 </head>
 <body>
 
@@ -72,95 +63,59 @@
 
     <div class="codigo-container">
         <label>CÓDIGO PACIENTE:</label>
-        <input type="text" placeholder="INGRESE CÓDIGO MANUALMENTE">
+        <input type="text" id="codigo_paciente" placeholder="INGRESE CÓDIGO MANUALMENTE">
     </div>
 
     <div class="section">
         <div class="section-title">I. Historia Familiar</div>
-        <div class="line"><label>Persona:</label><input type="text"></div>
-        <div class="line"><label>Personalidad:</label><input type="text"></div>
-        <div class="line"><label>Conducta sexual:</label><input type="text"></div>
+        <div class="line"><label>Persona:</label><input type="text" id="historia_familiar"></div>
+        <div class="line"><label>Personalidad:</label><input type="text" id="personalidad"></div>
+        <div class="line"><label>Conducta sexual:</label><input type="text" id="conducta_sexual"></div>
     </div>
 
     <div class="section">
-        <div class="section-title">II. Hábitos (Alcohol, Tabaco, Drogas, Bolear coca)</div>
-        <div class="grid-2">
-            <div>
-                <div class="line"><label>Alcohol:</label><input type="checkbox"> SI <input type="checkbox"> NO</div>
-                <div class="line"><label>Frecuencia:</label><input type="text"></div>
-            </div>
-            <div>
-                <div class="line"><label>Tabaco:</label><input type="checkbox"> SI <input type="checkbox"> NO</div>
-                <div class="line"><label>Cantidad:</label><input type="text"></div>
-            </div>
-        </div>
-        <div class="line"><label>Drogas:</label><input type="text"></div>
-        <div class="line"><label>Coquear:</label><input type="text"></div>
-    </div>
-
-    <div class="section">
-        <div class="section-title">III. Otras Observaciones</div>
-        <textarea></textarea>
-    </div>
-
-    <div class="section">
-        <div class="section-title">IV. Examen Mental</div>
-        <div class="grid-2">
-            <div>
-                <div class="line"><label>Presentación:</label><input type="text"></div>
-                <div class="line"><label>Postura:</label><input type="checkbox"> Erguida <input type="checkbox"> Encorvada</div>
-                <div class="line"><label>Discurso:</label><input type="checkbox"> Lento <input type="checkbox"> Rápido <input type="checkbox"> Fluido</div>
-            </div>
-            <div>
-                <div class="line"><label>Pensamiento:</label><input type="text"></div>
-                <div class="line"><label>Percepción:</label><input type="text"></div>
-            </div>
+        <div class="section-title">VIII. PSICOLÓGICAMENTE</div>
+        <div class="line">
+            <input type="checkbox" name="psicologicamente" value="APTO"> APTO 
+            <input type="checkbox" name="psicologicamente" value="APTO CON RECOMENDACIONES"> APTO CON RECOMENDACIONES 
+            <input type="checkbox" name="psicologicamente" value="NO APTO"> NO APTO
         </div>
     </div>
-    	
-    <div class="section">
-    <br><br><br>
-	<div class="section-title">V. Test y Cuestionarios</div>
-        <table>
-            <thead><tr><th>Nombre de la prueba</th><th>Puntaje</th><th>Observaciones</th></tr></thead>
-            <tbody>
-                <tr><td>CUESTIONARIO SUSESO/ISTAS21</td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><td>Inventario de la Ansiedad BECK (BAI)</td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><td>Test de Acrofobia</td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><td>MINI TEST PSIQUIATRICO</td><td><input type="text"></td><td><input type="text"></td></tr>
-            </tbody>
-        </table>
-    </div>
 
-    <div class="section"><div class="section-title">VI. Exámenes Realizados</div><textarea></textarea></div>
-    <div class="section">
-        <div class="section-title">VII. Conclusiones</div>
-        <div class="grid-2">
-            <div><div class="line"><label>Área Cognitiva:</label><input type="checkbox"> Normal <input type="checkbox"> Anormal</div></div>
-            <div><div class="line"><label>Área Emocional:</label><input type="checkbox"> Normal <input type="checkbox"> Anormal</div></div>
-        </div>
-    </div>
-    <div class="section">
-        <div class="section-title">VIII. Psicológicamente</div>
-        <div class="line"><input type="checkbox"> APTO <input type="checkbox"> APTO CON RECOMENDACIONES <input type="checkbox"> NO APTO</div>
-    </div>
-    <div class="section"><div class="section-title">IX. Recomendaciones</div><textarea></textarea></div>
-
-    <div class="signature">
-        <div class="signature-line"></div>
-        <div>PSICÓLOGO/A</div>
-    </div>
-
-    <button class="btn-save">💾 GUARDAR REGISTRO FINAL</button>
+    <button class="btn-save" onclick="guardarFicha()">💾 GUARDAR REGISTRO FINAL</button>
 </div>
 
 <script>
-document.querySelectorAll("input[type='checkbox']").forEach(chk => {
-    chk.addEventListener("change", function(){
-        let group = this.parentElement.querySelectorAll("input[type='checkbox']");
-        if(this.checked) group.forEach(el => { if(el !== this) el.checked = false; });
+    // Lógica para checkbox único
+    document.querySelectorAll("input[type='checkbox']").forEach(chk => {
+        chk.addEventListener("change", function(){
+            let group = this.parentElement.querySelectorAll("input[type='checkbox']");
+            if(this.checked) group.forEach(el => { if(el !== this) el.checked = false; });
+        });
     });
-});
+
+    async function guardarFicha() {
+        const codigo = document.getElementById('codigo_paciente').value;
+        const check = document.querySelector("input[name='psicologicamente']:checked");
+        
+        if(!codigo || !check) { alert("Complete el código y el estado psicológico."); return; }
+
+        const datos = {
+            codigo_paciente: codigo,
+            psicologicamente: check.value,
+            // Agrega aquí los demás campos según necesites
+        };
+
+        try {
+            const res = await fetch('https://historial-clinico-nube.onrender.com/guardar-psicologia/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            });
+            if(res.ok) alert("Guardado con éxito");
+            else alert("Error al guardar");
+        } catch(e) { console.error(e); }
+    }
 </script>
 </body>
 </html>
