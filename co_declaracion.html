@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Declaración Jurada</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #0d1117; color: white; padding: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .btn-volver { background: #30363d; color: white; padding: 10px; text-decoration: none; border-radius: 5px; }
+        h1 { text-align: center; color: #58a6ff; }
+        .search-section { text-align: center; margin: 30px 0; }
+        select, button { padding: 10px; border-radius: 5px; border: none; }
+        button { background: #238636; color: white; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #161b22; }
+        th, td { border: 1px solid #30363d; padding: 12px; text-align: left; }
+        th { background: #21262d; }
+        @media print { .no-print { display: none; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header no-print">
+        <img src="logo.png" alt="Logo" style="height: 50px;">
+        <a href="consultas.html" class="btn-volver">← VOLVER</a>
+    </div>
+
+    <h1>CONSULTA DE DECLARACIÓN JURADA</h1>
+
+    <div class="search-section no-print">
+        <select id="patologiaSelect">
+            <option value="">Seleccione una patología</option>
+            <option value="vista">Vista</option>
+            <option value="respiratorio">Respiratorio</option>
+            <option value="digestivos">Digestivos</option>
+            <option value="genitourinario">Genitourinario</option>
+            <option value="psiquiatricos">Psiquiátricos</option>
+            <option value="reumatologicos">Reumatológicos</option>
+            <option value="alergias">Alergias</option>
+            <option value="infecciones">Infecciones</option>
+            <option value="acc_trabajo">Accidente de Trabajo</option>
+            <option value="endocrino">Endocrino</option>
+            <option value="auditivo">Auditivo</option>
+            <option value="cardio">Cardio</option>
+            <option value="sangre">Sangre</option>
+            <option value="sistema_nervioso">Sistema Nervioso</option>
+            <option value="osteomusculares">Osteomusculares</option>
+            <option value="dermatologicas">Dermatológicas</option>
+            <option value="cirugias">Cirugías</option>
+            <option value="acc_personales">Accidentes Personales</option>
+            <option value="medicamentos">Medicamentos</option>
+            <option value="familiares">Familiares</option>
+            <option value="generales">Generales</option>
+            <option value="otros">Otros Específicos</option>
+        </select>
+        <button onclick="buscarPacientes()">BUSCAR</button>
+    </div>
+
+    <table id="resultadosTable">
+        <thead>
+            <tr>
+                <th>Código Paciente</th>
+                <th>Nombre Completo</th>
+                <th>Edad</th>
+                <th>Profesión</th>
+            </tr>
+        </thead>
+        <tbody id="resultadosBody">
+            </tbody>
+    </table>
+
+    <div style="text-align: center; margin-top: 20px;" class="no-print">
+        <button onclick="window.print()">IMPRIMIR RESULTADOS</button>
+    </div>
+</div>
+
+<script>
+    function buscarPacientes() {
+        // Lógica de búsqueda conectada al backend irá aquí
+        alert("Buscando pacientes con la patología seleccionada...");
+    }
+</script>
+
+</body>
+</html>
