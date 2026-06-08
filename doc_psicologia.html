@@ -146,55 +146,47 @@
 </div>
 
 <script>
-    document.querySelectorAll("input[type='checkbox']").forEach(chk => {
-        chk.addEventListener("change", function(){
-            let group = this.parentElement.querySelectorAll("input[type='checkbox']");
-            if(this.checked) group.forEach(el => { if(el !== this) el.checked = false; });
-        });
-    });
-
     async function guardarFicha() {
-        const codigo = document.getElementById('codigo_paciente').value;
-        if(!codigo) { alert("INGRESE CÓDIGO"); return; }
-        
-        // Objeto con todos los campos
-        const data = {
-            codigo: codigo,
-            historia: document.getElementById('persona_historia').value,
-            personalidad: document.getElementById('personalidad').value,
-            sexual: document.getElementById('conducta_sexual').value,
-            alcohol: document.querySelector("input[name='alcohol']:checked")?.value || "",
-            alcohol_freq: document.getElementById('alcohol_freq').value,
-            tabaco: document.querySelector("input[name='tabaco']:checked")?.value || "",
-            tabaco_cant: document.getElementById('tabaco_cant').value,
-            drogas: document.getElementById('drogas').value,
-            coquear: document.getElementById('coquear').value,
-            otras_obs: document.getElementById('otras_obs').value,
+        const payload = {
+            codigo_paciente: document.getElementById('codigo_paciente').value,
+            historia_familiar: document.getElementById('historia_familiar').value,
+            habitos_alcohol: document.querySelector("input[name='alcohol']:checked")?.value || "",
+            habitos_tabaco: document.querySelector("input[name='tabaco']:checked")?.value || "",
+            habitos_drogas: document.getElementById('drogas').value,
+            habitos_coquear: document.getElementById('coquear').value,
+            otras_observaciones: document.getElementById('otras_observaciones').value,
+            conducta: "PENDIENTE", // O mapea un campo específico
             presentacion: document.getElementById('presentacion').value,
             postura: document.querySelector("input[name='postura']:checked")?.value || "",
-            discurso: document.querySelector("input[name='discurso']:checked")?.value || "",
+            lucido_atento: "SI", // Ajusta según tu necesidad
             pensamiento: document.getElementById('pensamiento').value,
+            discurso: document.querySelector("input[name='discurso']:checked")?.value || "",
             percepcion: document.getElementById('percepcion').value,
-            test1: {p: document.getElementById('test1_p').value, o: document.getElementById('test1_o').value},
-            test2: {p: document.getElementById('test2_p').value, o: document.getElementById('test2_o').value},
-            test3: {p: document.getElementById('test3_p').value, o: document.getElementById('test3_o').value},
-            test4: {p: document.getElementById('test4_p').value, o: document.getElementById('test4_o').value},
-            examenes: document.getElementById('examenes_realizados').value,
-            cognitiva: document.querySelector("input[name='cognitiva']:checked")?.value || "",
-            emocional: document.querySelector("input[name='emocional']:checked")?.value || "",
-            psicologicamente: document.querySelector("input[name='psicologicamente']:checked")?.value || "",
-            recomendaciones: document.getElementById('recomendaciones').value
+            memoria: "NORMAL",
+            articulacion_palabra: "NORMAL",
+            apetito: "NORMAL",
+            sueno: "NORMAL",
+            orientacion: "NORMAL",
+            personalidad: document.getElementById('personalidad').value,
+            afectividad: "NORMAL",
+            conducta_sexual: document.getElementById('conducta_sexual').value,
+            puntaje_test: document.getElementById('t1_p').value, // Ejemplo
+            nombre_prueba: "SUSESO/ISTAS21",
+            observaciones_test: document.getElementById('t1_o').value
         };
 
         const res = await fetch('https://historial-clinico-nube.onrender.com/guardar-psicologia/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: JSON.stringify(payload)
         });
 
-        if(res.ok) alert("REGISTRO GUARDADO");
+        if(res.ok) alert("GUARDADO CON ÉXITO");
         else alert("ERROR AL GUARDAR");
     }
 </script>
+
+
+   
 </body>
 </html>
