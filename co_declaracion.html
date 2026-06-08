@@ -3,83 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta de Declaración Jurada</title>
+    <title>CONSULTA - DECLARACIÓN JURADA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #0d1117; color: white; padding: 20px; }
-        .container { max-width: 800px; margin: auto; }
-        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-        .btn-volver { background: #30363d; color: white; padding: 10px; text-decoration: none; border-radius: 5px; }
-        h1 { text-align: center; color: #58a6ff; }
-        .search-section { text-align: center; margin: 30px 0; }
-        select, button { padding: 10px; border-radius: 5px; border: none; }
-        button { background: #238636; color: white; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #161b22; }
-        th, td { border: 1px solid #30363d; padding: 12px; text-align: left; }
-        th { background: #21262d; }
+        body { background-color: #0f172a; color: #e2e8f0; font-family: 'Segoe UI', sans-serif; }
+        .container { max-width: 900px; margin-top: 30px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .filter-box { background: #1e293b; padding: 20px; border-radius: 15px; display: flex; gap: 10px; align-items: center; justify-content: center; }
+        select, button { padding: 10px; border-radius: 8px; border: none; }
+        button { background: #22c55e; color: white; font-weight: bold; }
+        table { width: 100%; margin-top: 20px; background: white; color: #0f172a; border-radius: 10px; overflow: hidden; }
+        th { background: #334155; color: white; }
         @media print { .no-print { display: none; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header no-print">
-        <img src="logo.png" alt="Logo" style="height: 50px;">
-        <a href="consultas.html" class="btn-volver">← VOLVER</a>
+    <div class="header">
+        <a href="consultas.html" class="btn btn-secondary btn-sm mb-3 no-print">← VOLVER</a>
+        <h2>CONSULTA DE DECLARACIÓN JURADA</h2>
     </div>
 
-    <h1>CONSULTA DE DECLARACIÓN JURADA</h1>
-
-    <div class="search-section no-print">
-        <select id="patologiaSelect">
-            <option value="">Seleccione una patología</option>
-            <option value="vista">Vista</option>
-            <option value="respiratorio">Respiratorio</option>
-            <option value="digestivos">Digestivos</option>
-            <option value="genitourinario">Genitourinario</option>
-            <option value="psiquiatricos">Psiquiátricos</option>
-            <option value="reumatologicos">Reumatológicos</option>
-            <option value="alergias">Alergias</option>
-            <option value="infecciones">Infecciones</option>
-            <option value="acc_trabajo">Accidente de Trabajo</option>
-            <option value="endocrino">Endocrino</option>
-            <option value="auditivo">Auditivo</option>
-            <option value="cardio">Cardio</option>
-            <option value="sangre">Sangre</option>
-            <option value="sistema_nervioso">Sistema Nervioso</option>
-            <option value="osteomusculares">Osteomusculares</option>
-            <option value="dermatologicas">Dermatológicas</option>
-            <option value="cirugias">Cirugías</option>
-            <option value="acc_personales">Accidentes Personales</option>
-            <option value="medicamentos">Medicamentos</option>
-            <option value="familiares">Familiares</option>
-            <option value="generales">Generales</option>
-            <option value="otros">Otros Específicos</option>
+    <div class="filter-box no-print">
+        <select id="patologiaSelect" class="form-select w-50">
+            <option value="vista">1. VISTA</option>
+            <option value="auditivo">2. AUDITIVO</option>
+            <option value="respiratorio">3. RESPIRATORIO</option>
+            <option value="cardio">4. CARDIOVASCULARES</option>
+            <option value="digestivos">5. DIGESTIVOS</option>
+            <option value="sangre">6. SANGRE</option>
+            <option value="genitourinario">7. GENITOURINARIO</option>
+            <option value="sistema_nervioso">8. SISTEMA NERVIOSO</option>
+            <option value="psiquiatricos">9. PSIQUIÁTRICOS</option>
+            <option value="osteomusculares">10. OSTEOMUSCULARES</option>
+            <option value="reumatologicos">11. REUMATOLÓGICOS</option>
+            <option value="dermatologicas">12. DERMATOLÓGICAS</option>
+            <option value="alergias">13. ALERGIAS</option>
+            <option value="cirugias">14. CIRUGÍAS</option>
+            <option value="infecciones">15. INFECCIONES</option>
+            <option value="acc_personales">16. ACCIDENTES PERS.</option>
+            <option value="acc_trabajo">17. ACCIDENTES TRABAJO</option>
+            <option value="medicamentos">18. MEDICAMENTOS</option>
+            <option value="endocrino">19. ENDOCRINO</option>
+            <option value="familiares">20. ANTECEDENTES FAM.</option>
+            <option value="otros_especificos">21. OTROS ESPECÍFICOS</option>
+            <option value="generales">22. GENERALES</option>
         </select>
-        <button onclick="buscarPacientes()">BUSCAR</button>
+        <button onclick="filtrar()">BUSCAR</button>
     </div>
 
-    <table id="resultadosTable">
+    <table class="table table-bordered" id="tablaResultados">
         <thead>
             <tr>
-                <th>Código Paciente</th>
-                <th>Nombre Completo</th>
-                <th>Edad</th>
-                <th>Profesión</th>
+                <th>CÓDIGO</th>
+                <th>NOMBRE COMPLETO</th>
+                <th>EDAD</th>
+                <th>PROFESIÓN</th>
+                <th>DETALLE</th>
             </tr>
         </thead>
-        <tbody id="resultadosBody">
-            </tbody>
+        <tbody id="listaPacientes"></tbody>
     </table>
 
-    <div style="text-align: center; margin-top: 20px;" class="no-print">
-        <button onclick="window.print()">IMPRIMIR RESULTADOS</button>
+    <div class="text-center mt-4 no-print">
+        <button onclick="window.print()" class="btn btn-primary">IMPRIMIR RESULTADOS</button>
     </div>
 </div>
 
 <script>
-    function buscarPacientes() {
-        // Lógica de búsqueda conectada al backend irá aquí
-        alert("Buscando pacientes con la patología seleccionada...");
+    const API = 'https://historial-clinico-nube.onrender.com';
+
+    async function filtrar() {
+        const campo = document.getElementById('patologiaSelect').value;
+        const tbody = document.getElementById('listaPacientes');
+        tbody.innerHTML = "<tr><td colspan='5' class='text-center'>CARGANDO...</td></tr>";
+
+        try {
+            // Obtenemos todos los expedientes (ajusta la ruta según tu endpoint global)
+            const res = await fetch(`${API}/api/pacientes-completos`); 
+            const data = await res.json();
+            
+            tbody.innerHTML = "";
+            let encontrados = 0;
+
+            data.forEach(p => {
+                const valor = p.p2 ? p.p2[campo] : "NORMAL";
+                
+                // Filtro: Solo mostrar si NO es NORMAL y existe
+                if (valor && valor.toUpperCase() !== "NORMAL") {
+                    encontrados++;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${p.paciente.codigo_paciente}</td>
+                            <td>${p.paciente.apellido} ${p.paciente.nombre}</td>
+                            <td>${p.filiacion?.edad || '---'}</td>
+                            <td>${p.filiacion?.profesion_oficio || '---'}</td>
+                            <td>${valor}</td>
+                        </tr>
+                    `;
+                }
+            });
+
+            if (encontrados === 0) tbody.innerHTML = "<tr><td colspan='5' class='text-center'>NO SE ENCONTRARON PACIENTES CON ESTA PATOLOGÍA</td></tr>";
+            
+        } catch (e) {
+            alert("Error al conectar con la nube.");
+            tbody.innerHTML = "";
+        }
     }
 </script>
 
