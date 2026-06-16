@@ -105,7 +105,7 @@ async def guardar_psicologia(data: dict, db: Session = Depends(get_db)):
             discurso=data.get("discurso"),
             pensamiento=data.get("pensamiento"),
             percepcion=data.get("percepcion"),
-            psicologicamente=data.get("psicologicamente")
+            resultado_psicologico=data.get("resultado_psicologico")
         )
         
         db.add(nueva_ficha)
