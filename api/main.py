@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from .database import SessionLocal, engine, Base
 from .crud import create_doctor, create_enfermera
 from . import models
@@ -11,6 +12,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -79,6 +81,7 @@ async def guardar_psicologia(data: dict, db: Session = Depends(get_db)):
     if not codigo_input:
         raise HTTPException(status_code=400, detail="El código del paciente es obligatorio")
 
+    # Búsqueda normalizada para evitar errores de coincidencia
     paciente = db.query(models.Paciente).filter(
         func.upper(models.Paciente.codigo_paciente) == codigo_input
     ).first()
