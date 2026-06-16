@@ -147,30 +147,27 @@
     });
 
 async function guardarFicha() {
-    // Función auxiliar para obtener valor sin romper el código
-    const getVal = (selector) => {
-        const el = document.querySelector(selector);
-        return el ? el.value : "";
-    };
+    // Función auxiliar para obtener valor por ID
+    const getVal = (id) => document.getElementById(id)?.value || "";
 
     const payload = {
-        codigo_paciente: getVal('input[placeholder="EH1111"]'),
-        historia_familiar: getVal('input[placeholder="FM FOH FRT"]'),
-        personalidad: getVal('input[placeholder="FDH FH"]'),
-        conducta_sexual: getVal('input[placeholder="FH FTH"]'),
-        habitos_alcohol: document.querySelector('input[name="alcohol"]')?.checked || false,
-        habitos_tabaco: document.querySelector('input[name="tabaco"]')?.checked || false,
-        frecuencia: getVal('input[placeholder="HF HF I"]'),
-        cantidad: getVal('input[placeholder="FH FTH"]'),
-        drogas: getVal('input[placeholder="FH FTH"]'),
-        coquear: getVal('input[placeholder="FH FTH"]'),
-        otras_observaciones: getVal('textarea'),
-        presentacion: getVal('input[placeholder="FDH FH"]'),
+        codigo_paciente: getVal('codigo_paciente'),
+        historia_familiar: getVal('historia_familiar'),
+        personalidad: getVal('personalidad'),
+        conducta_sexual: getVal('conducta_sexual'),
+        habitos_alcohol: document.querySelector('input[name="alcohol"][value="SI"]:checked') ? "SI" : "NO",
+        habitos_tabaco: document.querySelector('input[name="tabaco"][value="SI"]:checked') ? "SI" : "NO",
+        frecuencia: getVal('alcohol_freq'),
+        cantidad: getVal('tabaco_cant'),
+        drogas: getVal('drogas'),
+        coquear: getVal('coquear'),
+        otras_observaciones: getVal('otras_observaciones'),
+        presentacion: getVal('presentacion'),
         postura: document.querySelector('input[name="postura"]:checked')?.value || "",
         discurso: document.querySelector('input[name="discurso"]:checked')?.value || "",
-        pensamiento: getVal('input[placeholder="FDH F"]'),
-        percepcion: getVal('input[placeholder="FH FTH"]'),
-        psicologicamente: document.querySelector('input[name="apto"]:checked')?.value || ""
+        pensamiento: getVal('pensamiento'),
+        percepcion: getVal('percepcion'),
+        psicologicamente: document.querySelector('input[name="psicologicamente"]:checked')?.value || ""
     };
 
     try {
