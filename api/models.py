@@ -78,18 +78,23 @@ class FichaOftalmologica(Base):
     pio_oi = Column(String); pio_obs = Column(String); diagnostico = Column(Text)
 
 class FichaPsicologia(Base):
-    __tablename__ = "ficha_psicologia"
+    __tablename__ = "fichas_psicologia"
     id = Column(Integer, primary_key=True, index=True)
-    paciente_id = Column(Integer, ForeignKey("pacientes.id", ondelete="CASCADE"))
-    historia_familiar = Column(Text); habitos_alcohol = Column(String)
-    habitos_tabaco = Column(String); habitos_drogas = Column(String); habitos_coquear = Column(String)
-    otras_observaciones = Column(Text); conducta = Column(Text); presentacion = Column(String)
-    postura = Column(String); lucido_atento = Column(String); pensamiento = Column(String)
-    discurso = Column(String); percepcion = Column(String); memoria = Column(String)
-    articulacion_palabra = Column(String); apetito = Column(String); sueno = Column(String)
-    orientacion = Column(String); personalidad = Column(String); afectividad = Column(String)
-    conducta_sexual = Column(String); puntaje_test = Column(String)
-    nombre_prueba = Column(String); observaciones_test = Column(Text)
+    paciente_id = Column(Integer)
+    historia_familiar = Column(String)
+    personalidad = Column(String)
+    conducta_sexual = Column(String)
+    habitos_alcohol = Column(String)
+    habitos_tabaco = Column(String)
+    habitos_drogas = Column(String) # Cambiado de 'drogas'
+    habitos_coquear = Column(String) # Cambiado de 'coquear'
+    otras_observaciones = Column(String)
+    presentacion = Column(String)
+    postura = Column(String)
+    discurso = Column(String)
+    pensamiento = Column(String)
+    percepcion = Column(String)
+    resultado_psicologico = Column(String) # CAMBIADO: 'psicologicamente' por 'resultado_psicologico'
 
 class FichaEspirometria(Base):
     __tablename__ = "ficha_espirometria"
