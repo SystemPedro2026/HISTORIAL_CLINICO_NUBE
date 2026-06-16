@@ -257,4 +257,19 @@ def consultar_cardiologia(diagnostico: str, db: Session = Depends(get_db)):
             })
     return resultados
 
-
+@app.get("/filtrar-cardiologia")
+async def filtrar_cardiologia(query: str, db: Session = Depends(get_db)):
+    # Buscamos en la tabla ficha_cardiologia filtrando por diagnostico_recomendaciones
+    resultados = db.query(models.FichaCardiologia, models.Paciente).join(
+        models.Paciente
+    ).filter(
+        models.FichaCardiologia.diagnostico_recomendaciones.ilike(f"%{query}%")
+    ).all()
+    
+    return [
+        {
+            "codigo_paciente": p.codigo_paciente,
+            "nombre_paciente": p.nombre_completo,
+            "diagnostico": f.diagnostico_recomendaciones
+        } for f, p in resultados
+    ]
