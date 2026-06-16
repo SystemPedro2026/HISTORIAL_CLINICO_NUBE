@@ -5,127 +5,148 @@
     <title>Ficha de Cardiología</title>
     <style>
         :root { --emerald: #00a651; }
-        @page { size: letter; margin: 0.5in; }
-        body { font-family: Arial, sans-serif; font-size: 11px; margin: 0; padding: 20px; color: #000; background-color: #f4f6f8; }
-        .container { width: 100%; max-width: 800px; margin: auto; background: white; padding: 30px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0,0,0,0.1); box-sizing: border-box; }
-        
-        /* Cabecera */
+        body { font-family: Arial, sans-serif; font-size: 11px; margin: 0; padding: 20px; background-color: #f4f6f8; }
+        .container { width: 100%; max-width: 800px; margin: auto; background: white; padding: 30px; border: 1px solid #ddd; }
         .top-nav { display: flex; justify-content: space-between; margin-bottom: 20px; }
         .btn { padding: 8px 15px; border: none; cursor: pointer; color: white; font-weight: bold; border-radius: 4px; font-size: 11px; }
-        .btn-volver { background-color: #6c757d; }
-        .btn-imprimir { background-color: #343a40; }
-        
-        .header-content { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--emerald); padding-bottom: 10px; margin-bottom: 20px; }
-        .header-content img { height: 50px; }
-        .title-area { text-align: right; }
-        .title-area h1 { font-size: 18px; margin: 0; color: #000; font-weight: 800; }
-        .title-area p { font-size: 11px; margin: 0; color: var(--emerald); font-weight: 800; }
-
+        .btn-guardar { width: 100%; padding: 15px; background-color: #1976d2; color: white; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; }
         .code-box { margin-bottom: 15px; border: 1px solid #ccc; padding: 8px; background: #fafafa; font-weight: bold; }
-
-        /* Estilos de Tabla */
         table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
         th, td { border: 1px solid #000; padding: 5px; }
-        .caption { font-weight: bold; background: #e9ecef; border: 1px solid #000; padding: 5px; margin-top: 10px; font-size: 11px; }
-        
-        input[type="text"] { border: none; border-bottom: 1px solid #000; width: 100%; background: transparent; outline: none; }
-        textarea { width: 100%; height: 40px; border: 1px solid #000; resize: none; box-sizing: border-box; }
-        
-        .btn-guardar { width: 100%; padding: 15px; background-color: #1976d2; color: white; font-size: 16px; border: none; cursor: pointer; font-weight: bold; border-radius: 4px; margin-top: 20px; }
-
-        @media print {
-            .top-nav, .btn-guardar, .no-print { display: none !important; }
-            .container { width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; border: none !important; }
-            table, .caption, textarea { break-inside: avoid; page-break-inside: avoid; }
-        }
+        .caption { font-weight: bold; background: #e9ecef; border: 1px solid #000; padding: 5px; margin-top: 10px; }
+        input[type="text"] { border: none; border-bottom: 1px solid #000; width: 100%; outline: none; }
+        textarea { width: 100%; height: 40px; border: 1px solid #000; resize: none; }
+        @media print { .no-print { display: none !important; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="top-nav no-print">
-        <button class="btn btn-volver" onclick="history.back()">← VOLVER AL MENÚ</button>
-        <button class="btn btn-imprimir" onclick="window.print()">🖨️ IMPRIMIR</button>
+        <button class="btn" style="background:#6c757d" onclick="history.back()">← VOLVER</button>
+        <button class="btn" style="background:#343a40" onclick="window.print()">🖨️ IMPRIMIR</button>
     </div>
 
-    <div class="header-content">
-        <img src="https://ingerutonny-ui.github.io/HISTORIAL_CLINICO_NUBE/logo.png" alt="Logo">
-        <div class="title-area">
-            <h1>FICHA DE CARDIOLOGÍA</h1>
-            <p>SALUD OCUPACIONAL - DOCUMENTO LEGAL</p>
-        </div>
+    <div class="code-box">
+        CÓDIGO PACIENTE: <input type="text" id="codigo_paciente" style="width: 200px;">
     </div>
 
-    <div class="code-box">CÓDIGO PACIENTE: <input type="text" style="border:none; border-bottom:1px solid #000; width: 200px;" placeholder="     INGRESE CÓDIGO">
-      
-</div>
-   <div class="caption">ANTECEDENTES (PATOLOGICAS Y NO PATOLOGICAS)</div>
+    <div class="caption">ANTECEDENTES</div>
     <table>
         <tr>
-            <td>NIÑEZ <input type="checkbox"> SI <input type="checkbox"> NO</td>
-            <td>TABAQUISMO <input type="checkbox"> SI <input type="checkbox"> NO</td>
-            <td>HTA <input type="checkbox"> SI <input type="checkbox"> NO</td>
+            <td>NIÑEZ: <input type="text" id="ninez"></td>
+            <td>TABAQUISMO: <input type="text" id="tabaquismo"></td>
+            <td>HTA: <input type="text" id="hta"></td>
         </tr>
         <tr>
-            <td>ADOLESCENTE <input type="checkbox"> SI <input type="checkbox"> NO</td>
-            <td>HIPERLIPIDEMIAS <input type="checkbox"> SI <input type="checkbox"> NO</td>
-            <td>DIABETES <input type="checkbox"> SI <input type="checkbox"> NO</td>
+            <td>ADOLESCENTE: <input type="text" id="adolescente"></td>
+            <td>HIPERLIPIDEMIAS: <input type="text" id="hiperlipidemias"></td>
+            <td>DIABETES: <input type="text" id="diabetes"></td>
         </tr>
         <tr>
-            <td>ADULTEZ <input type="checkbox"> SI <input type="checkbox"> NO</td>
-            <td>ASMA BRONQUIAL <input type="checkbox"> SI <input type="checkbox"> NO</td>
-            <td>BRONQUITIS <input type="checkbox"> SI <input type="checkbox"> NO</td>
+            <td>ADULTEZ: <input type="text" id="adultez"></td>
+            <td>ASMA BRONQUIAL: <input type="text" id="asma_bronquial"></td>
+            <td>BRONQUITIS: <input type="text" id="bronquitis"></td>
         </tr>
     </table>
-    <div style="margin-bottom: 10px;"><strong>OBSERVACIONES:</strong><textarea></textarea></div>
+    <strong>OBSERVACIONES:</strong><textarea id="obs_antecedentes"></textarea>
 
     <div class="caption">ANTECEDENTES FAMILIARES</div>
     <table>
         <tr>
-            <td>PADRE <input type="checkbox"> SI <input type="checkbox"> NO</td>
-            <td>MADRE <input type="checkbox"> SI <input type="checkbox"> NO</td>
-            <td>HERMANOS <input type="checkbox"> SI <input type="checkbox"> NO</td>
+            <td>PADRE: <input type="text" id="padre"></td>
+            <td>MADRE: <input type="text" id="madre"></td>
+            <td>HERMANOS: <input type="text" id="hermanos"></td>
         </tr>
         <tr>
-            <td>ABUELOS <input type="checkbox"> SI <input type="checkbox"> NO</td>
-            <td>HIJOS <input type="checkbox"> SI <input type="checkbox"> NO</td>
-            <td></td>
+            <td>ABUELOS: <input type="text" id="abuelos"></td>
+            <td>HIJOS: <input type="text" id="hijos"></td>
         </tr>
     </table>
-    <div style="margin-bottom: 10px;"><strong>OBSERVACIONES:</strong><textarea></textarea></div>
+    <strong>OBSERVACIONES:</strong><textarea id="obs_familiares"></textarea>
 
-    <div style="margin-bottom: 10px;"><strong>ANAMNESIS:</strong><textarea style="height: 50px;"></textarea></div>
+    <strong>ANAMNESIS:</strong><textarea id="anamnesis" style="height:50px"></textarea>
 
     <div class="caption">EXAMEN DE SIGNOS VITALES</div>
     <table>
         <tr>
-            <td>PRESION ARTERIAL: <input type="text"></td>
-            <td>FRECUENCIA CARDIACA: <input type="text"></td>
+            <td>PRESION ARTERIAL: <input type="text" id="presion_arterial"></td>
+            <td>FRECUENCIA CARDIACA: <input type="text" id="frecuencia_cardiaca"></td>
         </tr>
         <tr>
-            <td>PULSO: <input type="text"></td>
-            <td>FRECUENCIA RESPIRATORIA: <input type="text"></td>
+            <td>PULSO: <input type="text" id="pulso"></td>
+            <td>FRECUENCIA RESPIRATORIA: <input type="text" id="frecuencia_respiratoria"></td>
         </tr>
         <tr>
-            <td>TALLA: <input type="text"></td>
-            <td>PESO: <input type="text"></td>
+            <td>TALLA: <input type="text" id="talla"></td>
+            <td>PESO: <input type="text" id="peso"></td>
         </tr>
         <tr>
-            <td>IMC: <input type="text"></td>
-            <td>SAT O2: <input type="text"></td>
+            <td>IMC: <input type="text" id="imc"></td>
+            <td>SAT O2: <input type="text" id="sat_o2"></td>
         </tr>
     </table>
 
-    <div style="margin-bottom: 10px;"><strong>EXAMEN CLINICO:</strong><textarea style="height: 50px;"></textarea></div>
-    <div style="margin-bottom: 10px;"><strong>RESULTADO DE ELECTROCARDIOGRAMA:</strong><textarea style="height: 50px;"></textarea></div>
-    <div style="margin-bottom: 10px;"><strong>DIAGNOSTICO Y RECOMENDACIONES:</strong><textarea style="height: 50px;"></textarea></div>
+    <strong>EXAMEN CLINICO:</strong><textarea id="examen_clinico" style="height:50px"></textarea>
+    <strong>RESULTADO ELECTROCARDIOGRAMA:</strong><textarea id="resultado_electro" style="height:50px"></textarea>
+    <strong>DIAGNOSTICO Y RECOMENDACIONES:</strong><textarea id="diagnostico_recomendaciones" style="height:50px"></textarea>
 
-    <div style="display:flex; justify-content: space-between; margin-top:40px;">
-        <div style="border-top:1px solid #000; width:45%; text-align:center;">NOMBRE DEL MÉDICO</div>
-        <div style="border-top:1px solid #000; width:45%; text-align:center;">FIRMA DEL PACIENTE</div>
-    </div>
-
-    <button class="btn-guardar no-print" onclick="alert('Datos guardados')">GUARDAR</button>
+    <button class="btn-guardar no-print" onclick="guardar()">GUARDAR FICHA DE CARDIOLOGÍA</button>
 </div>
+
+<script>
+    const API = 'https://historial-clinico-nube.onrender.com';
+
+    async function guardar() {
+        const data = {
+            codigo_paciente: document.getElementById('codigo_paciente').value,
+            ninez: document.getElementById('ninez').value,
+            tabaquismo: document.getElementById('tabaquismo').value,
+            hta: document.getElementById('hta').value,
+            adolescente: document.getElementById('adolescente').value,
+            hiperlipidemias: document.getElementById('hiperlipidemias').value,
+            diabetes: document.getElementById('diabetes').value,
+            adultez: document.getElementById('adultez').value,
+            asma_bronquial: document.getElementById('asma_bronquial').value,
+            bronquitis: document.getElementById('bronquitis').value,
+            obs_antecedentes: document.getElementById('obs_antecedentes').value,
+            padre: document.getElementById('padre').value,
+            madre: document.getElementById('madre').value,
+            hermanos: document.getElementById('hermanos').value,
+            abuelos: document.getElementById('abuelos').value,
+            hijos: document.getElementById('hijos').value,
+            obs_familiares: document.getElementById('obs_familiares').value,
+            anamnesis: document.getElementById('anamnesis').value,
+            presion_arterial: document.getElementById('presion_arterial').value,
+            frecuencia_cardiaca: document.getElementById('frecuencia_cardiaca').value,
+            pulso: document.getElementById('pulso').value,
+            frecuencia_respiratoria: document.getElementById('frecuencia_respiratoria').value,
+            talla: document.getElementById('talla').value,
+            peso: document.getElementById('peso').value,
+            imc: document.getElementById('imc').value,
+            sat_o2: document.getElementById('sat_o2').value,
+            examen_clinico: document.getElementById('examen_clinico').value,
+            resultado_electro: document.getElementById('resultado_electro').value,
+            diagnostico_recomendaciones: document.getElementById('diagnostico_recomendaciones').value
+        };
+
+        try {
+            const res = await fetch(`${API}/guardar-cardiologia`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (res.ok) {
+                alert("GUARDADO EXITOSAMENTE");
+            } else {
+                alert("Error: " + JSON.stringify(result));
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error al conectar con la nube");
+        }
+    }
+</script>
 </body>
 </html>
