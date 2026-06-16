@@ -66,46 +66,37 @@
         const estadoFiltro = document.getElementById('estadoSelect').value;
         const tbody = document.getElementById('listaPacientes');
         tbody.innerHTML = "<tr><td colspan='3' class='text-center'>CARGANDO DATOS...</td></tr>";
-
+    
         try {
-            const res = await fetch(`${API}/pacientes/`);
-            const pacientes = await res.json();
+            // Llamada única al nuevo endpoint que filtra desde el servidor
+            const res = await fetch(`${API}/ficha-psicologia-filtrada/${encodeURIComponent(estadoFiltro)}`);
+            const resultados = await res.json();
             
             tbody.innerHTML = "";
-            let encontrados = 0;
-
-            for (let p of pacientes) {
-                try {
-                    // Endpoint necesario: /ficha-psicologia/{paciente_id}
-                    const resFicha = await fetch(`${API}/ficha-psicologia/${p.id}`);
-                    if (!resFicha.ok) continue; 
-                    
-                    const ficha = await resFicha.json();
-
-                    // Ajusta 'psicologicamente' al nombre exacto del campo en tu DB (modelo FichaPsicologia)
-                    if (ficha.psicologicamente && ficha.psicologicamente.toUpperCase() === estadoFiltro) {
-                        encontrados++;
-                        tbody.innerHTML += `
-                            <tr>
-                                <td>${p.codigo_paciente || '---'}</td>
-                                <td>${p.apellido} ${p.nombre}</td>
-                                <td>${ficha.psicologicamente}</td>
-                            </tr>
-                        `;
-                    }
-                } catch (err) {
-                    console.error("Error al traer ficha psicológica del paciente", p.id);
-                }
+    
+            if (resultados.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='3' class='text-center'>NO SE ENCONTRARON PACIENTES</td></tr>";
+                return;
             }
-
-            if (encontrados === 0) tbody.innerHTML = "<tr><td colspan='3' class='text-center'>NO SE ENCONTRARON PACIENTES CON ESTE ESTADO</td></tr>";
-            
+    
+            for (let item of resultados) {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${item.codigo || '---'}</td>
+                        <td>${item.nombre}</td>
+                        <td>${item.estado}</td>
+                    </tr>
+                `;
+            }
         } catch (e) {
             console.error(e);
             alert("Error al conectar con la nube.");
             tbody.innerHTML = "";
         }
     }
+
+    
+
 </script>
 
 </body>
