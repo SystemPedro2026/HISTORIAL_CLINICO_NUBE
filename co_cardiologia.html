@@ -4,42 +4,47 @@
     <meta charset="UTF-8">
     <title>Consulta de Cardiología</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #0d1117; color: white; padding: 20px; }
-        .container { max-width: 900px; margin: auto; background: #161b22; padding: 30px; border-radius: 8px; border: 1px solid #30363d; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #00a651; padding-bottom: 20px; }
-        .logo { font-size: 24px; font-weight: bold; color: #00a651; }
-        .search-section { background: #21262d; padding: 20px; border-radius: 6px; margin: 20px 0; display: flex; gap: 10px; align-items: center; }
-        input { padding: 10px; border-radius: 4px; border: 1px solid #30363d; background: #0d1117; color: white; flex-grow: 1; }
-        button { padding: 10px 20px; background: #00a651; color: white; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; color: black; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #00a651; color: white; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b121e; color: #ffffff; margin: 0; padding: 20px; }
+        .container { max-width: 950px; margin: auto; background: #131c2d; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .logo { font-size: 32px; font-weight: bold; color: #00a651; display: flex; align-items: center; }
+        .btn-volver { background: #374151; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+        .search-container { background: #1f2937; padding: 25px; border-radius: 8px; display: flex; gap: 15px; align-items: center; margin-bottom: 30px; }
+        label { font-weight: bold; color: #9ca3af; }
+        select, input { padding: 12px; border-radius: 5px; border: 1px solid #374151; background: #111827; color: white; flex-grow: 1; }
+        button.btn-buscar { padding: 12px 30px; background: #00a651; color: white; border: none; cursor: pointer; border-radius: 5px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+        th { background-color: #00a651; color: white; padding: 15px; text-align: left; }
+        td { color: #1f2937; padding: 15px; border-bottom: 1px solid #e5e7eb; }
+        .btn-print { margin-top: 20px; background: #2563eb; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <div class="logo">ohs</div>
-        <h2>CONSULTA DE CARDIOLOGÍA</h2>
-        <button onclick="history.back()">← VOLVER</button>
+        <div class="logo">ohs <span style="font-size: 14px; margin-left: 10px; color: #9ca3af; font-weight: normal;">HISTORIAL_CLINICO</span></div>
+        <a href="#" onclick="history.back()" class="btn-volver">← VOLVER</a>
     </div>
 
-    <div class="search-section">
-        <input type="text" id="term_busqueda" placeholder="Buscar por antecedente (Ej: TABAQUISMO)">
-        <button onclick="buscar()">BUSCAR</button>
+    <h2 style="text-align: center; margin-bottom: 30px;">CONSULTA DE ANTECEDENTES CARDIOLÓGICOS</h2>
+
+    <div class="search-container">
+        <label>ANTECEDENTE:</label>
+        <input type="text" id="term_busqueda" placeholder="Ej: TABAQUISMO">
+        <button class="btn-buscar" onclick="buscar()">BUSCAR</button>
     </div>
 
     <table>
         <thead>
-            <tr><th>CÓDIGO</th><th>PACIENTE</th><th>ESTADO ANTECEDENTE</th></tr>
+            <tr><th>CÓDIGO</th><th>NOMBRE COMPLETO</th><th>ESTADO</th></tr>
         </thead>
         <tbody id="tabla_resultados">
-            <tr><td colspan="3">INGRESA UN ANTECEDENTE Y PRESIONA BUSCAR...</td></tr>
+            <tr><td colspan="3" style="text-align:center;">Realice una búsqueda para mostrar resultados</td></tr>
         </tbody>
     </table>
-    <br>
-    <button onclick="window.print()">IMPRIMIR RESULTADOS</button>
+
+    <button class="btn-print" onclick="window.print()">IMPRIMIR RESULTADOS</button>
 </div>
 
 <script>
@@ -48,13 +53,15 @@
     async function buscar() {
         const term = document.getElementById('term_busqueda').value;
         const tabla = document.getElementById('tabla_resultados');
-        tabla.innerHTML = "<tr><td colspan='3'>BUSCANDO...</td></tr>";
+        tabla.innerHTML = "<tr><td colspan='3' style='text-align:center;'>CARGANDO...</td></tr>";
 
         try {
             const res = await fetch(`${API}/buscar-cardiologia?antecedente=${term}`);
             const data = await res.json();
             
             tabla.innerHTML = "";
+            if (data.length === 0) tabla.innerHTML = "<tr><td colspan='3' style='text-align:center;'>NO SE ENCONTRARON RESULTADOS</td></tr>";
+            
             data.forEach(item => {
                 tabla.innerHTML += `<tr>
                     <td>${item.codigo}</td>
@@ -63,7 +70,7 @@
                 </tr>`;
             });
         } catch (err) {
-            tabla.innerHTML = "<tr><td colspan='3'>ERROR AL CARGAR DATOS</td></tr>";
+            tabla.innerHTML = "<tr><td colspan='3' style='text-align:center;'>ERROR AL CONECTAR CON EL SERVIDOR</td></tr>";
         }
     }
 </script>
