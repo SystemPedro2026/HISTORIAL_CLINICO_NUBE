@@ -120,6 +120,22 @@ def obtener_ficha_psicologia(paciente_id: int, db: Session = Depends(get_db)):
     if not ficha: raise HTTPException(status_code=404, detail="Ficha no encontrada")
     return ficha
 
+# NUEVO ENDPOINT PARA CONSULTAS (El que faltaba)
+@app.get("/ficha-psicologia-filtrada/{estado}")
+def obtener_fichas_por_estado(estado: str, db: Session = Depends(get_db)):
+    fichas = db.query(models.FichaPsicologia).filter(models.FichaPsicologia.resultado_psicologico == estado).all()
+    resultados = []
+    for f in fichas:
+        paciente = db.query(models.Paciente).filter(models.Paciente.id == f.paciente_id).first()
+        if paciente:
+            resultados.append({
+                "codigo": paciente.codigo_paciente,
+                "nombre": f"{paciente.apellido} {paciente.nombre}",
+                "estado": f.resultado_psicologico
+            })
+    return resultados
+
+
 # ----------- PERSONAL: DOCTORES -----------
 @app.get("/personal/")
 def obtener_personal(db: Session = Depends(get_db)):
