@@ -127,7 +127,7 @@ class FichaCardiologia(Base):
     __tablename__ = "ficha_cardiologia"
     
     id = Column(Integer, primary_key=True, index=True)
-    paciente_id = Column(Integer, ForeignKey("paciente.id"))
+    paciente_id = Column(Integer, ForeignKey("pacientes.id"))
     
     # Antecedentes
     ninez = Column(String)
