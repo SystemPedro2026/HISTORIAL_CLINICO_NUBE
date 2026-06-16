@@ -8,7 +8,7 @@
         .container { max-width: 900px; margin: auto; background: #161b22; padding: 30px; border-radius: 8px; border: 1px solid #30363d; }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #00a651; padding-bottom: 20px; }
         .logo { font-size: 24px; font-weight: bold; color: #00a651; }
-        .search-section { background: #21262d; padding: 20px; border-radius: 6px; margin: 20px 0; display: flex; gap: 10px; }
+        .search-section { background: #21262d; padding: 20px; border-radius: 6px; margin: 20px 0; display: flex; gap: 10px; align-items: center; }
         input { padding: 10px; border-radius: 4px; border: 1px solid #30363d; background: #0d1117; color: white; flex-grow: 1; }
         button { padding: 10px 20px; background: #00a651; color: white; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; color: black; }
@@ -21,43 +21,50 @@
 <div class="container">
     <div class="header">
         <div class="logo">ohs</div>
-        <h2>CONSULTA: ANTECEDENTES CARDIO</h2>
+        <h2>CONSULTA DE CARDIOLOGÍA</h2>
         <button onclick="history.back()">← VOLVER</button>
     </div>
 
     <div class="search-section">
-        <input type="text" id="term_busqueda" placeholder="Ej: TABAQUISMO, HTA, DIABETES...">
-        <button onclick="buscarAntecedentes()">BUSCAR</button>
+        <input type="text" id="term_busqueda" placeholder="Buscar por antecedente (Ej: TABAQUISMO)">
+        <button onclick="buscar()">BUSCAR</button>
     </div>
 
     <table>
         <thead>
-            <tr><th>CÓDIGO</th><th>PACIENTE</th><th>ANTECEDENTE HALLADO</th></tr>
+            <tr><th>CÓDIGO</th><th>PACIENTE</th><th>ESTADO ANTECEDENTE</th></tr>
         </thead>
         <tbody id="tabla_resultados">
-            <tr><td colspan="3">INGRESE UN ANTECEDENTE PARA BUSCAR...</td></tr>
+            <tr><td colspan="3">INGRESA UN ANTECEDENTE Y PRESIONA BUSCAR...</td></tr>
         </tbody>
     </table>
+    <br>
+    <button onclick="window.print()">IMPRIMIR RESULTADOS</button>
 </div>
 
 <script>
     const API = 'https://historial-clinico-nube.onrender.com';
 
-    async function buscarAntecedentes() {
+    async function buscar() {
         const term = document.getElementById('term_busqueda').value;
         const tabla = document.getElementById('tabla_resultados');
-        
-        const res = await fetch(`${API}/buscar-cardiologia?antecedente=${term}`);
-        const data = await res.json();
-        
-        tabla.innerHTML = "";
-        data.forEach(item => {
-            tabla.innerHTML += `<tr>
-                <td>${item.codigo}</td>
-                <td>${item.nombre}</td>
-                <td>${item.detalle}</td>
-            </tr>`;
-        });
+        tabla.innerHTML = "<tr><td colspan='3'>BUSCANDO...</td></tr>";
+
+        try {
+            const res = await fetch(`${API}/buscar-cardiologia?antecedente=${term}`);
+            const data = await res.json();
+            
+            tabla.innerHTML = "";
+            data.forEach(item => {
+                tabla.innerHTML += `<tr>
+                    <td>${item.codigo}</td>
+                    <td>${item.nombre}</td>
+                    <td>${item.detalle}</td>
+                </tr>`;
+            });
+        } catch (err) {
+            tabla.innerHTML = "<tr><td colspan='3'>ERROR AL CARGAR DATOS</td></tr>";
+        }
     }
 </script>
 </body>
