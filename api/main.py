@@ -70,18 +70,24 @@ def obtener_ficha_oftalmo(paciente_id: int, db: Session = Depends(get_db)):
     ficha = db.query(models.FichaOftalmologica).filter(models.FichaOftalmologica.paciente_id == paciente_id).first()
     if not ficha: raise HTTPException(status_code=404, detail="Ficha no encontrada")
     return ficha
+
 # ----------- FICHA PSICOLOGICA -----------
-@app.post("/guardar-psicologia/")
+@app.post("/guardar-psicologia")
 def guardar_psicologia(data: dict, db: Session = Depends(get_db)):
     codigo = data.get("codigo_paciente")
     paciente = db.query(models.Paciente).filter(models.Paciente.codigo_paciente == codigo).first()
-    if not paciente: raise HTTPException(status_code=404, detail="Paciente no encontrado")
+    if not paciente: 
+        raise HTTPException(status_code=404, detail="Paciente no encontrado")
     
     datos = data.copy()
     datos.pop("codigo_paciente", None)
     datos["paciente_id"] = paciente.id
     
-    nueva = models.FichaPsicologia(**datos); db.add(nueva); db.commit(); db.refresh(nueva); return nueva
+    nueva = models.FichaPsicologia(**datos)
+    db.add(nueva)
+    db.commit()
+    db.refresh(nueva)
+    return nueva
 
 @app.get("/ficha-psicologia/{paciente_id}")
 def obtener_ficha_psicologia(paciente_id: int, db: Session = Depends(get_db)):
