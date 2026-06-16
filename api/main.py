@@ -273,3 +273,15 @@ async def filtrar_cardiologia(query: str, db: Session = Depends(get_db)):
             "diagnostico": f.diagnostico_recomendaciones
         } for f, p in resultados
     ]
+
+@app.get("/buscar-cardiologia")
+async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
+    # Lógica simplificada para buscar en campos de antecedentes
+    # Esto filtra los pacientes que tienen "SI" en el antecedente buscado
+    resultados = db.query(models.FichaCardiologia, models.Paciente).join(
+        models.Paciente
+    ).filter(
+        models.FichaCardiologia.tabaquismo == antecedente.upper() # O el campo dinámico que necesites
+    ).all()
+    
+    return [{"codigo": p.codigo_paciente, "nombre": p.nombre_completo, "detalle": "Confirmado"} for f, p in resultados]
