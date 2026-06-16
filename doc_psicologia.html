@@ -148,38 +148,45 @@
 
 async function guardarFicha() {
     const payload = {
-        codigo_paciente: document.getElementById('codigo_paciente').value,
-        historia_familiar: document.getElementById('historia_familiar').value,
-        personalidad: document.getElementById('personalidad').value,
-        conducta_sexual: document.getElementById('conducta_sexual').value,
-        habitos_alcohol: document.querySelector("input[name='alcohol']:checked")?.value || "",
-        habitos_tabaco: document.querySelector("input[name='tabaco']:checked")?.value || "",
-        habitos_drogas: document.getElementById('drogas').value,
-        habitos_coquear: document.getElementById('coquear').value,
-        otras_observaciones: document.getElementById('otras_observaciones').value,
-        presentacion: document.getElementById('presentacion').value,
-        postura: document.querySelector("input[name='postura']:checked")?.value || "",
-        discurso: document.querySelector("input[name='discurso']:checked")?.value || "",
-        pensamiento: document.getElementById('pensamiento').value,
-        percepcion: document.getElementById('percepcion').value,
-        psicologicamente: document.querySelector("input[name='psicologicamente']:checked")?.value || ""
+        codigo_paciente: document.querySelector('input[placeholder="EH1111"]').value, // Asegúrate de que el selector sea correcto
+        historia_familiar: document.querySelector('input[placeholder="FM FOH FRT"]').value, // Mapea según el ID o placeholder
+        personalidad: document.querySelector('input[placeholder="FDH FH"]').value,
+        conducta_sexual: document.querySelector('input[placeholder="FH FTH"]').value,
+        habitos_alcohol: document.querySelector('input[type="checkbox"][name="alcohol"]').checked,
+        habitos_tabaco: document.querySelector('input[type="checkbox"][name="tabaco"]').checked,
+        frecuencia: document.querySelector('input[placeholder="HF HF I"]').value,
+        cantidad: document.querySelector('input[placeholder="FH FTH"]').value,
+        drogas: document.querySelector('input[placeholder="FH FTH"]').value,
+        coquear: document.querySelector('input[placeholder="FH FTH"]').value,
+        otras_observaciones: document.querySelector('textarea').value,
+        presentacion: document.querySelector('input[placeholder="FDH FH"]').value,
+        postura: document.querySelector('input[type="checkbox"][name="postura"]:checked').value,
+        discurso: document.querySelector('input[type="checkbox"][name="discurso"]:checked').value,
+        pensamiento: document.querySelector('input[placeholder="FDH F"]').value,
+        percepcion: document.querySelector('input[placeholder="FH FTH"]').value,
+        psicologicamente: document.querySelector('input[type="checkbox"][name="apto"]:checked').value
+        // Agrega aquí los campos de la tabla de tests si es necesario
     };
 
-    const response = await fetch(`${API}/guardar-psicologia`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    });
+    try {
+        const response = await fetch(`${API}/guardar-psicologia`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
 
-    if (response.ok) {
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || "Error desconocido");
+        }
+
         alert("GUARDADO EXITOSAMENTE");
-    } else {
-        const errorData = await response.json();
-        alert("ERROR AL GUARDAR: " + (errorData.detail || "Error desconocido"));
+    } catch (error) {
+        alert("ERROR AL GUARDAR: " + error.message);
     }
 }
+
+   
 </script>
 </body>
 </html>
