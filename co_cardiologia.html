@@ -36,16 +36,15 @@
     <div class="filter-box no-print">
         <span class="label-patologias">ANTECEDENTES PATOLÓGICOS</span>
         <select id="estadoSelect" class="form-select w-50">
-            <option value="">NIÑEZ</option>
-            <option value="">ADOLECENTE</option>
-            <option value="">ADULTEZ</option>
-            <option value="">TABAQUISMO</option>
-            <option value="">HIPERLIPIDEMIAS</option>
-            <option value="">ASMA BRONQUIAL</option>
-            <option value="">HTA</option>
-            <option value="">DIABETES</option>
-            <option value="">BRONQUITIS</option>
-            
+            <option value="NINEZ">NIÑEZ</option>
+            <option value="ADOLESCENTE">ADOLESCENTE</option>
+            <option value="ADULTEZ">ADULTEZ</option>
+            <option value="TABAQUISMO">TABAQUISMO</option>
+            <option value="HIPERLIPIDEMIAS">HIPERLIPIDEMIAS</option>
+            <option value="ASMA_BRONQUIAL">ASMA BRONQUIAL</option>
+            <option value="HTA">HTA</option>
+            <option value="DIABETES">DIABETES</option>
+            <option value="BRONQUITIS">BRONQUITIS</option>
         </select>
         <button onclick="filtrar()">BUSCAR</button>
     </div>
@@ -58,7 +57,9 @@
                 <th>ESTADO</th>
             </tr>
         </thead>
-        <tbody id="listaPacientes"></tbody>
+        <tbody id="listaPacientes">
+            <tr><td colspan="3" class="text-center">Seleccione un antecedente y presione Buscar</td></tr>
+        </tbody>
     </table>
 
     <div class="text-center mt-4 no-print">
@@ -75,8 +76,7 @@
         tbody.innerHTML = "<tr><td colspan='3' class='text-center'>CARGANDO DATOS...</td></tr>";
     
         try {
-            // Llamada única al nuevo endpoint que filtra desde el servidor
-            const res = await fetch(`${API}/ficha-psicologia-filtrada/${encodeURIComponent(estadoFiltro)}`);
+            const res = await fetch(`${API}/buscar-cardiologia?antecedente=${encodeURIComponent(estadoFiltro)}`);
             const resultados = await res.json();
             
             tbody.innerHTML = "";
@@ -91,19 +91,16 @@
                     <tr>
                         <td>${item.codigo || '---'}</td>
                         <td>${item.nombre}</td>
-                        <td>${item.estado}</td>
+                        <td>CONFIRMADO</td>
                     </tr>
                 `;
             }
         } catch (e) {
             console.error(e);
             alert("Error al conectar con la nube.");
-            tbody.innerHTML = "";
+            tbody.innerHTML = "<tr><td colspan='3' class='text-center'>ERROR DE CONEXIÓN</td></tr>";
         }
     }
-
-    
-
 </script>
 
 </body>
