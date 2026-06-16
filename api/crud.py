@@ -98,3 +98,14 @@ def delete_paciente(db: Session, paciente_id: int):
     except Exception:
         db.rollback()
         return False
+
+def create_ficha_psicologia(db: Session, data: dict):
+    valid_keys = [col.name for col in models.FichaPsicologia.__table__.columns]
+    data_filtered = {k: v for k, v in data.items() if k in valid_keys}
+    
+    db_obj = models.FichaPsicologia(**data_filtered)
+    db.add(db_obj)
+    db.commit()
+    db.refresh(db_obj)
+    return db_obj
+
