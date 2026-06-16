@@ -73,21 +73,44 @@ def obtener_ficha_oftalmo(paciente_id: int, db: Session = Depends(get_db)):
 
 # ----------- FICHA PSICOLOGICA -----------
 @app.post("/guardar-psicologia")
-def guardar_psicologia(data: dict, db: Session = Depends(get_db)):
-    codigo = data.get("codigo_paciente")
-    paciente = db.query(models.Paciente).filter(models.Paciente.codigo_paciente == codigo).first()
-    if not paciente: 
+async def guardar_psicologia(data: dict, db: Session = Depends(get_db)):
+    codigo_input = data.get("codigo_paciente")
+    
+    # Buscamos al paciente directamente por el campo que almacena el código
+    # Asegúrate de que 'codigo_paciente' sea el nombre exacto de la columna en tu modelo
+    paciente = db.query(models.Paciente).filter(models.Paciente.codigo_paciente == str(codigo_input)).first()
+    
+    if not paciente:
+        # Intentamos una segunda búsqueda limpiando espacios por si acaso
+        paciente = db.query(models.Paciente).filter(models.Paciente.codigo_paciente == str(codigo_input).strip()).first()
+    
+    if not paciente:
         raise HTTPException(status_code=404, detail="Paciente no encontrado")
+
+    # Si llega aquí, el paciente existe. Procedemos a guardar la ficha.
+    nueva_ficha = models.FichaPsicologia(
+        paciente_id=paciente.id,
+        historia_familiar=data.get("historia_familiar"),
+        personalidad=data.get("personalidad"),
+        conducta_sexual=data.get("conducta_sexual"),
+        habitos_alcohol=data.get("habitos_alcohol"),
+        habitos_tabaco=data.get("habitos_tabaco"),
+        habitos_drogas=data.get("habitos_drogas"),
+        habitos_coquear=data.get("habitos_coquear"),
+        otras_observaciones=data.get("otras_observaciones"),
+        presentacion=data.get("presentacion"),
+        postura=data.get("postura"),
+        discurso=data.get("discurso"),
+        pensamiento=data.get("pensamiento"),
+        percepcion=data.get("percepcion"),
+        psicologicamente=data.get("psicologicamente")
+    )
     
-    datos = data.copy()
-    datos.pop("codigo_paciente", None)
-    datos["paciente_id"] = paciente.id
-    
-    nueva = models.FichaPsicologia(**datos)
-    db.add(nueva)
+    db.add(nueva_ficha)
     db.commit()
-    db.refresh(nueva)
-    return nueva
+    db.refresh(nueva_ficha)
+    
+    return {"message": "GUARDADO EXITOSAMENTE"}
 
 @app.get("/ficha-psicologia/{paciente_id}")
 def obtener_ficha_psicologia(paciente_id: int, db: Session = Depends(get_db)):
