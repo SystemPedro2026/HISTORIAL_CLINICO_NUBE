@@ -74,43 +74,45 @@ def obtener_ficha_oftalmo(paciente_id: int, db: Session = Depends(get_db)):
 # ----------- FICHA PSICOLOGICA -----------
 @app.post("/guardar-psicologia")
 async def guardar_psicologia(data: dict, db: Session = Depends(get_db)):
-    codigo_input = data.get("codigo_paciente")
+    codigo_input = str(data.get("codigo_paciente", "")).strip().upper()
     
-    # Buscamos al paciente directamente por el campo que almacena el código
-    # Asegúrate de que 'codigo_paciente' sea el nombre exacto de la columna en tu modelo
-    paciente = db.query(models.Paciente).filter(models.Paciente.codigo_paciente == str(codigo_input)).first()
-    
-    if not paciente:
-        # Intentamos una segunda búsqueda limpiando espacios por si acaso
-        paciente = db.query(models.Paciente).filter(models.Paciente.codigo_paciente == str(codigo_input).strip()).first()
-    
-    if not paciente:
-        raise HTTPException(status_code=404, detail="Paciente no encontrado")
+    if not codigo_input:
+        raise HTTPException(status_code=400, detail="El código del paciente es obligatorio")
 
-    # Si llega aquí, el paciente existe. Procedemos a guardar la ficha.
-    nueva_ficha = models.FichaPsicologia(
-        paciente_id=paciente.id,
-        historia_familiar=data.get("historia_familiar"),
-        personalidad=data.get("personalidad"),
-        conducta_sexual=data.get("conducta_sexual"),
-        habitos_alcohol=data.get("habitos_alcohol"),
-        habitos_tabaco=data.get("habitos_tabaco"),
-        habitos_drogas=data.get("habitos_drogas"),
-        habitos_coquear=data.get("habitos_coquear"),
-        otras_observaciones=data.get("otras_observaciones"),
-        presentacion=data.get("presentacion"),
-        postura=data.get("postura"),
-        discurso=data.get("discurso"),
-        pensamiento=data.get("pensamiento"),
-        percepcion=data.get("percepcion"),
-        psicologicamente=data.get("psicologicamente")
-    )
+    paciente = db.query(models.Paciente).filter(
+        func.upper(models.Paciente.codigo_paciente) == codigo_input
+    ).first()
     
-    db.add(nueva_ficha)
-    db.commit()
-    db.refresh(nueva_ficha)
-    
-    return {"message": "GUARDADO EXITOSAMENTE"}
+    if not paciente:
+        raise HTTPException(status_code=404, detail="Paciente no encontrado en el sistema")
+
+    try:
+        nueva_ficha = models.FichaPsicologia(
+            paciente_id=paciente.id,
+            historia_familiar=data.get("historia_familiar"),
+            personalidad=data.get("personalidad"),
+            conducta_sexual=data.get("conducta_sexual"),
+            habitos_alcohol=data.get("habitos_alcohol"),
+            habitos_tabaco=data.get("habitos_tabaco"),
+            habitos_drogas=data.get("habitos_drogas"),
+            habitos_coquear=data.get("habitos_coquear"),
+            otras_observaciones=data.get("otras_observaciones"),
+            presentacion=data.get("presentacion"),
+            postura=data.get("postura"),
+            discurso=data.get("discurso"),
+            pensamiento=data.get("pensamiento"),
+            percepcion=data.get("percepcion"),
+            psicologicamente=data.get("psicologicamente")
+        )
+        
+        db.add(nueva_ficha)
+        db.commit()
+        db.refresh(nueva_ficha)
+        return {"message": "GUARDADO EXITOSAMENTE"}
+        
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/ficha-psicologia/{paciente_id}")
 def obtener_ficha_psicologia(paciente_id: int, db: Session = Depends(get_db)):
