@@ -241,3 +241,23 @@ def obtener_ficha_cardiologia(paciente_id: int, db: Session = Depends(get_db)):
     ficha = db.query(models.FichaCardiologia).filter(models.FichaCardiologia.paciente_id == paciente_id).first()
     if not ficha: raise HTTPException(status_code=404, detail="Ficha no encontrada")
     return ficha
+
+@app.get("/consulta-cardiologia/{diagnostico}")
+def consultar_cardiologia(diagnostico: str, db: Session = Depends(get_db)):
+    # Buscamos fichas que contengan el texto en el diagnóstico
+    fichas = db.query(models.FichaCardiologia).filter(
+        models.FichaCardiologia.diagnostico_recomendaciones.contains(diagnostico)
+    ).all()
+    
+    resultados = []
+    for f in fichas:
+        p = db.query(models.Paciente).filter(models.Paciente.id == f.paciente_id).first()
+        if p:
+            resultados.append({
+                "codigo": p.codigo_paciente,
+                "nombre": f"{p.apellido} {p.nombre}",
+                "diagnostico": f.diagnostico_recomendaciones
+            })
+    return resultados
+
+
