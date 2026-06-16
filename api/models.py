@@ -122,3 +122,45 @@ class FichaElectroencefalograma(Base):
     romberg = Column(String); vertigo_nistagmo = Column(String); vertigo_adaptacion = Column(String)
     observaciones_examen = Column(Text); descripcion_estudio = Column(String)
     resultado_estudio = Column(String); observaciones_estudio = Column(Text)
+
+class FichaCardiologia(Base):
+    __tablename__ = "ficha_cardiologia"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    paciente_id = Column(Integer, ForeignKey("paciente.id"))
+    
+    # Antecedentes
+    ninez = Column(String)
+    tabaquismo = Column(String)
+    hta = Column(String)
+    adolescente = Column(String)
+    hiperlipidemias = Column(String)
+    diabetes = Column(String)
+    adultez = Column(String)
+    asma_bronquial = Column(String)
+    bronquitis = Column(String)
+    obs_antecedentes = Column(Text)
+    
+    # Antecedentes Familiares
+    padre = Column(String)
+    madre = Column(String)
+    hermanos = Column(String)
+    abuelos = Column(String)
+    hijos = Column(String)
+    obs_familiares = Column(Text)
+    
+    # Anamnesis y Signos Vitales
+    anamnesis = Column(Text)
+    presion_arterial = Column(String)
+    frecuencia_cardiaca = Column(String)
+    pulso = Column(String)
+    frecuencia_respiratoria = Column(String)
+    talla = Column(String)
+    peso = Column(String)
+    imc = Column(String)
+    sat_o2 = Column(String)
+    
+    # Exámenes
+    examen_clinico = Column(Text)
+    resultado_electro = Column(Text)
+    diagnostico_recomendaciones = Column(Text)
