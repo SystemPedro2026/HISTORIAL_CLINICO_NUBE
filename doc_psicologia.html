@@ -145,34 +145,39 @@
         });
     });
 
-    async function guardarFicha() {
-        const payload = {
-            codigo_paciente: document.getElementById('codigo_paciente').value,
-            historia_familiar: document.getElementById('historia_familiar').value,
-            personalidad: document.getElementById('personalidad').value,
-            conducta_sexual: document.getElementById('conducta_sexual').value,
-            habitos_alcohol: document.querySelector("input[name='alcohol']:checked")?.value || "",
-            habitos_tabaco: document.querySelector("input[name='tabaco']:checked")?.value || "",
-            habitos_drogas: document.getElementById('drogas').value,
-            habitos_coquear: document.getElementById('coquear').value,
-            otras_observaciones: document.getElementById('otras_observaciones').value,
-            presentacion: document.getElementById('presentacion').value,
-            postura: document.querySelector("input[name='postura']:checked")?.value || "",
-            discurso: document.querySelector("input[name='discurso']:checked")?.value || "",
-            pensamiento: document.getElementById('pensamiento').value,
-            percepcion: document.getElementById('percepcion').value,
-            psicologicamente: document.querySelector("input[name='psicologicamente']:checked")?.value || ""
-        };
+async function guardarFicha() {
+    const payload = {
+        codigo_paciente: document.getElementById('codigo_paciente').value,
+        historia_familiar: document.getElementById('historia_familiar').value,
+        personalidad: document.getElementById('personalidad').value,
+        conducta_sexual: document.getElementById('conducta_sexual').value,
+        habitos_alcohol: document.querySelector("input[name='alcohol']:checked")?.value || "",
+        habitos_tabaco: document.querySelector("input[name='tabaco']:checked")?.value || "",
+        habitos_drogas: document.getElementById('drogas').value,
+        habitos_coquear: document.getElementById('coquear').value,
+        otras_observaciones: document.getElementById('otras_observaciones').value,
+        presentacion: document.getElementById('presentacion').value,
+        postura: document.querySelector("input[name='postura']:checked")?.value || "",
+        discurso: document.querySelector("input[name='discurso']:checked")?.value || "",
+        pensamiento: document.getElementById('pensamiento').value,
+        percepcion: document.getElementById('percepcion').value,
+        psicologicamente: document.querySelector("input[name='psicologicamente']:checked")?.value || ""
+    };
 
-        const res = await fetch('https://historial-clinico-nube.onrender.com/guardar-psicologia/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+    const response = await fetch(`${API}/guardar-psicologia`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
 
-        if(res.ok) alert("REGISTRO GUARDADO CORRECTAMENTE");
-        else alert("ERROR AL GUARDAR");
+    if (response.ok) {
+        alert("GUARDADO EXITOSAMENTE");
+    } else {
+        alert("ERROR AL GUARDAR");
     }
+}
 </script>
 </body>
 </html>
