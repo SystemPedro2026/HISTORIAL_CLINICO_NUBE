@@ -127,9 +127,8 @@ class FichaCardiologia(Base):
     __tablename__ = "ficha_cardiologia"
     
     id = Column(Integer, primary_key=True, index=True)
-    paciente_id = Column(Integer, ForeignKey("pacientes.id"))
+    paciente_id = Column(Integer, ForeignKey("pacientes.id"), nullable=False)
     
-    # Antecedentes
     ninez = Column(String)
     tabaquismo = Column(String)
     hta = Column(String)
@@ -140,16 +139,12 @@ class FichaCardiologia(Base):
     asma_bronquial = Column(String)
     bronquitis = Column(String)
     obs_antecedentes = Column(Text)
-    
-    # Antecedentes Familiares
     padre = Column(String)
     madre = Column(String)
     hermanos = Column(String)
     abuelos = Column(String)
     hijos = Column(String)
     obs_familiares = Column(Text)
-    
-    # Anamnesis y Signos Vitales
     anamnesis = Column(Text)
     presion_arterial = Column(String)
     frecuencia_cardiaca = Column(String)
@@ -159,8 +154,6 @@ class FichaCardiologia(Base):
     peso = Column(String)
     imc = Column(String)
     sat_o2 = Column(String)
-    
-    # Exámenes
     examen_clinico = Column(Text)
     resultado_electro = Column(Text)
     diagnostico_recomendaciones = Column(Text)
