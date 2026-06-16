@@ -77,11 +77,10 @@ def obtener_ficha_oftalmo(paciente_id: int, db: Session = Depends(get_db)):
 @app.post("/guardar-psicologia")
 async def guardar_psicologia(data: dict, db: Session = Depends(get_db)):
     codigo_input = str(data.get("codigo_paciente", "")).strip().upper()
-    
     if not codigo_input:
         raise HTTPException(status_code=400, detail="El código del paciente es obligatorio")
 
-    # Búsqueda normalizada para evitar errores de coincidencia
+    # Búsqueda normalizada
     paciente = db.query(models.Paciente).filter(
         func.upper(models.Paciente.codigo_paciente) == codigo_input
     ).first()
@@ -107,14 +106,12 @@ async def guardar_psicologia(data: dict, db: Session = Depends(get_db)):
             percepcion=data.get("percepcion"),
             resultado_psicologico=data.get("resultado_psicologico")
         )
-        
         db.add(nueva_ficha)
         db.commit()
         db.refresh(nueva_ficha)
         return {"message": "GUARDADO EXITOSAMENTE"}
-        
     except Exception as e:
-        db.rollback()
+        print(f"Error al guardar: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/ficha-psicologia/{paciente_id}")
