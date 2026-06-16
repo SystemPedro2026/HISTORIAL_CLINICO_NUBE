@@ -196,45 +196,42 @@ async def guardar_cardiologia(data: dict, db: Session = Depends(get_db)):
     if not paciente:
         raise HTTPException(status_code=404, detail="Paciente no encontrado")
 
-    try:
-        nueva_ficha = models.FichaCardiologia(
-            paciente_id=paciente.id,
-            ninez=data.get("ninez"),
-            tabaquismo=data.get("tabaquismo"),
-            hta=data.get("hta"),
-            adolescente=data.get("adolescente"),
-            hiperlipidemias=data.get("hiperlipidemias"),
-            diabetes=data.get("diabetes"),
-            adultez=data.get("adultez"),
-            asma_bronquial=data.get("asma_bronquial"),
-            bronquitis=data.get("bronquitis"),
-            obs_antecedentes=data.get("obs_antecedentes"),
-            padre=data.get("padre"),
-            madre=data.get("madre"),
-            hermanos=data.get("hermanos"),
-            abuelos=data.get("abuelos"),
-            hijos=data.get("hijos"),
-            obs_familiares=data.get("obs_familiares"),
-            anamnesis=data.get("anamnesis"),
-            presion_arterial=data.get("presion_arterial"),
-            frecuencia_cardiaca=data.get("frecuencia_cardiaca"),
-            pulso=data.get("pulso"),
-            frecuencia_respiratoria=data.get("frecuencia_respiratoria"),
-            talla=data.get("talla"),
-            peso=data.get("peso"),
-            imc=data.get("imc"),
-            sat_o2=data.get("sat_o2"),
-            examen_clinico=data.get("examen_clinico"),
-            resultado_electro=data.get("resultado_electro"),
-            diagnostico_recomendaciones=data.get("diagnostico_recomendaciones")
-        )
-        db.add(nueva_ficha)
-        db.commit()
-        db.refresh(nueva_ficha)
-        return {"message": "GUARDADO EXITOSAMENTE"}
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+    nueva_ficha = models.FichaCardiologia(
+        paciente_id=paciente.id,
+        ninez=data.get("ninez"),
+        tabaquismo=data.get("tabaquismo"),
+        hta=data.get("hta"),
+        adolescente=data.get("adolescente"),
+        hiperlipidemias=data.get("hiperlipidemias"),
+        diabetes=data.get("diabetes"),
+        adultez=data.get("adultez"),
+        asma_bronquial=data.get("asma_bronquial"),
+        bronquitis=data.get("bronquitis"),
+        obs_antecedentes=data.get("obs_antecedentes"),
+        padre=data.get("padre"),
+        madre=data.get("madre"),
+        hermanos=data.get("hermanos"),
+        abuelos=data.get("abuelos"),
+        hijos=data.get("hijos"),
+        obs_familiares=data.get("obs_familiares"),
+        anamnesis=data.get("anamnesis"),
+        presion_arterial=data.get("presion_arterial"),
+        frecuencia_cardiaca=data.get("frecuencia_cardiaca"),
+        pulso=data.get("pulso"),
+        frecuencia_respiratoria=data.get("frecuencia_respiratoria"),
+        talla=data.get("talla"),
+        peso=data.get("peso"),
+        imc=data.get("imc"),
+        sat_o2=data.get("sat_o2"),
+        examen_clinico=data.get("examen_clinico"),
+        resultado_electro=data.get("resultado_electro"),
+        diagnostico_recomendaciones=data.get("diagnostico_recomendaciones")
+    )
+    db.add(nueva_ficha)
+    db.commit()
+    return {"status": "success"}
+
+
 
 @app.get("/ficha-cardiologia/{paciente_id}")
 def obtener_ficha_cardiologia(paciente_id: int, db: Session = Depends(get_db)):
