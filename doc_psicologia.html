@@ -175,7 +175,8 @@ async function guardarFicha() {
     if (response.ok) {
         alert("GUARDADO EXITOSAMENTE");
     } else {
-        alert("ERROR AL GUARDAR");
+        const errorData = await response.json();
+        alert("ERROR AL GUARDAR: " + (errorData.detail || "Error desconocido"));
     }
 }
 </script>
