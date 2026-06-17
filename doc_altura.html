@@ -164,5 +164,33 @@
     <button class="save-btn no-print">GUARDAR EVALUACIÓN</button>
 </div>
 
+<script>
+    const API_URL = "https://historial-clinico-nube.onrender.com";
+
+    async function buscarFicha() {
+        const codigo = document.getElementById('codigo_busqueda').value.trim();
+        if (!codigo) return alert("EL CÓDIGO ES REQUERIDO");
+
+        try {
+            const response = await fetch(`${API_URL}/consultar-altura/${codigo}`);
+            const data = await response.json();
+
+            const body = document.getElementById('body_resultados');
+            if (data.status === "error") {
+                body.innerHTML = `<tr><td colspan="3" style="text-align:center;">NO SE ENCONTRÓ FICHA PARA ESTE CÓDIGO</td></tr>`;
+            } else {
+                body.innerHTML = `<tr>
+                    <td>${codigo}</td>
+                    <td>${data.obs_antecedentes || 'SIN OBSERVACIONES'}</td>
+                    <td>${data.obs_examen || 'SIN OBSERVACIONES'}</td>
+                </tr>`;
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("ERROR AL CONECTAR CON EL SERVIDOR");
+        }
+    }
+</script>
+    
 </body>
 </html>
