@@ -7,22 +7,25 @@
     <style>
         body { background-color: #0f172a; color: #e2e8f0; font-family: 'Segoe UI', sans-serif; }
         .container { max-width: 900px; margin-top: 20px; }
+        .logo-container { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .logo-container img { height: 60px; }
         .filter-box { background: #1e293b; padding: 20px; border-radius: 15px; display: flex; gap: 15px; align-items: center; justify-content: center; }
         button { background: #22c55e; color: white; font-weight: bold; padding: 10px 20px; border-radius: 8px; border: none; }
         table { width: 100%; margin-top: 20px; background: white; color: #0f172a; border-radius: 10px; overflow: hidden; }
         th { background: #334155; color: white; }
-        @media print { .no-print { display: none; } }
     </style>
 </head>
 <body>
-
 <div class="container">
+    <div class="logo-container">
+        <img src="logo.png" alt="Logo">
+        <strong>HISTORIAL_CLINICO</strong>
+    </div>
     <div class="header text-center">
-        <a href="consultas.html" class="btn btn-secondary btn-sm mb-3 no-print">← VOLVER</a>
+        <a href="consultas.html" class="btn btn-secondary btn-sm mb-3">← VOLVER</a>
         <h2>CONSULTA DE TRABAJO CON ALTURA</h2>
     </div>
-
-    <div class="filter-box no-print">
+    <div class="filter-box">
         <select id="campoSelect" class="form-select w-50">
             <option value="soplo_cardiaco">SOPLO CARDIACO</option>
             <option value="arritmias_cardiacas">ARRITMIAS CARDIACAS</option>
@@ -33,39 +36,25 @@
         </select>
         <button onclick="filtrar()">BUSCAR</button>
     </div>
-
     <table class="table table-bordered">
         <thead><tr><th>CÓDIGO</th><th>NOMBRE COMPLETO</th><th>ESTADO</th></tr></thead>
         <tbody id="listaPacientes"></tbody>
     </table>
-
-    <div class="text-center mt-4 no-print">
-        <button onclick="window.print()" class="btn btn-primary">IMPRIMIR RESULTADOS</button>
-    </div>
 </div>
-
 <script>
     const API = 'https://historial-clinico-nube.onrender.com';
-
     async function filtrar() {
         const campo = document.getElementById('campoSelect').value;
         const tbody = document.getElementById('listaPacientes');
         tbody.innerHTML = "<tr><td colspan='3' class='text-center'>CARGANDO...</td></tr>";
-    
         try {
             const res = await fetch(`${API}/filtrar-altura/${campo}`);
             const resultados = await res.json();
-            
             tbody.innerHTML = resultados.length === 0 
                 ? "<tr><td colspan='3' class='text-center'>NO SE ENCONTRARON REGISTROS</td></tr>"
-                : resultados.map(item => `
-                    <tr>
-                        <td>${item.codigo}</td>
-                        <td>${item.nombre}</td>
-                        <td>${item.estado}</td>
-                    </tr>`).join('');
+                : resultados.map(item => `<tr><td>${item.codigo}</td><td>${item.nombre}</td><td>${item.estado}</td></tr>`).join('');
         } catch (e) {
-            alert("Error al conectar con la nube.");
+            alert("Error al conectar con la nube. Verifica la consola.");
             tbody.innerHTML = "";
         }
     }
