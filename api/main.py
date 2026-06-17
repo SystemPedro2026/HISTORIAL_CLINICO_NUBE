@@ -274,8 +274,10 @@ async def filtrar_cardiologia(query: str, db: Session = Depends(get_db)):
         } for f, p in resultados
     ]
 
+
 @app.get("/buscar-cardiologia")
 async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
+    # Mapeo directo a los atributos del modelo
     columnas = {
         "NINEZ": models.FichaCardiologia.ninez,
         "ADOLESCENTE": models.FichaCardiologia.adolescente,
@@ -288,20 +290,14 @@ async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
         "BRONQUITIS": models.FichaCardiologia.bronquitis
     }
     
-    columna_a_buscar = columnas.get(antecedente.upper().strip())
-    if not columna_a_buscar: return []
+    columna_modelo = columnas.get(antecedente.upper().strip())
+    if not columna_modelo:
+        return []
 
-    # CAMBIO: Usamos FichaCardiologia para filtrar y luego obtenemos los datos
-    fichas = db.query(models.FichaCardiologia).filter(columna_a_buscar == "SI").all()
-    
-    resultados = []
-    for f in fichas:
-        p = db.query(models.Paciente).filter(models.Paciente.id == f.paciente_id).first()
-        if p:
-            resultados.append({
-                "codigo": p.codigo_paciente, 
-                "nombre": f"{p.apellido} {p.nombre}", 
-                "detalle": "CONFIRMADO"
-            })
-    return resultados
+    # EJECUCIÓN: Query sin el alias de modelo confuso, referenciando las tablas desde la sesión
+    query = db.query(models.Paciente.codigo_paciente, models.Paciente.nombre, models.Paciente.apellido).\
+               join(models.FichaCardiologia, models.FichaCardiologia.paciente_id == models.Paciente.id).\
+               filter(columna_modelo == "SI").all()
 
+    # Formateo de salida para que el frontend reciba algo que entienda
+    return [{"codigo": r[0], "nombre": f"{r[1]} {r[2]}", "detalle": "CONFIRMADO"} for r in query]
