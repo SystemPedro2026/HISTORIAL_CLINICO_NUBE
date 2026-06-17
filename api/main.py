@@ -308,20 +308,14 @@ async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
 
 
 # --- FICHA ESPIROMETRÍA ---
-
 @app.post("/guardar-espirometria")
 async def guardar_espirometria(data: dict):
     try:
-        # Validación y normalización estricta de campos
-        codigo = str(data.get("codigo_paciente", "")).strip().upper()
-        if not codigo:
-            return {"status": "error", "message": "Código de paciente requerido"}
-        
         db = get_db()
         cursor = db.cursor()
-           
-        # Reemplaza SOLO el bloque cursor.execute dentro de tu función @app.post("/guardar-espirometria")
-        cursor.execute("""
+        
+        # Mapeo exacto basado en la estructura de tu tabla confirmada
+        query = """
             INSERT INTO ficha_espirometria (
                 paciente_id, criterios_exclusion_1, criterios_exclusion_2, criterios_exclusion_3, 
                 criterios_exclusion_4, criterios_exclusion_5, hemoptisis, infarto_reciente, 
@@ -329,20 +323,29 @@ async def guardar_espirometria(data: dict):
                 embarazo_complicado, aneurisma_cerebral, inestabilidad_cv, embolia_pulmonar, 
                 infeccion_respiratoria, infeccion_oido, uso_aerosoles, fumo_ultimas_horas
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            1, # Aquí debes poner la lógica para obtener el paciente_id real desde tu sistema
-            data.get("ex1"), data.get("ex2"), data.get("ex3"), data.get("ex4"), data.get("ex5"),
-            data.get("hemoptisis"), data.get("infarto_reciente"), data.get("neumotorax"), 
-            data.get("fiebre_nv"), data.get("traqueostomia"), data.get("embarazo_avanzado"), 
-            data.get("sonda_pleural"), data.get("embarazo_complicado"), data.get("aneurisma_cerebral"), 
-            data.get("inestabilidad_cv"), data.get("embolia_pulmonar"), 
-            data.get("inf_resp"), data.get("inf_oido"), data.get("aerosoles"), data.get("fuma")
-        ))
+        """
         
+        # Obtenemos valores. Si no existen, guardamos cadena vacía ""
+        valores = (
+            None, # paciente_id
+            data.get("criterios_exclusion_1", ""), data.get("criterios_exclusion_2", ""),
+            data.get("criterios_exclusion_3", ""), data.get("criterios_exclusion_4", ""),
+            data.get("criterios_exclusion_5", ""), data.get("hemoptisis", ""),
+            data.get("infarto_reciente", ""), data.get("neumotorax", ""),
+            data.get("fiebre_nauseas", ""), data.get("traqueostomia", ""),
+            data.get("embarazo_avanzado", ""), data.get("sonda_pleural", ""),
+            data.get("embarazo_complicado", ""), data.get("aneurisma_cerebral", ""),
+            data.get("inestabilidad_cv", ""), data.get("embolia_pulmonar", ""),
+            data.get("infeccion_respiratoria", ""), data.get("infeccion_oido", ""),
+            data.get("uso_aerosoles", ""), data.get("fumo_ultimas_horas", "")
+        )
+        
+        cursor.execute(query, valores)
         db.commit()
-        return {"status": "success", "message": "Registro guardado exitosamente"}
+        return {"status": "success"}
     except Exception as e:
-        return {"status": "error", "message": f"Error interno: {str(e)}"}
+        return {"status": "error", "message": str(e)}
+
 
 @app.get("/consultar-espirometria/{codigo_paciente}")
 async def consultar_espirometria(codigo_paciente: str):
