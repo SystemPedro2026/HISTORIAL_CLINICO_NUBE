@@ -123,14 +123,20 @@ class FichaElectroencefalograma(Base):
     __tablename__ = "ficha_electroencefalograma"
     id = Column(Integer, primary_key=True, index=True)
     paciente_id = Column(Integer, ForeignKey("pacientes.id", ondelete="CASCADE"))
+    # Antecedentes
     cefaleas = Column(String); epilepsia = Column(String); convulsiones = Column(String)
     accidente = Column(String); perdida_conocimiento = Column(String); paralisis = Column(String)
     otros_antecedentes = Column(Text); derrame_cerebral = Column(String); quirurgicos = Column(String)
-    observaciones_antecedentes = Column(Text); marcha = Column(String); reflejos = Column(String)
+    observaciones_antecedentes = Column(Text)
+    # Examen Clínico
+    marcha = Column(String); reflejos = Column(String)
     coordinacion_dedo_nariz = Column(String); coordinacion_talon_rodilla = Column(String)
     romberg = Column(String); vertigo_nistagmo = Column(String); vertigo_adaptacion = Column(String)
-    observaciones_examen = Column(Text); descripcion_estudio = Column(String)
-    resultado_estudio = Column(String); observaciones_estudio = Column(Text)
+    observaciones_examen = Column(Text)
+    # Descripción y Activación
+    descripcion_estudio = Column(String); resultado_estudio = Column(String); observaciones_estudio = Column(Text)
+    reposo = Column(String); fotoestimulacion = Column(String); hipernea = Column(String)
+    diagnostico_recomendaciones = Column(Text)
 
 class FichaCardiologia(Base):
     __tablename__ = "ficha_cardiologia"
