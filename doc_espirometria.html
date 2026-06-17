@@ -11,9 +11,10 @@
         .btn { padding: 8px 15px; border: none; cursor: pointer; color: white; font-weight: bold; font-size: 13px; text-decoration: none; display: flex; align-items: center; }
         .btn-gray { background: #64748b; }
         .btn-black { background: #212529; }
-        
+          
         .header-content { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--emerald); padding-bottom: 10px; margin-bottom: 20px; }
         .header-content img { height: 50px; }
+        
         .title-area { text-align: right; }
         .title-area h1 { font-size: 18px; margin: 0; color: #000; font-weight: 800; }
         .title-area p { font-size: 11px; margin: 0; color: var(--emerald); font-weight: 800; }
@@ -27,21 +28,11 @@
 </head>
 <body>
 <div class="container">
+    <!-------------------------------------- -->
     <div class="top-action-bar">
         <a href="d_menu.html" class="btn btn-gray">← VOLVER AL MENÚ</a>
         <button onclick="window.print()" class="btn btn-black">🖨️ IMPRIMIR</button>
     </div>
-
-    <div class="header-content">
-        <img src="https://ingerutonny-ui.github.io/HISTORIAL_CLINICO_NUBE/logo.png" alt="Logo">
-        <div class="title-area">
-            <h1>FICHA DE EVALUACIÓN PSICOLÓGICA</h1>
-            <p>SALUD OCUPACIONAL - DOCUMENTO LEGAL</p>
-        </div>
-    </div>
-    
-    
-    
     
     <div class="header-content">
         <img src="https://ingerutonny-ui.github.io/HISTORIAL_CLINICO_NUBE/logo.png" height="50" alt="Logo">
@@ -50,11 +41,11 @@
             <p>SALUD OCUPACIONAL - DOCUMENTO LEGAL</p>
         </div>
     </div>
-
+     <!-------------------------------------- -->
     <div class="code-box">
         <strong>CÓDIGO PACIENTE:</strong> <input type="text" id="codigo_paciente" style="width: 200px;" oninput="this.value = this.value.toUpperCase()">
     </div>
-
+     <!-------------------------------------- -->
     <table>
         <tr><td colspan="5" class="caption">PREGUNTAS PARA TODOS LOS POSTULANTES (CRITERIOS DE EXCLUSIÓN)</td></tr>
         <tr><td>1. ¿Tuvo desprendimiento de retina... en últimos 3 meses?</td><td>SI</td><td><input type="radio" name="criterios_exclusion_1" value="SI"></td><td>NO</td><td><input type="radio" name="criterios_exclusion_1" value="NO"></td></tr>
