@@ -72,11 +72,11 @@ async function guardarFicha() {
         codigo_paciente: document.getElementById('codigo_paciente').value.toUpperCase(),
         
         // Mapeo exacto según FichaEspirometria en models.py
-        criterios_exclusion_1: document.querySelector('input[name="ex1"]:checked')?.value || '',
-        criterios_exclusion_2: document.querySelector('input[name="ex2"]:checked')?.value || '',
-        criterios_exclusion_3: document.querySelector('input[name="ex3"]:checked')?.value || '',
-        criterios_exclusion_4: document.querySelector('input[name="ex4"]:checked')?.value || '',
-        criterios_exclusion_5: document.querySelector('input[name="ex5"]:checked')?.value || '',
+        criterios_exclusion_1: document.querySelector('input[name="criterios_exclusion_1"]:checked')?.value || '',
+        criterios_exclusion_2: document.querySelector('input[name="criterios_exclusion_2"]:checked')?.value || '',
+        criterios_exclusion_3: document.querySelector('input[name="criterios_exclusion_3"]:checked')?.value || '',
+        criterios_exclusion_4: document.querySelector('input[name="criterios_exclusion_4"]:checked')?.value || '',
+        criterios_exclusion_5: document.querySelector('input[name="criterios_exclusion_5"]:checked')?.value || '',
         
         hemoptisis: document.querySelector('input[name="hemoptisis"]:checked')?.value || '',
         infarto_reciente: document.querySelector('input[name="infarto_reciente"]:checked')?.value || '',
