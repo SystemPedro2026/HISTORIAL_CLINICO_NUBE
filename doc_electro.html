@@ -95,7 +95,52 @@
         <div style="border-top:1px solid #000; width:40%; text-align:center;">FIRMA DEL PACIENTE</div>
     </div>
 
-    <button class="btn-guardar no-print" onclick="alert('Funcionalidad de guardado lista para conectar')">💾 GUARDAR REGISTRO FINAL</button>
+    <button class="btn-guardar no-print" onclick="guardarFichaElectro()">💾 GUARDAR REGISTRO FINAL</button>
 </div>
+
+<script>
+async function guardarFichaElectro() {
+    const data = {
+        codigo_paciente: document.getElementById('codigo_paciente').value,
+        cefaleas: document.getElementById('cefaleas').checked ? 'SI' : 'NO',
+        perdida_conocimiento: document.getElementById('perdida_conocimiento').checked ? 'SI' : 'NO',
+        derrame_cerebral: document.getElementById('derrame_cerebral').checked ? 'SI' : 'NO',
+        epilepsia: document.getElementById('epilepsia').checked ? 'SI' : 'NO',
+        paralisis: document.getElementById('paralisis').checked ? 'SI' : 'NO',
+        quirurgicos: document.getElementById('quirurgicos').checked ? 'SI' : 'NO',
+        convulsiones: document.getElementById('convulsiones').checked ? 'SI' : 'NO',
+        accidente: document.getElementById('accidente').checked ? 'SI' : 'NO',
+        otros_antecedentes: document.getElementById('otros_antecedentes').checked ? 'SI' : 'NO',
+        observaciones_antecedentes: document.getElementById('observaciones_antecedentes').value,
+        marcha: document.getElementById('marcha').checked ? 'NORMAL' : 'ANORMAL',
+        reflejos: document.getElementById('reflejos').checked ? 'NORMAL' : 'ANORMAL',
+        coordinacion_dedo_nariz: document.getElementById('coordinacion_dedo_nariz').checked ? 'NORMAL' : 'ANORMAL',
+        coordinacion_talon_rodilla: document.getElementById('coordinacion_talon_rodilla').checked ? 'NORMAL' : 'ANORMAL',
+        romberg: document.getElementById('romberg').checked ? 'NORMAL' : 'ANORMAL',
+        vertigo_nistagmo: document.getElementById('vertigo_nistagmo').checked ? 'NORMAL' : 'ANORMAL',
+        vertigo_adaptacion: document.getElementById('vertigo_adaptacion').checked ? 'NORMAL' : 'ANORMAL',
+        observaciones_examen: document.getElementById('observaciones_examen').value,
+        descripcion_estudio: document.getElementById('descripcion_estudio').checked ? 'NORMAL' : 'ANORMAL',
+        resultado_estudio: document.getElementById('resultado_estudio').checked ? 'NORMAL' : 'ANORMAL',
+        observaciones_estudio: document.getElementById('observaciones_estudio').value,
+        reposo: document.getElementById('reposo_n').checked ? 'NORMAL' : 'ANORMAL',
+        fotoestimulacion: document.getElementById('foto_n').checked ? 'NORMAL' : 'ANORMAL',
+        hipernea: document.getElementById('hipernea_n').checked ? 'NORMAL' : 'ANORMAL',
+        diagnostico_recomendaciones: document.getElementById('diagnostico_recomendaciones').value
+    };
+
+    const response = await fetch('/guardar-electro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+        alert('GUARDADO EXITOSAMENTE');
+    } else {
+        alert('ERROR AL GUARDAR, REVISA LOS LOGS');
+    }
+}
+</script>
 </body>
 </html>
