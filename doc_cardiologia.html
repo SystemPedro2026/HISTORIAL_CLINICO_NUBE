@@ -100,7 +100,16 @@
 
 <script>
     const API = 'https://historial-clinico-nube.onrender.com';
-
+    // Asegúrate de colocar esto dentro de tu etiqueta <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputCodigo = document.getElementById("codigo_paciente");
+        
+        if (inputCodigo) {
+            inputCodigo.addEventListener("input", function() {
+                this.value = this.value.toUpperCase();
+            });
+        }
+    });
     async function guardar() {
         const getVal = (id) => document.getElementById(id).checked ? "SI" : "NO";
         const data = {
