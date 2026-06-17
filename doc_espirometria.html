@@ -81,7 +81,7 @@ async function guardarFicha() {
         hemoptisis: document.querySelector('input[name="hemoptisis"]:checked')?.value || '',
         infarto_reciente: document.querySelector('input[name="infarto_reciente"]:checked')?.value || '',
         neumotorax: document.querySelector('input[name="neumotorax"]:checked')?.value || '',
-        fiebre_nauseas: document.querySelector('input[name="fiebre_nv"]:checked')?.value || '',
+        fiebre_nauseas: document.querySelector('input[name="fiebre_nauseas"]:checked')?.value || '',
         traqueostomia: document.querySelector('input[name="traqueostomia"]:checked')?.value || '',
         embarazo_avanzado: document.querySelector('input[name="embarazo_avanzado"]:checked')?.value || '',
         // Agregados faltantes en tu formulario que existen en tu modelo:
@@ -91,17 +91,17 @@ async function guardarFicha() {
         inestabilidad_cv: document.querySelector('input[name="inestabilidad_cv"]:checked')?.value || '',
         embolia_pulmonar: document.querySelector('input[name="embolia_pulmonar"]:checked')?.value || '',
         
-        infeccion_respiratoria: document.querySelector('input[name="inf_resp"]:checked')?.value || '',
-        infeccion_oido: document.querySelector('input[name="inf_oido"]:checked')?.value || '',
-        uso_aerosoles: document.querySelector('input[name="aerosoles"]:checked')?.value || '',
-        uso_aerosoles_detalle: document.querySelector('input[name="aerosoles_tiempo"]')?.value || '',
-        fumo_ultimas_horas: document.querySelector('input[name="fuma"]:checked')?.value || '',
-        fumo_cantidad_detalle: document.querySelector('input[name="fuma_cantidad"]')?.value || '',
-        ejercicio_fisico: document.querySelector('input[name="ejercicio"]:checked')?.value || '',
-        comio_ultima_hora: document.querySelector('input[name="comio"]:checked')?.value || '',
-        tos_flemas: document.querySelector('input[name="tos"]:checked')?.value || '',
-        tos_flemas_detalle: document.querySelector('input[name="tos_detalle"]')?.value || '',
-        equipo_proteccion: document.querySelector('input[name="epp"]:checked')?.value || ''
+        infeccion_respiratoria: document.querySelector('input[name="infeccion_respiratoria"]:checked')?.value || '',
+        infeccion_oido: document.querySelector('input[name="infeccion_oido"]:checked')?.value || '',
+        uso_aerosoles: document.querySelector('input[name="uso_aerosoles"]:checked')?.value || '',
+        uso_aerosoles_detalle: document.querySelector('input[name="uso_aerosoles_detalle"]')?.value || '',
+        fumo_ultimas_horas: document.querySelector('input[name="fumo_ultimas_horas"]:checked')?.value || '',
+        fumo_cantidad_detalle: document.querySelector('input[name="fuma_cantidad_detalle"]')?.value || '',
+        ejercicio_fisico: document.querySelector('input[name="ejercicio_fisico"]:checked')?.value || '',
+        comio_ultima_hora: document.querySelector('input[name="comio_ultima_hora"]:checked')?.value || '',
+        tos_flemas: document.querySelector('input[name="tos_flemas"]:checked')?.value || '',
+        tos_flemas_detalle: document.querySelector('input[name="tos_flemas_detalle"]')?.value || '',
+        equipo_proteccion: document.querySelector('input[name="equipo_proteccion"]:checked')?.value || ''
     };
 
     try {
