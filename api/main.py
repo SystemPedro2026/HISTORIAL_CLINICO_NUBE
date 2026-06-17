@@ -408,5 +408,70 @@ def obtener_espirometria_por_sintoma(sintoma: str, db: Session = Depends(get_db)
                 "estado": sintoma.upper()
             })
     return resultados
-# --- FIN DE LÓGICA COMPLETA Y DEFINITIVA PARA ESPIROMETRÍA ---
 
+# ------------------- FICHA ALTURA --------------------------
+@app.post("/guardar-altura")
+async def guardar_altura(data: dict, db: Session = Depends(get_db)):
+    try:
+        codigo = str(data.get("codigo_paciente", "")).strip().upper()
+        paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
+        
+        if not paciente:
+            raise HTTPException(status_code=404, detail="Paciente no encontrado")
+
+        nueva_ficha = models.FichaAltura(
+            paciente_id=paciente.id,
+            agorafobia=data.get("agorafobia"),
+            diabetes=data.get("diabetes"),
+            acrofobia=data.get("acrofobia"),
+            insuficiencia_cardiaca=data.get("insuficiencia_cardiaca"),
+            arritmia=data.get("arritmia"),
+            hipertension=data.get("hipertension"),
+            consumo_drogas=data.get("consumo_drogas"),
+            meniere=data.get("meniere"),
+            enfermedad_psiquiatrica=data.get("enfermedad_psiquiatrica"),
+            ametropia=data.get("ametropia"),
+            trauma_encefalo=data.get("trauma_encefalo"),
+            esteropsis=data.get("esteropsis"),
+            convulsiones=data.get("convulsiones"),
+            asma_bronquial=data.get("asma_bronquial"),
+            vertigo=data.get("vertigo"),
+            hipoacusia=data.get("hipoacusia"),
+            sincope=data.get("sincope"),
+            accidentes_fracturas=data.get("accidentes_fracturas"),
+            mioclonias=data.get("mioclonias"),
+            deformidades=data.get("deformidades"),
+            cefaleas=data.get("cefaleas"),
+            obs_antecedentes=data.get("obs_antecedentes"),
+            soplo_cardiaco=data.get("soplo_cardiaco"),
+            sustentacion_pie=data.get("sustentacion_pie"),
+            arritmias_cardiacas=data.get("arritmias_cardiacas"),
+            camina_libre=data.get("camina_libre"),
+            nistagmus=data.get("nistagmus"),
+            adiacocinesia=data.get("adiacocinesia"),
+            test_romberg=data.get("test_romberg"),
+            audicion=data.get("audicion"),
+            test_barany=data.get("test_barany"),
+            marcha_ojos_cerrados=data.get("marcha_ojos_cerrados"),
+            test_babinsky=data.get("test_babinsky"),
+            extremidades=data.get("extremidades"),
+            obs_examen=data.get("obs_examen")
+        )
+        db.add(nueva_ficha)
+        db.commit()
+        db.refresh(nueva_ficha)
+        return {"status": "success", "message": "GUARDADO EXITOSAMENTE"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/consultar-altura/{codigo_paciente}")
+async def consultar_altura(codigo_paciente: str, db: Session = Depends(get_db)):
+    paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo_paciente.upper().strip()).first()
+    if not paciente:
+        return {"status": "error", "message": "Paciente no encontrado"}
+    
+    ficha = db.query(models.FichaAltura).filter(models.FichaAltura.paciente_id == paciente.id).first()
+    if not ficha:
+        return {"status": "error", "message": "Ficha no encontrada"}
+        
+    return ficha
