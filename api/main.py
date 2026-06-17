@@ -307,25 +307,26 @@ async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
     return [{"codigo": r[0], "nombre": f"{r[1]} {r[2]}", "detalle": "CONFIRMADO"} for r in query]
 
 
-# --- FICHA ESPIROMETRÍA ---
+# -----------------FICHA ESPIROMETRÍA -----------------
 @app.post("/guardar-espirometria")
 async def guardar_espirometria(data: dict):
     try:
         db = get_db()
         cursor = db.cursor()
         
-        # Mapeo exacto basado en la estructura de tu tabla confirmada
+        # Mapeo completo sincronizado con la estructura de tu modelo y base de datos
         query = """
             INSERT INTO ficha_espirometria (
                 paciente_id, criterios_exclusion_1, criterios_exclusion_2, criterios_exclusion_3, 
                 criterios_exclusion_4, criterios_exclusion_5, hemoptisis, infarto_reciente, 
                 neumotorax, fiebre_nauseas, traqueostomia, embarazo_avanzado, sonda_pleural, 
                 embarazo_complicado, aneurisma_cerebral, inestabilidad_cv, embolia_pulmonar, 
-                infeccion_respiratoria, infeccion_oido, uso_aerosoles, fumo_ultimas_horas
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                infeccion_respiratoria, infeccion_oido, uso_aerosoles, uso_aerosoles_detalle, 
+                fumo_ultimas_horas, fumo_cantidad_detalle, ejercicio_fisico, comio_ultima_hora, 
+                tos_flemas, tos_flemas_detalle, equipo_proteccion
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
         
-        # Obtenemos valores. Si no existen, guardamos cadena vacía ""
         valores = (
             None, # paciente_id
             data.get("criterios_exclusion_1", ""), data.get("criterios_exclusion_2", ""),
@@ -337,16 +338,20 @@ async def guardar_espirometria(data: dict):
             data.get("embarazo_complicado", ""), data.get("aneurisma_cerebral", ""),
             data.get("inestabilidad_cv", ""), data.get("embolia_pulmonar", ""),
             data.get("infeccion_respiratoria", ""), data.get("infeccion_oido", ""),
-            data.get("uso_aerosoles", ""), data.get("fumo_ultimas_horas", "")
+            data.get("uso_aerosoles", ""), data.get("uso_aerosoles_detalle", ""),
+            data.get("fumo_ultimas_horas", ""), data.get("fumo_cantidad_detalle", ""),
+            data.get("ejercicio_fisico", ""), data.get("comio_ultima_hora", ""),
+            data.get("tos_flemas", ""), data.get("tos_flemas_detalle", ""),
+            data.get("equipo_proteccion", "")
         )
         
         cursor.execute(query, valores)
         db.commit()
-        return {"status": "success"}
+        return {"status": "success", "message": "Guardado exitosamente"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-
+# -------
 @app.get("/consultar-espirometria/{codigo_paciente}")
 async def consultar_espirometria(codigo_paciente: str):
     try:
@@ -357,7 +362,7 @@ async def consultar_espirometria(codigo_paciente: str):
         return dict(row) if row else {"status": "error", "message": "Paciente no encontrado"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
-
+# -------
 @app.get("/listar-espirometria")
 async def listar_espirometria(filtro: str = ""):
     try:
