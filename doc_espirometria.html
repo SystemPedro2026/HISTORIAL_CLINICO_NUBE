@@ -66,26 +66,21 @@
 </div>
 
 <script>
+
 async function guardarFicha() {
     const data = {
         codigo_paciente: document.getElementById('codigo_paciente').value.toUpperCase(),
-        
-        // Criterios de Exclusión (Radio Groups)
         criterios_exclusion_1: document.querySelector('input[name="ex1"]:checked')?.value || '',
         criterios_exclusion_2: document.querySelector('input[name="ex2"]:checked')?.value || '',
         criterios_exclusion_3: document.querySelector('input[name="ex3"]:checked')?.value || '',
         criterios_exclusion_4: document.querySelector('input[name="ex4"]:checked')?.value || '',
         criterios_exclusion_5: document.querySelector('input[name="ex5"]:checked')?.value || '',
-        
-        // Profesional (Radio Groups)
         hemoptisis: document.querySelector('input[name="hemoptisis"]:checked')?.value || '',
         infarto_reciente: document.querySelector('input[name="infarto_reciente"]:checked')?.value || '',
         neumotorax: document.querySelector('input[name="neumotorax"]:checked')?.value || '',
         fiebre_nauseas: document.querySelector('input[name="fiebre_nv"]:checked')?.value || '',
         traqueostomia: document.querySelector('input[name="traqueostomia"]:checked')?.value || '',
         embarazo_avanzado: document.querySelector('input[name="embarazo_avanzado"]:checked')?.value || '',
-        
-        // Entrevistados (Radio Groups + Inputs)
         infeccion_respiratoria: document.querySelector('input[name="inf_resp"]:checked')?.value || '',
         infeccion_oido: document.querySelector('input[name="inf_oido"]:checked')?.value || '',
         uso_aerosoles: document.querySelector('input[name="aerosoles"]:checked')?.value || '',
@@ -99,7 +94,7 @@ async function guardarFicha() {
         equipo_proteccion: document.querySelector('input[name="epp"]:checked')?.value || ''
     };
 
-    console.log("JSON completo enviado al servidor:", data);
+    console.log("Enviando JSON completo:", data);
 
     try {
         const response = await fetch('https://historial-clinico-nube.onrender.com/guardar-espirometria', {
@@ -111,13 +106,17 @@ async function guardarFicha() {
         if (response.ok) {
             alert('GUARDADO EXITOSAMENTE');
         } else {
-            const errorData = await response.json();
-            alert('Error al guardar: ' + JSON.stringify(errorData));
+            const err = await response.json();
+            console.error("Error del servidor:", err);
+            alert('Error al guardar. Revisa la consola (F12).');
         }
     } catch (e) {
-        alert('Error de conexión.');
+        alert('Error de conexión con la nube.');
     }
 }
+
+
+    
 </script>
 </body>
 </html>
