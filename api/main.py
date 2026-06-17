@@ -306,17 +306,18 @@ async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
     # Formateo de salida para que el frontend reciba algo que entienda
     return [{"codigo": r[0], "nombre": f"{r[1]} {r[2]}", "detalle": "CONFIRMADO"} for r in query]
 
-# ----------- FICHA ESPIROMETRÍA (CORREGIDO Y SINCRONIZADO) -----------
+# ----------- FICHA ESPIROMETRÍA (SOLUCIÓN DEFINITIVA) -----------
 @app.post("/guardar-espirometria")
 async def guardar_espirometria(data: dict, db: Session = Depends(get_db)):
     try:
-        # Buscamos al paciente primero
+        # Normalización del código para buscar al paciente
         codigo = str(data.get("codigo_paciente", "")).strip().upper()
         paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
+        
         if not paciente:
-            raise HTTPException(status_code=404, detail="Paciente no encontrado")
+            raise HTTPException(status_code=404, detail="Paciente no encontrado en el sistema")
 
-        # Usamos el modelo para insertar, es seguro y evita errores de sintaxis SQL
+        # Inserción usando el modelo ORM definido en models.py
         nueva_ficha = models.FichaEspirometria(
             paciente_id=paciente.id,
             criterios_exclusion_1=data.get("criterios_exclusion_1"),
@@ -338,15 +339,23 @@ async def guardar_espirometria(data: dict, db: Session = Depends(get_db)):
             infeccion_respiratoria=data.get("infeccion_respiratoria"),
             infeccion_oido=data.get("infeccion_oido"),
             uso_aerosoles=data.get("uso_aerosoles"),
-            fumo_ultimas_horas=data.get("fumo_ultimas_horas")
+            uso_aerosoles_detalle=data.get("uso_aerosoles_detalle"),
+            fumo_ultimas_horas=data.get("fumo_ultimas_horas"),
+            fumo_cantidad_detalle=data.get("fumo_cantidad_detalle"),
+            ejercicio_fisico=data.get("ejercicio_fisico"),
+            comio_ultima_hora=data.get("comio_ultima_hora"),
+            tos_flemas=data.get("tos_flemas"),
+            tos_flemas_detalle=data.get("tos_flemas_detalle"),
+            equipo_proteccion=data.get("equipo_proteccion")
         )
         db.add(nueva_ficha)
         db.commit()
         db.refresh(nueva_ficha)
         return {"status": "success", "message": "GUARDADO EXITOSAMENTE"}
     except Exception as e:
-        return {"status": "error", "message": str(e)}
-
+        print(f"Error detectado: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+# ----------------------------
 @app.get("/consultar-espirometria/{codigo_paciente}")
 async def consultar_espirometria(codigo_paciente: str, db: Session = Depends(get_db)):
     # Buscamos al paciente
