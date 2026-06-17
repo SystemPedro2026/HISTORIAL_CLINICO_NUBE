@@ -274,14 +274,30 @@ async def filtrar_cardiologia(query: str, db: Session = Depends(get_db)):
         } for f, p in resultados
     ]
 
-@app.get("/buscar-cardiologia")
+@app("/buscar-cardiologia")
 async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
-    # Lógica simplificada para buscar en campos de antecedentes
-    # Esto filtra los pacientes que tienen "SI" en el antecedente buscado
-    resultados = db.query(models.FichaCardiologia, models.Paciente).join(
-        models.Paciente
-    ).filter(
-        models.FichaCardiologia.tabaquismo == antecedente.upper() # O el campo dinámico que necesites
-    ).all()
+    # Mapeo de los valores del select a los nombres de columna en tu BD
+    columnas = {
+        "NINEZ": models.FichaCardiologia.ninez,
+        "ADOLESCENTE": models.FichaCardiologia.adolescente,
+        "ADULTEZ": models.FichaCardiologia.adultez,
+        "TABAQUISMO": models.FichaCardiologia.tabaquismo,
+        "HIPERLIPIDEMIAS": models.FichaCardiologia.hiperlipidemias,
+        "ASMA_BRONQUIAL": models.FichaCardiologia.asma_bronquial,
+        "HTA": models.FichaCardiologia.hta,
+        "DIABETES": models.FichaCardiologia.diabetes,
+        "BRONQUITIS": models.FichaCardiologia.bronquitis
+    }
     
-    return [{"codigo": p.codigo_paciente, "nombre": p.nombre_completo, "detalle": "Confirmado"} for f, p in resultados]
+    columna_a_buscar = columnas.get(antecedente.upper())
+    
+    if not columna_a_buscar:
+        return []
+
+    # Buscamos donde el valor sea exactamente 'SI'
+    resultados = db.query(models.FichaCardiologia, models.Paciente)\
+                   .join(models.Paciente)\
+                   .filter(columna_a_buscar == "SI")\
+                   .all()
+
+    return [{"codigo": p.codigo_paciente, "nombre": p.nombre_completo, "detalle": "CONFIRMADO"} for f, p in resultados]
