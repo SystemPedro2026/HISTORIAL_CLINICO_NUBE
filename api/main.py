@@ -310,14 +310,13 @@ async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
 @app.post("/guardar-espirometria")
 async def guardar_espirometria(data: dict, db: Session = Depends(get_db)):
     try:
-        # Normalización del código para buscar al paciente
         codigo = str(data.get("codigo_paciente", "")).strip().upper()
         paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
         
         if not paciente:
-            raise HTTPException(status_code=404, detail="Paciente no encontrado en el sistema")
+            raise HTTPException(status_code=404, detail="Paciente no encontrado")
 
-        # Inserción usando el modelo ORM definido en models.py
+        # Mapeo exacto basado en tu models.py
         nueva_ficha = models.FichaEspirometria(
             paciente_id=paciente.id,
             criterios_exclusion_1=data.get("criterios_exclusion_1"),
@@ -353,7 +352,8 @@ async def guardar_espirometria(data: dict, db: Session = Depends(get_db)):
         db.refresh(nueva_ficha)
         return {"status": "success", "message": "GUARDADO EXITOSAMENTE"}
     except Exception as e:
-        print(f"Error detectado: {e}")
+        # Esto imprimirá el error real en los logs de Render
+        print(f"ERROR DETALLADO: {str(e)}") 
         raise HTTPException(status_code=500, detail=str(e))
 # ----------------------------
 @app.get("/consultar-espirometria/{codigo_paciente}")
