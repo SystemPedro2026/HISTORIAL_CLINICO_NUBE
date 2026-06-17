@@ -274,11 +274,8 @@ async def filtrar_cardiologia(query: str, db: Session = Depends(get_db)):
         } for f, p in resultados
     ]
 
-
-
 @app.get("/buscar-cardiologia")
 async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
-    # Mapeo exacto a las columnas de tu BD (tabla ficha_cardiologia)
     columnas = {
         "NINEZ": models.FichaCardiologia.ninez,
         "ADOLESCENTE": models.FichaCardiologia.adolescente,
@@ -291,17 +288,20 @@ async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
         "BRONQUITIS": models.FichaCardiologia.bronquitis
     }
     
-    # Normalización para evitar errores por tildes o mayúsculas
-    key = antecedente.upper().replace("Í", "I").replace("É", "E")
-    columna_a_buscar = columnas.get(key)
+    columna_a_buscar = columnas.get(antecedente.upper().strip())
+    if not columna_a_buscar: return []
+
+    # CAMBIO: Usamos FichaCardiologia para filtrar y luego obtenemos los datos
+    fichas = db.query(models.FichaCardiologia).filter(columna_a_buscar == "SI").all()
     
-    if not columna_a_buscar:
-        return []
+    resultados = []
+    for f in fichas:
+        p = db.query(models.Paciente).filter(models.Paciente.id == f.paciente_id).first()
+        if p:
+            resultados.append({
+                "codigo": p.codigo_paciente, 
+                "nombre": f"{p.apellido} {p.nombre}", 
+                "detalle": "CONFIRMADO"
+            })
+    return resultados
 
-    # Query corregida: Se usa JOIN con la tabla Paciente
-    resultados = db.query(models.Paciente.codigo_paciente, models.Paciente.nombre_completo)\
-                   .join(models.FichaCardiologia, models.FichaCardiologia.paciente_id == models.Paciente.id)\
-                   .filter(columna_a_buscar == "SI")\
-                   .all()
-
-    return [{"codigo": r[0], "nombre": r[1], "detalle": "CONFIRMADO"} for r in resultados]
