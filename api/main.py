@@ -478,7 +478,7 @@ async def consultar_altura(codigo_paciente: str, db: Session = Depends(get_db)):
 
 @app.get("/filtrar-altura/{campo}")
 def filtrar_altura(campo: str, db: Session = Depends(get_db)):
-    # Mapeo de valores del select a columnas reales
+    # Mapeo exacto a las columnas de la tabla FichaAltura
     mapeo = {
         "soplo_cardiaco": models.FichaAltura.soplo_cardiaco,
         "arritmias_cardiacas": models.FichaAltura.arritmias_cardiacas,
@@ -490,7 +490,12 @@ def filtrar_altura(campo: str, db: Session = Depends(get_db)):
     columna = mapeo.get(campo)
     if not columna: return []
 
-    # Buscamos pacientes donde el campo sea "SI"
-    fichas = db.query(models.FichaAltura, models.Paciente).join(models.Paciente).filter(columna == "SI").all()
+    # Consulta corregida con join explícito
+    fichas = db.query(models.FichaAltura, models.Paciente).join(
+        models.Paciente, models.FichaAltura.paciente_id == models.Paciente.id
+    ).filter(columna == "SI").all()
     
     return [{"codigo": f.Paciente.codigo_paciente, "nombre": f"{f.Paciente.apellido} {f.Paciente.nombre}", "estado": "ANORMAL"} for f in fichas]
+
+
+
