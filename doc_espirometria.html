@@ -7,37 +7,24 @@
         :root { --emerald: #00a651; }
         @page { size: letter; margin: 0.5in; }
         body { font-family: Arial, sans-serif; font-size: 11px; margin: 0; padding: 20px; color: #000; background-color: #f4f6f8; }
-        
         .container { width: 100%; max-width: 800px; margin: auto; background: white; padding: 30px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        
-        /* Cabecera Uniforme */
         .top-nav { display: flex; justify-content: space-between; margin-bottom: 20px; }
         .btn { padding: 8px 15px; border: none; cursor: pointer; color: white; font-weight: bold; border-radius: 4px; font-size: 11px; }
         .btn-volver { background-color: #64748b; }
         .btn-imprimir { background-color: #343a40; }
-        
         .header-content { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--emerald); padding-bottom: 10px; margin-bottom: 20px; }
         .header-content img { height: 50px; }
         .title-area { text-align: right; }
         .title-area h1 { font-size: 18px; margin: 0; color: #000; font-weight: 800; }
         .title-area p { font-size: 11px; margin: 0; color: var(--emerald); font-weight: 800; }
-
-        /* Campos y Tablas */
         .code-box { margin-bottom: 15px; border: 1px solid #ccc; padding: 8px; background: #fafafa; }
-        input[type="text"] { border: none; border-bottom: 1px solid #000; outline: none; background: transparent; }
+        input[type="text"] { border: none; border-bottom: 1px solid #000; outline: none; background: transparent; width: 100%; }
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         th, td { border: 1px solid #000; padding: 6px; text-align: left; }
         .caption { font-weight: bold; background: #f2f2f2; padding: 8px; }
-        
         .signature-box { border: 1px solid #000; height: 80px; margin-top: 20px; }
         .signature-label { text-align: center; font-weight: bold; margin-top: 5px; }
         .btn-guardar { width: 100%; padding: 15px; background-color: #1976d2; color: white; font-size: 16px; border: none; cursor: pointer; margin-top: 20px; font-weight: bold; border-radius: 4px; }
-
-        @media print {
-            .top-nav, .btn-guardar, .no-print { display: none !important; }
-            .container { width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; border: none !important; }
-            table, .caption, textarea, .code-box { break-inside: avoid; page-break-inside: avoid; }
-        }
     </style>
 </head>
 <body>
@@ -57,41 +44,36 @@
     </div>
 
     <div class="code-box">
-        <strong>CÓDIGO PACIENTE:</strong> <input type="text" style="width: 200px;" placeholder="INGRESE CÓDIGO MANUALMENTE">
+        <strong>CÓDIGO PACIENTE:</strong> 
+        <input type="text" id="codigo_paciente" style="width: 200px;" placeholder="INGRESE CÓDIGO" oninput="this.value = this.value.toUpperCase()">
     </div>
 
     <table>
-        <tr><td colspan="5" class="caption">PREGUNTAS PARA TODOS LOS POSTULANTES A ESPIROMETRIA (RELACIONADAS A CRITERIOS DE EXCLUSIÓN)</td></tr>
-        <tr><td>1. ¿Tuvo desprendimiento de retina, operación ojos, tórax o abdomen en últimos 3 meses?</td><td>SI</td><td><input type="checkbox"></td><td>NO</td><td><input type="checkbox"></td></tr>
-        <tr><td>2. ¿Ha tenido algún ataque cardíaco o infarto al corazón en los últimos 3 meses?</td><td>SI</td><td><input type="checkbox"></td><td>NO</td><td><input type="checkbox"></td></tr>
-        <tr><td>3. ¿Ha estado hospitalizado por problemas del corazón en los últimos 3 meses?</td><td>SI</td><td><input type="checkbox"></td><td>NO</td><td><input type="checkbox"></td></tr>
-        <tr><td>4. ¿Está usando tratamiento para la tuberculosis en este momento?</td><td>SI</td><td><input type="checkbox"></td><td>NO</td><td><input type="checkbox"></td></tr>
-        <tr><td>5. En caso de ser mujer, ¿está usted embarazada actualmente?</td><td>SI</td><td><input type="checkbox"></td><td>NO</td><td><input type="checkbox"></td></tr>
+        <tr><td colspan="5" class="caption">PREGUNTAS PARA TODOS LOS POSTULANTES (CRITERIOS DE EXCLUSIÓN)</td></tr>
+        <tr><td>1. ¿Tuvo desprendimiento de retina, operación ojos, tórax o abdomen en últimos 3 meses?</td><td>SI</td><td><input type="radio" name="criterios_exclusion_1" value="SI"></td><td>NO</td><td><input type="radio" name="criterios_exclusion_1" value="NO"></td></tr>
+        <tr><td>2. ¿Ha tenido algún ataque cardíaco o infarto al corazón en los últimos 3 meses?</td><td>SI</td><td><input type="radio" name="criterios_exclusion_2" value="SI"></td><td>NO</td><td><input type="radio" name="criterios_exclusion_2" value="NO"></td></tr>
+        <tr><td>3. ¿Ha estado hospitalizado por problemas del corazón en los últimos 3 meses?</td><td>SI</td><td><input type="radio" name="criterios_exclusion_3" value="SI"></td><td>NO</td><td><input type="radio" name="criterios_exclusion_3" value="NO"></td></tr>
+        <tr><td>4. ¿Está usando tratamiento para la tuberculosis en este momento?</td><td>SI</td><td><input type="radio" name="criterios_exclusion_4" value="SI"></td><td>NO</td><td><input type="radio" name="criterios_exclusion_4" value="NO"></td></tr>
+        <tr><td>5. En caso de ser mujer, ¿está usted embarazada actualmente?</td><td>SI</td><td><input type="radio" name="criterios_exclusion_5" value="SI"></td><td>NO</td><td><input type="radio" name="criterios_exclusion_5" value="NO"></td></tr>
     </table>
 
     <table>
-        <tr><td colspan="6" class="caption">PARA SER LLENADO POR EL PROFESIONAL QUE REALIZA LA PRUEBA</td></tr>
-        <tr><td>Hemoptisis</td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td><td>Infarto reciente</td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td></tr>
-        <tr><td>Neumotórax</td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td><td>Fiebre, náuseas, vómitos</td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td></tr>
-        <tr><td>Traqueostomía</td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td><td>Embarazo avanzado</td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td></tr>
+        <tr><td colspan="6" class="caption">PARA SER LLENADO POR EL PROFESIONAL</td></tr>
+        <tr><td>Hemoptisis</td><td>SI <input type="radio" name="hemoptisis" value="SI"></td><td>NO <input type="radio" name="hemoptisis" value="NO"></td><td>Infarto reciente</td><td>SI <input type="radio" name="infarto_reciente" value="SI"></td><td>NO <input type="radio" name="infarto_reciente" value="NO"></td></tr>
+        <tr><td>Neumotórax</td><td>SI <input type="radio" name="neumotorax" value="SI"></td><td>NO <input type="radio" name="neumotorax" value="NO"></td><td>Fiebre, náuseas, vómitos</td><td>SI <input type="radio" name="fiebre_nauseas" value="SI"></td><td>NO <input type="radio" name="fiebre_nauseas" value="NO"></td></tr>
+        <tr><td>Traqueostomía</td><td>SI <input type="radio" name="traqueostomia" value="SI"></td><td>NO <input type="radio" name="traqueostomia" value="NO"></td><td>Embarazo avanzado</td><td>SI <input type="radio" name="embarazo_avanzado" value="SI"></td><td>NO <input type="radio" name="embarazo_avanzado" value="NO"></td></tr>
+        <tr><td>Sonda pleural</td><td>SI <input type="radio" name="sonda_pleural" value="SI"></td><td>NO <input type="radio" name="sonda_pleural" value="NO"></td><td>Embarazo complicado</td><td>SI <input type="radio" name="embarazo_complicado" value="SI"></td><td>NO <input type="radio" name="embarazo_complicado" value="NO"></td></tr>
+        <tr><td>Aneurisma cerebral</td><td>SI <input type="radio" name="aneurisma_cerebral" value="SI"></td><td>NO <input type="radio" name="aneurisma_cerebral" value="NO"></td><td>Inestabilidad CV</td><td>SI <input type="radio" name="inestabilidad_cv" value="SI"></td><td>NO <input type="radio" name="inestabilidad_cv" value="NO"></td></tr>
+        <tr><td>Embolia pulmonar</td><td>SI <input type="radio" name="embolia_pulmonar" value="SI"></td><td>NO <input type="radio" name="embolia_pulmonar" value="NO"></td><td>Infección respiratoria</td><td>SI <input type="radio" name="infeccion_respiratoria" value="SI"></td><td>NO <input type="radio" name="infeccion_respiratoria" value="NO"></td></tr>
+        <tr><td>Infección oído</td><td>SI <input type="radio" name="infeccion_oido" value="SI"></td><td>NO <input type="radio" name="infeccion_oido" value="NO"></td><td>Uso aerosoles</td><td>SI <input type="radio" name="uso_aerosoles" value="SI"></td><td>NO <input type="radio" name="uso_aerosoles" value="NO"></td></tr>
+        <tr><td colspan="3">Fumó en últimas horas</td><td colspan="3"><input type="text" name="fumo_ultimas_horas" placeholder="Detalle..."></td></tr>
     </table>
 
-    <table>
-        <tr><td colspan="3" class="caption">PREGUNTAS PARA ENTREVISTADOS SIN CRITERIOS DE EXCLUSIÓN</td></tr>
-        <tr><td>1. ¿Tuvo infección respiratoria en las últimas 3 semanas?</td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td></tr>
-        <tr><td>2. ¿Tuvo infecciones en el oído en las últimas 3 semanas?</td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td></tr>
-        <tr><td>3. ¿Usa aerosoles? ¿Cuándo? <input type="text"> hrs.</td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td></tr>
-        <tr><td>4. ¿Fumó en las últimas 2 horas? ¿Cuántos? <input type="text"></td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td></tr>
-        <tr><td>5. ¿Realizó ejercicio físico fuerte en la última hora?</td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td></tr>
-        <tr><td>6. ¿Comió en la última hora?</td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td></tr>
-        <tr><td>7. ¿Presenta tos o flemas frecuentes? ¿Desde cuándo? <input type="text"></td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td></tr>
-        <tr><td>8. ¿Utiliza Equipo de Protección Respiratoria?</td><td>SI <input type="checkbox"></td><td>NO <input type="checkbox"></td></tr>
-    </table>
-
-    <div class="signature-box" contenteditable="true"></div>
-    <div class="signature-label">FIRMA DEL PACIENTE</div>
-
-    <button class="btn-guardar no-print" onclick="alert('Datos guardados correctamente')">💾 GUARDAR REGISTRO FINAL</button>
+    <button class="btn-guardar no-print" onclick="guardarFicha()">💾 GUARDAR REGISTRO FINAL</button>
 </div>
+
+<script>
+    function guardarFicha() { alert('Preparado para enviar datos...'); }
+</script>
 </body>
 </html>
