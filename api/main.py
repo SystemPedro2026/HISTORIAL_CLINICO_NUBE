@@ -306,14 +306,21 @@ async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
     # Formateo de salida para que el frontend reciba algo que entienda
     return [{"codigo": r[0], "nombre": f"{r[1]} {r[2]}", "detalle": "CONFIRMADO"} for r in query]
 
-# --- INICIO DE ADICIÓN PARA ESPIROMETRÍA ---
+
+# --- INICIO DE LÓGICA COMPLETA Y DEFINITIVA PARA ESPIROMETRÍA ---
 
 @app.post("/guardar-espirometria")
 async def guardar_espirometria(data: dict):
     try:
-        codigo = data.get("codigo_paciente", "").strip().upper()
+        # Validación y normalización estricta de campos
+        codigo = str(data.get("codigo_paciente", "")).strip().upper()
+        if not codigo:
+            return {"status": "error", "message": "Código de paciente requerido"}
+        
         db = get_db()
         cursor = db.cursor()
+        
+        # Inserción con todos los campos mapeados según el formulario HTML
         cursor.execute("""
             INSERT INTO espirometria (
                 codigo_paciente, ex1, ex2, ex3, ex4, ex5, 
@@ -329,28 +336,32 @@ async def guardar_espirometria(data: dict):
             data.get("fuma"), data.get("fuma_cantidad"), data.get("ejercicio"), data.get("comio"), 
             data.get("tos"), data.get("tos_detalle"), data.get("epp")
         ))
+        
         db.commit()
-        return {"status": "success", "message": "Registro guardado"}
+        return {"status": "success", "message": "Registro guardado exitosamente"}
     except Exception as e:
-        return {"status": "error", "message": str(e)}
+        return {"status": "error", "message": f"Error interno: {str(e)}"}
 
 @app.get("/consultar-espirometria/{codigo_paciente}")
 async def consultar_espirometria(codigo_paciente: str):
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute("SELECT * FROM espirometria WHERE codigo_paciente = ?", (codigo_paciente.upper(),))
-    row = cursor.fetchone()
-    return dict(row) if row else {"error": "No encontrado"}
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM espirometria WHERE codigo_paciente = ?", (codigo_paciente.strip().upper(),))
+        row = cursor.fetchone()
+        return dict(row) if row else {"status": "error", "message": "Paciente no encontrado"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 @app.get("/listar-espirometria")
 async def listar_espirometria(filtro: str = ""):
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute("SELECT * FROM espirometria WHERE codigo_paciente LIKE ?", (f"%{filtro.upper()}%",))
-    return [dict(row) for row in cursor.fetchall()]
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM espirometria WHERE codigo_paciente LIKE ?", (f"%{filtro.strip().upper()}%",))
+        return [dict(row) for row in cursor.fetchall()]
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
-# --- FIN DE ADICIÓN PARA ESPIROMETRÍA ---
-
-
-
+# --- FIN DE LÓGICA COMPLETA Y DEFINITIVA PARA ESPIROMETRÍA ---
 
