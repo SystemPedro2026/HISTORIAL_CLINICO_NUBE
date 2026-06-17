@@ -378,5 +378,35 @@ async def listar_espirometria(filtro: str = ""):
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
+# ----------- ENDPOINT PARA CONSULTA FILTRADA ESPIROMETRÍA -----------
+@app.get("/espirometria-filtrada/{sintoma}")
+def obtener_espirometria_por_sintoma(sintoma: str, db: Session = Depends(get_db)):
+    # Filtramos la tabla FichaEspirometria donde el síntoma sea "SI"
+    # Mapeamos los valores del frontend a los campos del modelo
+    mapeo = {
+        "hemoptisis": models.FichaEspirometria.hemoptisis,
+        "infarto_reciente": models.FichaEspirometria.infarto_reciente,
+        "neumotorax": models.FichaEspirometria.neumotorax,
+        "fiebre_nauseas": models.FichaEspirometria.fiebre_nauseas,
+        "traqueostomia": models.FichaEspirometria.traqueostomia,
+        "embarazo_avanzado": models.FichaEspirometria.embarazo_avanzado
+    }
+    
+    campo = mapeo.get(sintoma.lower())
+    if not campo:
+        return []
+
+    fichas = db.query(models.FichaEspirometria).filter(campo == "SI").all()
+    
+    resultados = []
+    for f in fichas:
+        paciente = db.query(models.Paciente).filter(models.Paciente.id == f.paciente_id).first()
+        if paciente:
+            resultados.append({
+                "codigo": paciente.codigo_paciente,
+                "nombre": f"{paciente.apellido} {paciente.nombre}",
+                "estado": sintoma.upper()
+            })
+    return resultados
 # --- FIN DE LÓGICA COMPLETA Y DEFINITIVA PARA ESPIROMETRÍA ---
 
