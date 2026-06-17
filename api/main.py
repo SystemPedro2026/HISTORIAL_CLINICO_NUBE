@@ -306,36 +306,61 @@ async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
     # Formateo de salida para que el frontend reciba algo que entienda
     return [{"codigo": r[0], "nombre": f"{r[1]} {r[2]}", "detalle": "CONFIRMADO"} for r in query]
 
-
-# -----------------FICHA ESPIROMETRÍA -----------------
+# ----------- FICHA ESPIROMETRÍA (CORREGIDO Y SINCRONIZADO) -----------
 @app.post("/guardar-espirometria")
-async def guardar_espirometria(data: dict):
-    db = None
+async def guardar_espirometria(data: dict, db: Session = Depends(get_db)):
     try:
-        db = get_db()
-        cursor = db.cursor()
-        
-        # Test de inserción mínima para ver si la tabla responde
-        cursor.execute("INSERT INTO ficha_espirometria (criterios_exclusion_1) VALUES (?)", ("TEST_CONEXION",))
-        db.commit()
-        
-        return {"status": "success", "message": "Test de inserción exitoso"}
-    except Exception as e:
-        return {"status": "error", "message": f"FALLO CRÍTICO: {str(e)}"}
-    finally:
-        if db: db.close()
+        # Buscamos al paciente primero
+        codigo = str(data.get("codigo_paciente", "")).strip().upper()
+        paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
+        if not paciente:
+            raise HTTPException(status_code=404, detail="Paciente no encontrado")
 
-# -------
-@app.get("/consultar-espirometria/{codigo_paciente}")
-async def consultar_espirometria(codigo_paciente: str):
-    try:
-        db = get_db()
-        cursor = db.cursor()
-        cursor.execute("SELECT * FROM espirometria WHERE codigo_paciente = ?", (codigo_paciente.strip().upper(),))
-        row = cursor.fetchone()
-        return dict(row) if row else {"status": "error", "message": "Paciente no encontrado"}
+        # Usamos el modelo para insertar, es seguro y evita errores de sintaxis SQL
+        nueva_ficha = models.FichaEspirometria(
+            paciente_id=paciente.id,
+            criterios_exclusion_1=data.get("criterios_exclusion_1"),
+            criterios_exclusion_2=data.get("criterios_exclusion_2"),
+            criterios_exclusion_3=data.get("criterios_exclusion_3"),
+            criterios_exclusion_4=data.get("criterios_exclusion_4"),
+            criterios_exclusion_5=data.get("criterios_exclusion_5"),
+            hemoptisis=data.get("hemoptisis"),
+            infarto_reciente=data.get("infarto_reciente"),
+            neumotorax=data.get("neumotorax"),
+            fiebre_nauseas=data.get("fiebre_nauseas"),
+            traqueostomia=data.get("traqueostomia"),
+            embarazo_avanzado=data.get("embarazo_avanzado"),
+            sonda_pleural=data.get("sonda_pleural"),
+            embarazo_complicado=data.get("embarazo_complicado"),
+            aneurisma_cerebral=data.get("aneurisma_cerebral"),
+            inestabilidad_cv=data.get("inestabilidad_cv"),
+            embolia_pulmonar=data.get("embolia_pulmonar"),
+            infeccion_respiratoria=data.get("infeccion_respiratoria"),
+            infeccion_oido=data.get("infeccion_oido"),
+            uso_aerosoles=data.get("uso_aerosoles"),
+            fumo_ultimas_horas=data.get("fumo_ultimas_horas")
+        )
+        db.add(nueva_ficha)
+        db.commit()
+        db.refresh(nueva_ficha)
+        return {"status": "success", "message": "GUARDADO EXITOSAMENTE"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
+
+@app.get("/consultar-espirometria/{codigo_paciente}")
+async def consultar_espirometria(codigo_paciente: str, db: Session = Depends(get_db)):
+    # Buscamos al paciente
+    paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo_paciente.upper().strip()).first()
+    if not paciente:
+        return {"status": "error", "message": "Paciente no encontrado"}
+    
+    # Buscamos la ficha en la tabla correcta
+    ficha = db.query(models.FichaEspirometria).filter(models.FichaEspirometria.paciente_id == paciente.id).first()
+    if not ficha:
+        return {"status": "error", "message": "Ficha no encontrada"}
+        
+    return ficha
+
 # -------
 @app.get("/listar-espirometria")
 async def listar_espirometria(filtro: str = ""):
