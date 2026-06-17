@@ -46,7 +46,7 @@
             <option value="DIABETES">DIABETES</option>
             <option value="BRONQUITIS">BRONQUITIS</option>
         </select>
-        <button onclick="filtrar()">BUSCAR</button>
+        <button type="button" onclick="filtrar()">BUSCAR</button>
     </div>
 
     <table class="table table-bordered">
@@ -58,12 +58,12 @@
             </tr>
         </thead>
         <tbody id="listaPacientes">
-            <tr><td colspan="3" class="text-center">Seleccione una opción y busque</td></tr>
+            <tr><td colspan="3" class="text-center">Seleccione un antecedente y presione BUSCAR</td></tr>
         </tbody>
     </table>
 
     <div class="text-center mt-4 no-print">
-        <button onclick="window.print()" class="btn btn-primary">IMPRIMIR RESULTADOS</button>
+        <button type="button" onclick="window.print()" class="btn btn-primary">IMPRIMIR RESULTADOS</button>
     </div>
 </div>
 
@@ -73,35 +73,38 @@
     async function filtrar() {
         const filtro = document.getElementById('estadoSelect').value;
         const tbody = document.getElementById('listaPacientes');
+        
         tbody.innerHTML = "<tr><td colspan='3' class='text-center'>BUSCANDO...</td></tr>";
 
         try {
-            // El endpoint debe ser el de cardiología
-            const res = await fetch(`${API}/buscar-cardiologia?antecedente=${encodeURIComponent(filtro)}`);
+            const url = `${API}/buscar-cardiologia?antecedente=${encodeURIComponent(filtro)}`;
+            const res = await fetch(url);
+            
+            if (!res.ok) throw new Error('Error en la respuesta del servidor');
+            
             const resultados = await res.json();
             
             tbody.innerHTML = "";
             
             if (!resultados || resultados.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='3' class='text-center'>NO SE ENCONTRARON RESULTADOS</td></tr>";
+                tbody.innerHTML = "<tr><td colspan='3' class='text-center'>NO SE ENCONTRARON PACIENTES</td></tr>";
                 return;
             }
 
             resultados.forEach(item => {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${item.codigo || '---'}</td>
-                        <td>${item.nombre}</td>
+                        <td>${item.codigo || 'N/A'}</td>
+                        <td>${item.nombre || 'N/A'}</td>
                         <td>CONFIRMADO</td>
                     </tr>
                 `;
             });
         } catch (e) {
-            console.error(e);
-            tbody.innerHTML = "<tr><td colspan='3' class='text-center text-danger'>ERROR DE CONEXIÓN CON EL SERVIDOR</td></tr>";
+            console.error("Error en filtrar:", e);
+            tbody.innerHTML = "<tr><td colspan='3' class='text-center text-danger'>ERROR: NO SE PUDO CONECTAR A LA NUBE</td></tr>";
         }
     }
 </script>
-
 </body>
 </html>
