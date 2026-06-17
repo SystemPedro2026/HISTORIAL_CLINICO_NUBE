@@ -307,7 +307,7 @@ async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
     return [{"codigo": r[0], "nombre": f"{r[1]} {r[2]}", "detalle": "CONFIRMADO"} for r in query]
 
 
-# --- INICIO DE LÓGICA COMPLETA Y DEFINITIVA PARA ESPIROMETRÍA ---
+# --- FICHA ESPIROMETRÍA ---
 
 @app.post("/guardar-espirometria")
 async def guardar_espirometria(data: dict):
@@ -319,22 +319,24 @@ async def guardar_espirometria(data: dict):
         
         db = get_db()
         cursor = db.cursor()
-        
-        # Inserción con todos los campos mapeados según el formulario HTML
+           
+        # Reemplaza SOLO el bloque cursor.execute dentro de tu función @app.post("/guardar-espirometria")
         cursor.execute("""
-            INSERT INTO espirometria (
-                codigo_paciente, ex1, ex2, ex3, ex4, ex5, 
-                hemoptisis, infarto_reciente, neumotorax, fiebre_nv, traqueostomia, embarazo_avanzado,
-                inf_resp, inf_oido, aerosoles, aerosoles_tiempo, fuma, fuma_cantidad, 
-                ejercicio, comio, tos, tos_detalle, epp
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO ficha_espirometria (
+                paciente_id, criterios_exclusion_1, criterios_exclusion_2, criterios_exclusion_3, 
+                criterios_exclusion_4, criterios_exclusion_5, hemoptisis, infarto_reciente, 
+                neumotorax, fiebre_nauseas, traqueostomia, embarazo_avanzado, sonda_pleural, 
+                embarazo_complicado, aneurisma_cerebral, inestabilidad_cv, embolia_pulmonar, 
+                infeccion_respiratoria, infeccion_oido, uso_aerosoles, fumo_ultimas_horas
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
-            codigo, data.get("ex1"), data.get("ex2"), data.get("ex3"), data.get("ex4"), data.get("ex5"),
-            data.get("hemoptisis"), data.get("infarto_reciente"), data.get("neumotorax"), data.get("fiebre_nv"), 
-            data.get("traqueostomia"), data.get("embarazo_avanzado"),
-            data.get("inf_resp"), data.get("inf_oido"), data.get("aerosoles"), data.get("aerosoles_tiempo"), 
-            data.get("fuma"), data.get("fuma_cantidad"), data.get("ejercicio"), data.get("comio"), 
-            data.get("tos"), data.get("tos_detalle"), data.get("epp")
+            1, # Aquí debes poner la lógica para obtener el paciente_id real desde tu sistema
+            data.get("ex1"), data.get("ex2"), data.get("ex3"), data.get("ex4"), data.get("ex5"),
+            data.get("hemoptisis"), data.get("infarto_reciente"), data.get("neumotorax"), 
+            data.get("fiebre_nv"), data.get("traqueostomia"), data.get("embarazo_avanzado"), 
+            data.get("sonda_pleural"), data.get("embarazo_complicado"), data.get("aneurisma_cerebral"), 
+            data.get("inestabilidad_cv"), data.get("embolia_pulmonar"), 
+            data.get("inf_resp"), data.get("inf_oido"), data.get("aerosoles"), data.get("fuma")
         ))
         
         db.commit()
