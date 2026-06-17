@@ -324,19 +324,14 @@ async def guardar_espirometria(data: dict, db: Session = Depends(get_db)):
             criterios_exclusion_3=data.get("criterios_exclusion_3"),
             criterios_exclusion_4=data.get("criterios_exclusion_4"),
             criterios_exclusion_5=data.get("criterios_exclusion_5"),
+            
             hemoptisis=data.get("hemoptisis"),
             infarto_reciente=data.get("infarto_reciente"),
             neumotorax=data.get("neumotorax"),
             fiebre_nauseas=data.get("fiebre_nauseas"),
             traqueostomia=data.get("traqueostomia"),
             embarazo_avanzado=data.get("embarazo_avanzado"),
-            
-            sonda_pleural=data.get("sonda_pleural"),
-            embarazo_complicado=data.get("embarazo_complicado"),
-            aneurisma_cerebral=data.get("aneurisma_cerebral"),
-            inestabilidad_cv=data.get("inestabilidad_cv"),
-            embolia_pulmonar=data.get("embolia_pulmonar"),
-            
+                  
             infeccion_respiratoria=data.get("infeccion_respiratoria"),
             infeccion_oido=data.get("infeccion_oido"),
             uso_aerosoles=data.get("uso_aerosoles"),
