@@ -157,3 +157,60 @@ class FichaCardiologia(Base):
     examen_clinico = Column(Text)
     resultado_electro = Column(Text)
     diagnostico_recomendaciones = Column(Text)
+
+class FichaOftalmologia(Base):
+    __tablename__ = "ficha_oftalmologia"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    paciente_id = Column(Integer, ForeignKey("pacientes.id"))
+    
+    # Antecedentes
+    lentes = Column(String)
+    daltonismo = Column(String)
+    diabetes = Column(String)
+    estrabismo = Column(String)
+    infecciones = Column(String)
+    presion_alta = Column(String)
+    obs_ant = Column(String)
+    
+    # Anamnesis y Externo
+    anamnesis = Column(String)
+    ana_obs = Column(String)
+    examen_externo = Column(String)
+    exe_obs = Column(String)
+    
+    # Agudeza Visual Lejos
+    od_l_sc = Column(String)
+    od_l_cc = Column(String)
+    od_l_dio = Column(String)
+    oi_l_sc = Column(String)
+    oi_l_cc = Column(String)
+    oi_l_dio = Column(String)
+    
+    # Agudeza Visual Cerca
+    od_c_sc = Column(String)
+    od_c_cc = Column(String)
+    od_c_dio = Column(String)
+    oi_c_sc = Column(String)
+    oi_c_cc = Column(String)
+    oi_c_dio = Column(String)
+    
+    # Examenes Complementarios
+    cv_od = Column(String)
+    cv_od_obs = Column(String)
+    cv_oi = Column(String)
+    cv_oi_obs = Column(String)
+    fo = Column(String)
+    fo_obs = Column(String)
+    ish = Column(String)
+    ish_obs = Column(String)
+    est = Column(String)
+    est_obs = Column(String)
+    
+    # Presion Intraocular
+    pio_od = Column(String)
+    pio_oi = Column(String)
+    pio_obs = Column(String)
+    
+    # Diagnostico
+    diagnostico = Column(String)
