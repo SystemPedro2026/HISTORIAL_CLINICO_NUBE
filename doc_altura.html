@@ -167,29 +167,74 @@
 <script>
     const API_URL = "https://historial-clinico-nube.onrender.com";
 
-    async function buscarFicha() {
-        const codigo = document.getElementById('codigo_busqueda').value.trim();
-        if (!codigo) return alert("EL CÓDIGO ES REQUERIDO");
+    document.querySelector('.save-btn').addEventListener('click', async () => {
+        const codigoInput = document.getElementById('codigo_paciente');
+        const codigo = codigoInput.value.trim().toUpperCase();
+        
+        if (!codigo) {
+            alert("EL CÓDIGO DEL PACIENTE ES OBLIGATORIO");
+            return;
+        }
+
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const data = {
+            codigo_paciente: codigo,
+            agorafobia: checkboxes[0].checked ? "SI" : "NO",
+            diabetes: checkboxes[2].checked ? "SI" : "NO",
+            acrofobia: checkboxes[4].checked ? "SI" : "NO",
+            insuficiencia_cardiaca: checkboxes[6].checked ? "SI" : "NO",
+            arritmia: checkboxes[8].checked ? "SI" : "NO",
+            hipertension: checkboxes[10].checked ? "SI" : "NO",
+            consumo_drogas: checkboxes[12].checked ? "SI" : "NO",
+            meniere: checkboxes[14].checked ? "SI" : "NO",
+            enfermedad_psiquiatrica: checkboxes[16].checked ? "SI" : "NO",
+            ametropia: checkboxes[18].checked ? "SI" : "NO",
+            trauma_encefalo: checkboxes[20].checked ? "SI" : "NO",
+            esteropsis: checkboxes[22].checked ? "SI" : "NO",
+            convulsiones: checkboxes[24].checked ? "SI" : "NO",
+            asma_bronquial: checkboxes[26].checked ? "SI" : "NO",
+            vertigo: checkboxes[28].checked ? "SI" : "NO",
+            hipoacusia: checkboxes[30].checked ? "SI" : "NO",
+            sincope: checkboxes[32].checked ? "SI" : "NO",
+            accidentes_fracturas: checkboxes[34].checked ? "SI" : "NO",
+            mioclonias: checkboxes[36].checked ? "SI" : "NO",
+            deformidades: checkboxes[38].checked ? "SI" : "NO",
+            cefaleas: checkboxes[40].checked ? "SI" : "NO",
+            obs_antecedentes: document.querySelectorAll('.observaciones')[0].value,
+            
+            soplo_cardiaco: checkboxes[42].checked ? "SI" : "NO",
+            sustentacion_pie: checkboxes[44].checked ? "SI" : "NO",
+            arritmias_cardiacas: checkboxes[46].checked ? "SI" : "NO",
+            camina_libre: checkboxes[48].checked ? "SI" : "NO",
+            nistagmus: checkboxes[50].checked ? "SI" : "NO",
+            adiacocinesia: checkboxes[52].checked ? "SI" : "NO",
+            test_romberg: checkboxes[54].checked ? "SI" : "NO",
+            audicion: checkboxes[56].checked ? "SI" : "NO",
+            test_barany: checkboxes[58].checked ? "SI" : "NO",
+            marcha_ojos_cerrados: checkboxes[60].checked ? "SI" : "NO",
+            test_babinsky: checkboxes[62].checked ? "SI" : "NO",
+            extremidades: checkboxes[64].checked ? "SI" : "NO",
+            obs_examen: document.querySelectorAll('.observaciones')[1].value
+        };
 
         try {
-            const response = await fetch(`${API_URL}/consultar-altura/${codigo}`);
-            const data = await response.json();
+            const response = await fetch(`${API_URL}/guardar-altura`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
 
-            const body = document.getElementById('body_resultados');
-            if (data.status === "error") {
-                body.innerHTML = `<tr><td colspan="3" style="text-align:center;">NO SE ENCONTRÓ FICHA PARA ESTE CÓDIGO</td></tr>`;
+            if (response.ok) {
+                alert("FICHA GUARDADA EXITOSAMENTE");
             } else {
-                body.innerHTML = `<tr>
-                    <td>${codigo}</td>
-                    <td>${data.obs_antecedentes || 'SIN OBSERVACIONES'}</td>
-                    <td>${data.obs_examen || 'SIN OBSERVACIONES'}</td>
-                </tr>`;
+                const errorData = await response.json();
+                alert("ERROR AL GUARDAR: " + (errorData.detail || "DESCONOCIDO"));
             }
         } catch (error) {
             console.error("Error:", error);
-            alert("ERROR AL CONECTAR CON EL SERVIDOR");
+            alert("ERROR DE CONEXIÓN CON EL SERVIDOR");
         }
-    }
+    });
 </script>
     
 </body>
