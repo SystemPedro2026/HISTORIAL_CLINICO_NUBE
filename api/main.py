@@ -499,8 +499,8 @@ def filtrar_altura(campo: str, db: Session = Depends(get_db)):
 
 # ----------- FICHA ELECTROENCEFALOGRAMA -----------
 # Reemplaza la línea 501 actual por esta:
-@app.route("/guardar-electro", methods=["POST"])
-async def guardar_electro(request: Request, db: Session = Depends(get_db)):
+@app.post("/guardar-electro")
+async def guardar_electro(data: dict, db: Session = Depends(get_db)):
     data = await request.json()
     try:
         codigo = str(data.get("codigo_paciente", "")).strip().upper()
