@@ -498,11 +498,11 @@ def filtrar_altura(campo: str, db: Session = Depends(get_db)):
     return [{"codigo": f.Paciente.codigo_paciente, "nombre": f"{f.Paciente.apellido} {f.Paciente.nombre}", "estado": "ANORMAL"} for f in fichas]
 
 # ----------- FICHA ELECTROENCEFALOGRAMA -----------
-# Reemplaza la línea 501 actual por esta:
+
 @app.post("/guardar-electro")
 async def guardar_electro(data: dict, db: Session = Depends(get_db)):
-    data = await request.json()
     try:
+        # Lógica de guardado...
         codigo = str(data.get("codigo_paciente", "")).strip().upper()
         paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
 
@@ -542,7 +542,7 @@ async def guardar_electro(data: dict, db: Session = Depends(get_db)):
         db.refresh(nueva_ficha)
         return {"status": "success", "message": "GUARDADO EXITOSAMENTE"}
     except Exception as e:
-        print(f"ERROR AL GUARDAR ELECTRO: {str(e)}")
+        print(f"ERROR: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/consultar-electro/{codigo_paciente}")
