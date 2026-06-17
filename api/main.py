@@ -58,8 +58,12 @@ def registrar_paciente(data: dict, db: Session = Depends(get_db)):
 
 @app.get("/buscar-id-por-codigo/{codigo}")
 def buscar_id_por_codigo(codigo: str, db: Session = Depends(get_db)):
-    p = db.query(models.Paciente).filter(models.Paciente.codigo_paciente == codigo).first()
-    if not p: raise HTTPException(status_code=404, detail="Paciente no encontrado")
+    # Usamos func.upper para normalizar la búsqueda contra el modelo
+    p = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo.upper().strip()).first()
+    
+    if not p: 
+        raise HTTPException(status_code=404, detail="Paciente no encontrado")
+    
     return {"id": p.id}
 
 # ----------- FICHA MÉDICA -----------
