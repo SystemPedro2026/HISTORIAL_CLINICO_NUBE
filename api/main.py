@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import func
@@ -273,10 +273,11 @@ async def filtrar_cardiologia(query: str, db: Session = Depends(get_db)):
             "diagnostico": f.diagnostico_recomendaciones
         } for f, p in resultados
     ]
-
+    
+# Corrige el decorador y la entrada:
 @app.get("/buscar-cardiologia")
-async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
-    # Mapeo de los valores del select a los nombres de columna en tu BD
+async def buscar_cardiologia(antecedente: str = Query(...), db: Session = Depends(get_db)):
+    # Mapeo corregido (sin tildes para coincidir con el HTML)
     columnas = {
         "NINEZ": models.FichaCardiologia.ninez,
         "ADOLESCENTE": models.FichaCardiologia.adolescente,
@@ -289,12 +290,13 @@ async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
         "BRONQUITIS": models.FichaCardiologia.bronquitis
     }
     
-    columna_a_buscar = columnas.get(antecedente.upper())
+    # Normalizamos el input
+    antecedente_limpio = antecedente.upper().replace("Í", "I").replace("É", "E")
+    columna_a_buscar = columnas.get(antecedente_limpio)
     
     if not columna_a_buscar:
         return []
 
-    # Buscamos donde el valor sea exactamente 'SI'
     resultados = db.query(models.FichaCardiologia, models.Paciente)\
                    .join(models.Paciente)\
                    .filter(columna_a_buscar == "SI")\
