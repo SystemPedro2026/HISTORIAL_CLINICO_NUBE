@@ -106,15 +106,12 @@ class FichaEspirometria(Base):
     criterios_exclusion_3 = Column(String); criterios_exclusion_4 = Column(String)
     criterios_exclusion_5 = Column(String)
     
-    # Para el Profesional (8 campos)
+    # Para el Profesional (6 campos)
     hemoptisis = Column(String); infarto_reciente = Column(String)
     neumotorax = Column(String); fiebre_nauseas = Column(String)
     traqueostomia = Column(String); embarazo_avanzado = Column(String)
-    sonda_pleural = Column(String); embarazo_complicado = Column(String)
-    aneurisma_cerebral = Column(String); inestabilidad_cv = Column(String)
-    embolia_pulmonar = Column(String)
-    
-    # Entrevistados sin criterios (8 preguntas + detalles)
+        
+    # Entrevistados sin criterios (8 preguntas + 3 detalles)
     infeccion_respiratoria = Column(String); infeccion_oido = Column(String)
     uso_aerosoles = Column(String); uso_aerosoles_detalle = Column(String) # Campo hrs
     fumo_ultimas_horas = Column(String); fumo_cantidad_detalle = Column(String)
