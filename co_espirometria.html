@@ -39,7 +39,7 @@
           <option value="hemoptisis">HEMOPTISIS</option>
           <option value="infarto_reciente">INFARTO RECIENTE</option>
           <option value="neumotorax">NEUMOTORAX</option>
-          <option value="fiebre_nauseas">FIEBRE, NÁUSEAS, VÓOMITOS</option>
+          <option value="fiebre_nauseas">FIEBRE, NÁUSEAS, VÓMITOS</option>
           <option value="traqueostomia">TRAQUEOSTOMÍA</option>
           <option value="embarazo_avanzado">EMBARAZO AVANZADO</option>
         </select>
@@ -71,8 +71,8 @@
         tbody.innerHTML = "<tr><td colspan='3' class='text-center'>CARGANDO DATOS...</td></tr>";
     
         try {
-            // Llamada única al nuevo endpoint que filtra desde el servidor
-            const res = await fetch(`${API}/ficha-psicologia-filtrada/${encodeURIComponent(estadoFiltro)}`);
+            // Se actualizó el endpoint a espirometria-filtrada
+            const res = await fetch(`${API}/espirometria-filtrada/${encodeURIComponent(estadoFiltro)}`);
             const resultados = await res.json();
             
             tbody.innerHTML = "";
@@ -97,9 +97,6 @@
             tbody.innerHTML = "";
         }
     }
-
-    
-
 </script>
 
 </body>
