@@ -274,7 +274,7 @@ async def filtrar_cardiologia(query: str, db: Session = Depends(get_db)):
         } for f, p in resultados
     ]
 
-@app("/buscar-cardiologia")
+@app.get("/buscar-cardiologia")
 async def buscar_cardiologia(antecedente: str, db: Session = Depends(get_db)):
     # Mapeo de los valores del select a los nombres de columna en tu BD
     columnas = {
