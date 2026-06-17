@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Request
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from .database import SessionLocal, engine, Base
@@ -500,7 +501,8 @@ def filtrar_altura(campo: str, db: Session = Depends(get_db)):
 # ----------- FICHA ELECTROENCEFALOGRAMA -----------
 
 @app.post("/guardar-electro")
-async def guardar_electro(data: dict, db: Session = Depends(get_db)):
+async def guardar_electro(request: Request, db: Session = Depends(get_db)):
+    data = await request.json()
     try:
         codigo = str(data.get("codigo_paciente", "")).strip().upper()
         paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
@@ -541,8 +543,5 @@ async def guardar_electro(data: dict, db: Session = Depends(get_db)):
         db.refresh(nueva_ficha)
         return {"status": "success"}
     except Exception as e:
+        print(f"ERROR: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
-
-
-
