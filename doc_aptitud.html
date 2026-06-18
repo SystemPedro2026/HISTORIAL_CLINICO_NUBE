@@ -120,7 +120,7 @@ async function guardarDatos() {
         genero: document.querySelectorAll('input[type="text"]')[9].value,
         nro_doc_identidad: document.querySelectorAll('input[type="text"]')[10].value,
         puesto_trabajo: document.querySelectorAll('input[type="text"]')[11].value,
-        resultado: "APTO",
+        resultado: document.querySelector('input[type="checkbox"]:checked').parentElement.textContent.trim(),
         detalle_conclusion: document.querySelector('textarea').value,
         recomendacion_1: document.querySelectorAll('input[type="text"]')[12].value,
         recomendacion_2: document.querySelectorAll('input[type="text"]')[13].value,
