@@ -109,3 +109,13 @@ def create_ficha_psicologia(db: Session, data: dict):
     db.refresh(db_obj)
     return db_obj
 
+def upsert_electro(db: Session, data: dict):
+    # Filtro de seguridad: solo toma columnas que existen en la tabla
+    valid_keys = [col.name for col in models.FichaElectroencefalograma.__table__.columns]
+    data_filtered = {k: v for k, v in data.items() if k in valid_keys}
+    
+    db_obj = models.FichaElectroencefalograma(**data_filtered)
+    db.add(db_obj)
+    db.commit()
+    db.refresh(db_obj)
+    return db_obj
