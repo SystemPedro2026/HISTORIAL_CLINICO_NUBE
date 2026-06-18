@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Request
-from models import FichaElectroencefalograma, Paciente # Asegúrate de que estén ambos
+from api.models import FichaElectroencefalograma, Paciente # Asegúrate de que estén ambos
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from .database import SessionLocal, engine, Base
