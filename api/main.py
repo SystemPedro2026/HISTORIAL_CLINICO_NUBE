@@ -535,7 +535,7 @@ async def guardar_electro(data: dict, db: Session = Depends(get_db)):
             resultado_estudio=data.get("resultado_estudio"),
             observaciones_estudio=data.get("observaciones_estudio"),
             reposo=data.get("reposo"),
-            foto_n=data.get("fotoestimulacion"),
+            fotoestimulacion=data.get("fotoestimulacion"),
             hipernea_n=data.get("hipernea"),
             diagnostico_recomendaciones=data.get("diagnostico_recomendaciones")
         )
