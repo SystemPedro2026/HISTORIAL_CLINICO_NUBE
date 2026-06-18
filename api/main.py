@@ -553,23 +553,19 @@ async def guardar_electro(data: dict, db: Session = Depends(get_db)):
 
 @app.get("/consultar-electro-por-campo/{campo}")
 async def consultar_electro_por_campo(campo: str, db: Session = Depends(get_db)):
-    # Usamos getattr para buscar dinámicamente en la clase
-    try:
-        resultados = db.query(
-            FichaElectroencefalograma.paciente_id,
-            getattr(FichaElectroencefalograma, campo).label("valor")
-        ).filter(getattr(FichaElectroencefalograma, campo) != 'NO', 
-                 getattr(FichaElectroencefalograma, campo) != '').all()
-    except Exception:
-        return []
-
+    # Traemos todos los registros sin filtros complejos para evitar errores
+    registros = db.query(models.FichaElectroencefalograma).all()
     lista = []
-    for r in resultados:
-        paciente = db.query(Paciente).filter(Paciente.id == r.paciente_id).first()
-        lista.append({
-            "codigo_paciente": paciente.codigo if paciente else "N/A",
-            "nombre_paciente": paciente.nombre if paciente else "Desconocido",
-            "valor": r.valor
-        })
-    return lista
-
+    
+    for r in registros:
+        # Obtenemos el valor de forma segura
+        valor = getattr(r, campo, None)
+        # Si el valor existe y no es "NO", lo agregamos
+        if valor and str(valor).strip().upper() != 'NO':
+            paciente = db.query(models.Paciente).filter(models.Paciente.id == r.paciente_id).first()
+            lista.append({
+                "codigo_paciente": paciente.codigo_paciente if paciente else "N/A",
+                "nombre_paciente": f"{paciente.nombre} {paciente.apellido}" if paciente else "Desconocido",
+                "valor": valor
+            })
+    return lista # Esto siempre será una lista, nunca dará error al iterar
