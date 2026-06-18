@@ -502,11 +502,13 @@ def filtrar_altura(campo: str, db: Session = Depends(get_db)):
 
 @app.post("/guardar-electro")
 async def guardar_electro(data: dict, db: Session = Depends(get_db)):
-    data = await request.json()
     try:
+        # Validación básica de datos
         codigo = str(data.get("codigo_paciente", "")).strip().upper()
+        if not codigo:
+            raise HTTPException(status_code=400, detail="Código paciente vacío")
+            
         paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
-
         if not paciente:
             raise HTTPException(status_code=404, detail="Paciente no encontrado")
 
@@ -543,5 +545,9 @@ async def guardar_electro(data: dict, db: Session = Depends(get_db)):
         db.refresh(nueva_ficha)
         return {"status": "success"}
     except Exception as e:
-        print(f"ERROR: {e}")
+        # Esto imprimirá el error real en los logs de Render para que veas qué campo falla
+        print(f"DEBUG_ERROR: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+
