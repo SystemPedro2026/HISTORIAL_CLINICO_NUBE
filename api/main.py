@@ -511,34 +511,36 @@ async def guardar_electro(data: dict, db: Session = Depends(get_db)):
         paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
         if not paciente:
             raise HTTPException(status_code=404, detail="Paciente no encontrado")
-
-        nueva_ficha = models.FichaElectroencefalograma(
-            paciente_id=paciente.id,
-            cefaleas=data.get("cefaleas"),
-            epilepsia=data.get("epilepsia"),
-            convulsiones=data.get("convulsiones"),
-            accidente=data.get("accidente"),
-            perdida_conocimiento=data.get("perdida_conocimiento"),
-            paralisis=data.get("paralisis"),
-            otros_antecedentes=data.get("otros_antecedentes"),
-            derrame_cerebral=data.get("derrame_cerebral"),
-            quirurgicos=data.get("quirurgicos"),
-            observaciones_antecedentes=data.get("observaciones_antecedentes"),
-            marcha=data.get("marcha"),
-            reflejos=data.get("reflejos"),
-            coordinacion_dedo_nariz=data.get("coordinacion_dedo_nariz"),
-            coordinacion_talon_rodilla=data.get("coordinacion_talon_rodilla"),
-            romberg=data.get("romberg"),
-            vertigo_nistagmo=data.get("vertigo_nistagmo"),
-            vertigo_adaptacion=data.get("vertigo_adaptacion"),
-            observaciones_examen=data.get("observaciones_examen"),
-            descripcion_estudio=data.get("descripcion_estudio"),
-            resultado_estudio=data.get("resultado_estudio"),
-            observaciones_estudio=data.get("observaciones_estudio"),
-            reposo=data.get("reposo"),
-            fotoestimulacion=data.get("fotoestimulacion"),
-            hipernea=data.get("hipernea"),
-            diagnostico_recomendaciones=data.get("diagnostico_recomendaciones")
+            nueva_ficha = models.FichaElectroencefalograma(
+                paciente_id=paciente.id,
+                cefaleas=data.get("cefaleas"),
+                epilepsia=data.get("epilepsia"),
+                convulsiones=data.get("convulsiones"),
+                accidente=data.get("accidente"),
+                perdida_conocimiento=data.get("perdida_conocimiento"),
+                paralisis=data.get("paralisis"),
+                otros_antecedentes=data.get("otros_antecedentes"),
+                derrame_cerebral=data.get("derrame_cerebral"),
+                quirurgicos=data.get("quirurgicos"),
+                observaciones_antecedentes=data.get("observaciones_antecedentes"),
+                marcha=data.get("marcha"),
+                reflejos=data.get("reflejos"),
+                coordinacion_dedo_nariz=data.get("coordinacion_dedo_nariz"),
+                coordinacion_talon_rodilla=data.get("coordinacion_talon_rodilla"),
+                romberg=data.get("romberg"),
+                vertigo_nistagmo=data.get("vertigo_nistagmo"),
+                vertigo_adaptacion=data.get("vertigo_adaptacion"),
+                observaciones_examen=data.get("observaciones_examen"),
+                descripcion_estudio=data.get("descripcion_estudio"),
+                resultado_estudio=data.get("resultado_estudio"),
+                observaciones_estudio=data.get("observaciones_estudio"),
+                # Corregido: cambiamos 'reposo' por 'reposo_n' para coincidir con tu base de datos
+                reposo_n=data.get("reposo"), 
+                # Corregido: cambiamos 'fotoestimulacion' por 'foto_n'
+                foto_n=data.get("fotoestimulacion"),
+                # Corregido: cambiamos 'hipernea' por 'hipernea_n'
+                hipernea_n=data.get("hipernea"),
+                diagnostico_recomendaciones=data.get("diagnostico_recomendaciones")
         )
         db.add(nueva_ficha)
         db.commit()
