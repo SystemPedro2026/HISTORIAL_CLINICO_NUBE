@@ -215,7 +215,7 @@ class FichaElectroencefalograma(Base):
     
     # Descripción y Activación
     descripcion_estudio = Column(String); resultado_estudio = Column(String); observaciones_estudio = Column(Text)
+    diagnostico_recomendaciones = Column(Text)
     reposo = Column(String)
     fotoestimulacion = Column(String)
     hipernea = Column(String)
-    diagnostico_recomendaciones = Column(Text)
