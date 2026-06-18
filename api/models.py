@@ -252,4 +252,33 @@ class FichaAptitud(Base):
     recomendacion_3 = Column(Text)
     recomendacion_4 = Column(Text)
 
+class FichaAptitudFisica(Base):
+    __tablename__ = "ficha_aptitud_fisica"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    codigo_paciente = Column(String, nullable=False) # ID clave para el mapeo
+    razon_social = Column(String)
+    actividad_economica = Column(String)
+    dia = Column(String)
+    mes = Column(String)
+    anio = Column(String)
+    tipo_examen = Column(String)
+    otros_tipo = Column(String)
+    ape_pat = Column(String)
+    ape_mat = Column(String)
+    nombres = Column(String)
+    edad = Column(String)
+    genero = Column(String)
+    doc_id = Column(String)
+    puesto_trabajo = Column(String)
+    resultado_fisico = Column(String)
+    resultado_psicologico = Column(String)
+    conclusion_general = Column(Text)
+    rec1 = Column(String)
+    rec2 = Column(String)
+    rec3 = Column(String)
+    rec4 = Column(String)
+    rec5 = Column(String)
+    rec6 = Column(String)
+
 
