@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificado de Aptitud Médico Ocupacional</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.25; margin: 20px; }
+        .header-actions { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .btn { padding: 10px 20px; cursor: pointer; }
+        .patient-code-section { background: #f4f4f4; padding: 15px; border: 1px solid #ccc; margin-bottom: 20px; }
+        #codigo_paciente { text-transform: uppercase; width: 100%; padding: 8px; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+        .save-btn { width: 100%; padding: 20px; background-color: #007bff; color: white; border: none; font-size: 18px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="header-actions">
+        <button class="btn" onclick="window.history.back()">← VOLVER AL MENÚ</button>
+        <button class="btn" onclick="window.print()">IMPRIMIR</button>
+    </div>
+
+    <div class="patient-code-section">
+        <label><strong>CÓDIGO PACIENTE:</strong></label>
+        <input type="text" id="codigo_paciente" placeholder="INGRESE CÓDIGO MANUALMENTE" oninput="this.value = this.value.toUpperCase()">
+    </div>
+
+    <h1>CERTIFICADO DE APTITUD MÉDICO OCUPACIONAL</h1>
+
+    <h2>DATOS DE LA EMPRESA</h2>
+    <table>
+        <tr><td>Razón Social / Nombre: <input type="text" placeholder="Ej: OHS S.A."></td></tr>
+        <tr><td>Actividad Económica: <input type="text" placeholder="Ej: Servicios de Salud"></td></tr>
+    </table>
+
+    <h2>FECHA Y TIPO DE EXAMEN</h2>
+    <table>
+        <tr>
+            <th>DÍA</th><th>MES</th><th>AÑO</th>
+            <th>PREOCUPACIONAL</th><th>CONTROL PERIÓDICO</th><th>POST-OCUPACIONAL</th><th>OTROS</th>
+        </tr>
+        <tr>
+            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+            <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td>
+        </tr>
+    </table>
+
+    <h2>DATOS DEL COLABORADOR</h2>
+    <table>
+        <tr><td>Apellido Paterno: <input type="text"></td><td>Apellido Materno: <input type="text"></td></tr>
+        <tr><td>Nombres: <input type="text"></td><td>Edad: <input type="text"></td></tr>
+        <tr><td>Género: <input type="text"></td><td>Nº Doc. Identidad: <input type="text"></td></tr>
+        <tr><td colspan="2">Puesto de Trabajo: <input type="text"></td></tr>
+    </table>
+
+    <h2>CONCLUSIONES</h2>
+    <p>Se determina de acuerdo a los resultados de las evaluaciones médicas y estudios complementarios que el colaborador es:</p>
+    <table>
+        <tr>
+            <td><input type="checkbox"> APTO</td>
+            <td><input type="checkbox"> APTO CON RESTRICCIONES</td>
+            <td><input type="checkbox"> NO APTO</td>
+        </tr>
+        <tr><td colspan="3"><textarea style="width:100%" rows="3" placeholder="Ej: Apto para trabajo en oficina de tipo administrativo..."></textarea></td></tr>
+    </table>
+
+    <h2>RECOMENDACIONES PARA UN TRABAJO SANO Y SEGURO</h2>
+    <ol>
+        <li><input type="text" style="width:80%" value="Utilizar permanentemente todos los EPP asignados."></li>
+        <li><input type="text" style="width:80%" value="Capacitaciones anuales en temas de salud y seguridad."></li>
+        <li><input type="text" style="width:80%" value="Mantener una vida saludable (dieta y ejercicios)."></li>
+        <li><input type="text" style="width:80%" value="Descanso (dormir 8 horas diarias)."></li>
+    </ol>
+
+    <button class="save-btn" onclick="guardarRegistro()">GUARDAR REGISTRO FINAL</button>
+
+    <script>
+        function guardarRegistro() {
+            // Lógica para enviar los datos como dict al backend
+            console.log("Guardando datos...");
+        }
+    </script>
+</body>
+</html>
