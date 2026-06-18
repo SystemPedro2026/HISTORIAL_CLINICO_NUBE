@@ -35,26 +35,25 @@
 
     <div class="filter-box no-print">
         <span class="label-patologias">ANTECEDENTES</span>
-        <select id="estadoSelect" class="form-select w-50">
-            <option value="">CEFALEAS</option>
-            <option value="">EPILEPSIA</option>
-            <option value="">CONVULSIONES</option>
-            <option value="">PÉRDIDA DE CONOCIMIENTO</option>
-            <option value="">PARÁLISIS</option>
-            <option value="">ACCIDENTE</option>
-            <option value="">DERRAME CEREBRAL</option>
-            <option value="">QUIRURGICOS</option>
-            <option value="">OTROS</option>
-
+        <select id="campoSelect" class="form-select w-50">
+            <option value="cefaleas">CEFALEAS</option>
+            <option value="epilepsia">EPILEPSIA</option>
+            <option value="convulsiones">CONVULSIONES</option>
+            <option value="perdida_conocimiento">PÉRDIDA DE CONOCIMIENTO</option>
+            <option value="paralisis">PARÁLISIS</option>
+            <option value="accidente">ACCIDENTE</option>
+            <option value="derrame_cerebral">DERRAME CEREBRAL</option>
+            <option value="quirurgicos">QUIRÚRGICOS</option>
+        </select>
         <button onclick="filtrar()">BUSCAR</button>
     </div>
 
     <table class="table table-bordered" id="tablaResultados">
         <thead>
             <tr>
-                <th>CÓDIGO</th>
+                <th>CÓDIGO PACIENTE</th>
                 <th>NOMBRE COMPLETO</th>
-                <th>ESTADO</th>
+                <th>VALOR REGISTRADO</th>
             </tr>
         </thead>
         <tbody id="listaPacientes"></tbody>
@@ -69,13 +68,13 @@
     const API = 'https://historial-clinico-nube.onrender.com';
 
     async function filtrar() {
-        const estadoFiltro = document.getElementById('estadoSelect').value;
+        const campo = document.getElementById('campoSelect').value;
         const tbody = document.getElementById('listaPacientes');
         tbody.innerHTML = "<tr><td colspan='3' class='text-center'>CARGANDO DATOS...</td></tr>";
     
         try {
-            // Llamada única al nuevo endpoint que filtra desde el servidor
-            const res = await fetch(`${API}/ficha-psicologia-filtrada/${encodeURIComponent(estadoFiltro)}`);
+            // Se debe llamar al endpoint que filtre por el campo seleccionado
+            const res = await fetch(`${API}/consultar-electro-por-campo/${campo}`);
             const resultados = await res.json();
             
             tbody.innerHTML = "";
@@ -88,9 +87,9 @@
             for (let item of resultados) {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${item.codigo || '---'}</td>
-                        <td>${item.nombre}</td>
-                        <td>${item.estado}</td>
+                        <td>${item.codigo_paciente || '---'}</td>
+                        <td>${item.nombre_paciente}</td>
+                        <td>${item.valor}</td>
                     </tr>
                 `;
             }
@@ -100,9 +99,6 @@
             tbody.innerHTML = "";
         }
     }
-
-    
-
 </script>
 
 </body>
