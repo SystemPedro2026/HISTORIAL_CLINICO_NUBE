@@ -549,3 +549,27 @@ async def guardar_electro(data: dict, db: Session = Depends(get_db)):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/consultar-electro-por-campo/{campo}")
+async def consultar_electro_por_campo(campo: str, db: Session = Depends(get_db)):
+    # Buscamos en la tabla de electroencefalogramas
+    # Filtramos donde el campo seleccionado no esté vacío o no sea 'NO'
+    resultados = db.query(
+        FichaElectroencefalograma.paciente_id,
+        getattr(FichaElectroencefalograma, campo).label("valor")
+    ).filter(getattr(FichaElectroencefalograma, campo) != 'NO', 
+             getattr(FichaElectroencefalograma, campo) != '').all()
+
+    # Formateamos la respuesta incluyendo el nombre del paciente si es posible
+    lista = []
+    for r in resultados:
+        # Aquí asumimos que tienes una forma de obtener el nombre del paciente por ID
+        paciente = db.query(Paciente).filter(Paciente.id == r.paciente_id).first()
+        lista.append({
+            "codigo_paciente": paciente.codigo if paciente else "N/A",
+            "nombre_paciente": paciente.nombre if paciente else "Desconocido",
+            "valor": r.valor
+        })
+    return lista
+
+
