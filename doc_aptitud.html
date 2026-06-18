@@ -2,166 +2,89 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Ficha Aptitud Ocupacional</title>
+    <title>Certificado de Aptitud Ocupacional</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.5; background-color: #f0f0f0; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f0f0; margin: 0; padding: 20px; }
+        .main-container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 5px; border: 1px solid #ccc; }
         
-        .main-container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 8px rgba(0,0,0,0.1); position: relative; }
-
-        .header-actions { position: absolute; top: -50px; left: 0; right: 0; display: flex; justify-content: space-between; }
-        .btn-top { padding: 8px 16px; cursor: pointer; border: none; font-size: 14px; border-radius: 3px; font-weight: bold; }
-        .btn-back { background-color: #5a7b8e; color: white; }
-        .btn-print { background-color: #2e343b; color: white; }
+        .header-actions { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .btn { padding: 8px 15px; cursor: pointer; border: none; font-weight: bold; color: white; font-size: 12px; }
+        .btn-volver { background-color: #5f7481; }
+        .btn-imprimir { background-color: #2b3036; }
 
         .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .form-header .logo { width: 100px; }
-        .form-header .title-group { text-align: right; }
-        .form-header h1 { font-size: 24px; margin: 0; font-weight: bold; }
-        .form-header .subtitle { color: green; font-size: 14px; text-transform: uppercase; margin-top: 5px; }
+        .logo { width: 80px; }
+        .title-group { text-align: right; }
+        .title-group h1 { font-size: 20px; margin: 0; }
+        .title-group .subtitle { color: green; font-size: 12px; font-weight: bold; }
 
-        .patient-code-section { background: #f0f0f0; padding: 15px; border: 1px solid #ccc; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; }
-        .patient-code-section label { text-transform: uppercase; font-weight: bold; font-size: 14px; white-space: nowrap; }
-        #codigo_paciente { border: none; background: none; text-transform: uppercase; width: 100%; border-bottom: 2px solid #333; padding: 5px; font-weight: bold; font-size: 14px; color: #333; }
-
-        fieldset { border: none; padding: 0; margin-bottom: 30px; }
-        legend { text-transform: uppercase; font-weight: bold; padding: 0 10px; font-size: 14px; position: relative; width: 100%; border-bottom: 2px solid green; padding-bottom: 5px; margin-bottom: 15px; }
-
-        .section-box { border: 1px solid #ccc; background-color: #fff; padding: 15px; margin-bottom: 20px; }
+        .patient-section { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; margin-bottom: 20px; }
+        #codigo_paciente { border: none; background: transparent; border-bottom: 1px solid #000; width: 100%; text-transform: uppercase; font-size: 14px; }
         
+        h2 { font-size: 14px; color: green; border-bottom: 2px solid green; padding-bottom: 5px; margin-top: 25px; }
         table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-        th, td { border: none; padding: 8px; vertical-align: middle; font-size: 13px; }
-        input[type="text"] { width: 100%; border: none; border-bottom: 1px solid #333; padding: 4px; box-sizing: border-box; }
-        input[type="text"]:focus { outline: none; border-bottom: 2px solid green; }
-        input[type="text"]::placeholder { color: #aaa; }
+        input[type="text"] { width: 100%; border: none; border-bottom: 1px solid #000; padding: 2px; }
         
-        .date-input { width: 40px !important; text-align: center; }
-        .checkbox-cell { vertical-align: middle; white-space: nowrap; }
-        .checkbox-cell input { vertical-align: middle; margin-right: 5px; }
-        .multiline-input { width: 100%; border: none; border-bottom: 1px solid #333; padding: 4px; box-sizing: border-box; font-size: 13px; resize: none; overflow: hidden; margin-top: 5px;}
-
-        .conclusions-box td { border: 1px solid #ccc; padding: 15px; background: #fff; }
-
-        .save-btn { width: 100%; padding: 20px; background-color: #007bff; color: white; border: none; font-size: 18px; cursor: pointer; text-transform: uppercase; font-weight: bold; text-align: center; position: absolute; bottom: 0; left: 0; right: 0; margin: 0;}
-        .save-btn:hover { background-color: #0056b3; }
-
-        @media print {
-            body { background: white; padding: 0; }
-            .main-container { border: none; box-shadow: none; padding: 0; }
-            .header-actions, .save-btn { display: none; }
-        }
+        .save-btn { width: 100%; padding: 15px; background-color: #007bff; color: white; border: none; font-size: 16px; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
 <body>
 
+<div class="main-container">
     <div class="header-actions">
-        <button class="btn-top btn-back" onclick="window.history.back()">← VOLVER AL MENÚ</button>
-        <button class="btn-top btn-print" onclick="window.print()">IMPRIMIR</button>
+        <button class="btn btn-volver" onclick="window.history.back()">← VOLVER AL MENÚ</button>
+        <button class="btn btn-imprimir" onclick="window.print()">IMPRIMIR</button>
     </div>
 
-    <div class="main-container">
-        
-        <div class="form-header">
-            <img src="https://systempedro2026.github.io/HISTORIAL_CLINICO_NUBE/logo.png" alt="logo" class="logo">
-            <div class="title-group">
-                <h1>FICHA DE APTITUD MÉDICO OCUPACIONAL</h1>
-                <div class="subtitle">APTITUD MÉDICO OCUPACIONAL - DOCUMENTO LEGAL</div>
-            </div>
+    <div class="form-header">
+        <img src="https://i.imgur.com/tu_logo_aqui.png" alt="logo" class="logo">
+        <div class="title-group">
+            <h1>FICHA DE APTITUD MÉDICO OCUPACIONAL</h1>
+            <div class="subtitle">APTITUD MÉDICO OCUPACIONAL - DOCUMENTO LEGAL</div>
         </div>
-
-        <div class="patient-code-section">
-            <label>CÓDIGO PACIENTE:</label>
-            <input type="text" id="codigo_paciente" placeholder="INGRESE CÓDIGO MANUALMENTE" oninput="this.value = this.value.toUpperCase()">
-        </div>
-
-        <fieldset>
-            <legend>I. DATOS DE LA EMPRESA</legend>
-            <table>
-                <tr><td>Razón Social / Nombre: <input type="text" placeholder="Ej: OHS S.A."></td></tr>
-                <tr><td>Actividad Económica: <input type="text" placeholder="Ej: Servicios de Salud"></td></tr>
-            </table>
-        </fieldset>
-
-        <fieldset>
-            <legend>II. FECHA Y TIPO DE EXAMEN</legend>
-            <table>
-                <tr>
-                    <th>FECHA DEL CERTIFICADO</th>
-                    <td>DÍA: <input type="text" class="date-input"></td>
-                    <td>MES: <input type="text" class="date-input"></td>
-                    <td>AÑO: <input type="text" class="date-input" style="width: 50px !important;"></td>
-                </tr>
-            </table>
-            <div class="section-box">
-                <table style="width: auto;">
-                    <tr>
-                        <td class="checkbox-cell"><input type="checkbox"> PREOCUPACIONAL</td>
-                        <td class="checkbox-cell"><input type="checkbox"> CONTROL PERIÓDICO</td>
-                        <td class="checkbox-cell"><input type="checkbox"> POST-OCUPACIONAL</td>
-                        <td style="border-bottom: none;">OTROS: <input type="text" style="width: 150px;"></td>
-                    </tr>
-                </table>
-            </div>
-        </fieldset>
-
-        <fieldset>
-            <legend>III. DATOS DEL COLABORADOR</legend>
-            <table>
-                <tr>
-                    <td>Apellido Paterno: <input type="text"></td>
-                    <td>Apellido Materno: <input type="text"></td>
-                </tr>
-                <tr>
-                    <td>Nombres: <input type="text"></td>
-                    <td>Edad: <input type="text"></td>
-                </tr>
-                <tr>
-                    <td>Género: <input type="text"></td>
-                    <td>Nº Doc. Identidad: <input type="text"></td>
-                </tr>
-                <tr>
-                    <td colspan="2">Puesto de Trabajo: <input type="text"></td>
-                </tr>
-            </table>
-        </fieldset>
-
-        <fieldset>
-            <legend>IV. CONCLUSIONES</legend>
-            <p style="font-size: 13px;">Se determina de acuerdo a los resultados de las evaluaciones médicas y estudios complementarios que el colaborador es:</p>
-            
-            <div class="section-box conclusions-box">
-                <table>
-                    <tr>
-                        <td class="checkbox-cell" style="width: 30%;"><input type="checkbox"> APTO</td>
-                        <td class="checkbox-cell" style="width: 40%;"><input type="checkbox"> APTO CON RESTRICCIONES</td>
-                        <td class="checkbox-cell" style="width: 30%;"><input type="checkbox"> NO APTO</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <textarea class="multiline-input" placeholder="Ej: Apto para trabajo en oficina de tipo administrativo..."></textarea>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </fieldset>
-
-        <fieldset>
-            <legend>V. RECOMENDACIONES PARA UN TRABAJO SANO Y SEGURO</legend>
-            <table>
-                <tr><td>1. <input type="text" value="Utilizar permanentemente todos los EPP asignados."></td></tr>
-                <tr><td>2. <input type="text" value="Capacitaciones anuales en temas de salud y seguridad."></td></tr>
-                <tr><td>3. <input type="text" value="Mantener una vida saludable (dieta y ejercicios)."></td></tr>
-                <tr><td>4. <input type="text" value="Descanso (dormir 8 horas diarias)."></td></tr>
-            </table>
-        </fieldset>
-
-        <div style="height: 100px;"></div> <button class="save-btn" onclick="guardarRegistro()">GUARDAR REGISTRO FINAL</button>
     </div>
 
-    <script>
-        function guardarRegistro() {
-            // Lógica para enviar los datos como dict al backend
-            console.log("Guardando datos...");
-        }
-    </script>
+    <div class="patient-section">
+        <strong>CÓDIGO PACIENTE:</strong>
+        <input type="text" id="codigo_paciente" placeholder="INGRESE CÓDIGO MANUALMENTE" oninput="this.value = this.value.toUpperCase()">
+    </div>
+
+    <h2>I. DATOS DE LA EMPRESA</h2>
+    Razón Social / Nombre: <input type="text" placeholder="Ej: OHS S.A.">
+    Actividad Económica: <input type="text" placeholder="Ej: Servicios de Salud">
+
+    <h2>II. FECHA Y TIPO DE EXAMEN</h2>
+    FECHA DEL CERTIFICADO: DÍA: <input type="text" style="width: 50px;"> MES: <input type="text" style="width: 50px;"> AÑO: <input type="text" style="width: 50px;">
+    <br><br>
+    <input type="checkbox"> PREOCUPACIONAL <input type="checkbox"> CONTROL PERIÓDICO <input type="checkbox"> POST-OCUPACIONAL OTROS: <input type="text" style="width: 200px;">
+
+    <h2>III. DATOS DEL COLABORADOR</h2>
+    <table>
+        <tr><td>Apellido Paterno: <input type="text"></td><td>Apellido Materno: <input type="text"></td></tr>
+        <tr><td>Nombres: <input type="text"></td><td>Edad: <input type="text"></td></tr>
+        <tr><td>Género: <input type="text"></td><td>Nº Doc. Identidad: <input type="text"></td></tr>
+        <tr><td colspan="2">Puesto de Trabajo: <input type="text"></td></tr>
+    </table>
+
+    <h2>IV. CONCLUSIONES</h2>
+    <p>Se determina de acuerdo a los resultados de las evaluaciones médicas y estudios complementarios que el colaborador es:</p>
+    <table style="border: 1px solid #ccc;">
+        <tr>
+            <td><input type="checkbox"> APTO</td>
+            <td><input type="checkbox"> APTO CON RESTRICCIONES</td>
+            <td><input type="checkbox"> NO APTO</td>
+        </tr>
+    </table>
+    <textarea style="width: 100%; border: 1px solid #ccc;" rows="3" placeholder="Ej: Apto para trabajo en oficina..."></textarea>
+
+    <h2>V. RECOMENDACIONES PARA UN TRABAJO SANO Y SEGURO</h2>
+    1. <input type="text" value="Utilizar permanentemente todos los EPP (equipos de protección personal), asignados para las tareas.">
+    2. <input type="text" value="Capacitaciones anuales en temas de salud y seguridad aplicables a las tareas.">
+    3. <input type="text" value="Mantener una vida saludable (dieta y ejercicios).">
+    4. <input type="text" value="Descanso (dormir 8 horas diarias).">
+
+    <button class="save-btn" onclick="alert('Guardado')">GUARDAR REGISTRO FINAL</button>
+</div>
+
 </body>
 </html>
