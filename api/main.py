@@ -573,14 +573,14 @@ async def consultar_electro_por_campo(campo: str, db: Session = Depends(get_db))
 # ----------- FICHA APTITUD MÉDICO OCUPACIONAL -----------
 @app.post("/guardar-aptitud")
 async def guardar_aptitud(data: dict, db: Session = Depends(get_db)):
-    # Búsqueda normalizada por código paciente
-    codigo = str(data.get("codigo_paciente", "")).strip().upper()
-    paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
-    
-    if not paciente:
-        raise HTTPException(status_code=404, detail="Paciente no encontrado")
-
     try:
+        # Validación: buscar paciente
+        codigo = str(data.get("codigo_paciente", "")).strip().upper()
+        paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
+        if not paciente:
+            return {"status": "error", "message": "Paciente no encontrado"}
+
+        # Crear objeto con mapeo estricto
         nueva_ficha = models.FichaAptitud(
             paciente_id=paciente.id,
             razon_social=data.get("razon_social"),
@@ -597,7 +597,7 @@ async def guardar_aptitud(data: dict, db: Session = Depends(get_db)):
             genero=data.get("genero"),
             nro_doc_identidad=data.get("nro_doc_identidad"),
             puesto_trabajo=data.get("puesto_trabajo"),
-            resultado=data.get("resultado"),
+            resultado=str(data.get("resultado", "")).upper(),
             detalle_conclusion=data.get("detalle_conclusion"),
             recomendacion_1=data.get("recomendacion_1"),
             recomendacion_2=data.get("recomendacion_2"),
@@ -606,11 +606,10 @@ async def guardar_aptitud(data: dict, db: Session = Depends(get_db)):
         )
         db.add(nueva_ficha)
         db.commit()
-        db.refresh(nueva_ficha)
-        return {"status": "success", "message": "GUARDADO EXITOSAMENTE"}
+        return {"status": "success"}
     except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"ERROR: {e}")
+        return {"status": "error", "message": str(e)}
 
 @app.get("/consultar-aptitud/{codigo_paciente}")
 async def consultar_aptitud(codigo_paciente: str, db: Session = Depends(get_db)):
