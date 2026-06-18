@@ -162,7 +162,7 @@ async function capturarDatos() {
         });
 
         if (response.ok) {
-            alert('¡Guardado exitosamente en Neon!');
+            alert('¡Guardado exitosamente!');
         } else {
             const errorText = await response.text();
             alert('Error en el servidor: ' + errorText);
