@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Request
+from models import FichaElectroencefalograma, Paciente # Asegúrate de que estén ambos
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from .database import SessionLocal, engine, Base
@@ -552,18 +553,18 @@ async def guardar_electro(data: dict, db: Session = Depends(get_db)):
 
 @app.get("/consultar-electro-por-campo/{campo}")
 async def consultar_electro_por_campo(campo: str, db: Session = Depends(get_db)):
-    # Buscamos en la tabla de electroencefalogramas
-    # Filtramos donde el campo seleccionado no esté vacío o no sea 'NO'
-    resultados = db.query(
-        FichaElectroencefalograma.paciente_id,
-        getattr(FichaElectroencefalograma, campo).label("valor")
-    ).filter(getattr(FichaElectroencefalograma, campo) != 'NO', 
-             getattr(FichaElectroencefalograma, campo) != '').all()
+    # Usamos getattr para buscar dinámicamente en la clase
+    try:
+        resultados = db.query(
+            FichaElectroencefalograma.paciente_id,
+            getattr(FichaElectroencefalograma, campo).label("valor")
+        ).filter(getattr(FichaElectroencefalograma, campo) != 'NO', 
+                 getattr(FichaElectroencefalograma, campo) != '').all()
+    except Exception:
+        return []
 
-    # Formateamos la respuesta incluyendo el nombre del paciente si es posible
     lista = []
     for r in resultados:
-        # Aquí asumimos que tienes una forma de obtener el nombre del paciente por ID
         paciente = db.query(Paciente).filter(Paciente.id == r.paciente_id).first()
         lista.append({
             "codigo_paciente": paciente.codigo if paciente else "N/A",
@@ -571,5 +572,4 @@ async def consultar_electro_por_campo(campo: str, db: Session = Depends(get_db))
             "valor": r.valor
         })
     return lista
-
 
