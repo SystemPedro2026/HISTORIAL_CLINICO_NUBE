@@ -1,12 +1,14 @@
 from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Request
-from api.models import FichaElectroencefalograma, Paciente # Asegúrate de que estén ambos
+from api.models import FichaElectroencefalograma, Paciente 
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from .database import SessionLocal, engine, Base
 from .crud import create_doctor, create_enfermera
 from . import models
+from .models import FichaAptitudFisica 
+from .database import get_db
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -639,8 +641,41 @@ def filtrar_aptitud_por_resultado(resultado: str, db: Session = Depends(get_db))
     return resultados
 
 
-
-
-
+# ----------- FICHA APTITUD FISICA Y PSICOLOGICA -----------
+@app.post("/guardar-aptitud-fisica")
+def guardar_aptitud_fisica(data: dict, db: Session = Depends(get_db)):
+    try:
+        nueva_ficha = FichaAptitudFisica(
+            codigo_paciente=data.get("codigo_paciente"),
+            razon_social=data.get("razon_social"),
+            actividad_economica=data.get("actividad_economica"),
+            dia=data.get("dia"),
+            mes=data.get("mes"),
+            anio=data.get("anio"),
+            tipo_examen=data.get("tipo_examen"),
+            otros_tipo=data.get("otros_tipo"),
+            ape_pat=data.get("ape_pat"),
+            ape_mat=data.get("ape_mat"),
+            nombres=data.get("nombres"),
+            edad=data.get("edad"),
+            genero=data.get("genero"),
+            doc_id=data.get("doc_id"),
+            puesto_trabajo=data.get("puesto_trabajo"),
+            resultado_fisico=data.get("resultado_fisico"),
+            resultado_psicologico=data.get("resultado_psicologico"),
+            conclusion_general=data.get("conclusion_general"),
+            rec1=data.get("rec1"),
+            rec2=data.get("rec2"),
+            rec3=data.get("rec3"),
+            rec4=data.get("rec4"),
+            rec5=data.get("rec5"),
+            rec6=data.get("rec6")
+        )
+        db.add(nueva_ficha)
+        db.commit()
+        db.refresh(nueva_ficha)
+        return {"status": "success", "id": nueva_ficha.id}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
