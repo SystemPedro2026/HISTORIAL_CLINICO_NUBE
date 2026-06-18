@@ -26,6 +26,15 @@
         input[type="text"] { width: 100%; border: none; border-bottom: 1px solid #000; padding: 2px; }
         
         .save-btn { width: 100%; padding: 15px; background-color: #007bff; color: white; border: none; font-size: 16px; cursor: pointer; margin-top: 20px; }
+   
+        /* Forzar que no haya saltos de página innecesarios */
+        @media print {
+        body { background: white; padding: 0; }
+            .main-container { border: none; padding: 0; width: 100%; }
+            .header-actions, .save-btn { display: none; }
+            .patient-section { border: none; background: none; }
+        }
+    
     </style>
 </head>
 <body>
@@ -37,7 +46,7 @@
     </div>
 
     <div class="form-header">
-        <img src="https://i.imgur.com/tu_logo_aqui.png" alt="logo" class="logo">
+        <img src="https://systempedro2026.github.io/HISTORIAL_CLINICO_NUBE/logo.png" alt="logo" class="logo">
         <div class="title-group">
             <h1>FICHA DE APTITUD MÉDICO OCUPACIONAL</h1>
             <div class="subtitle">APTITUD MÉDICO OCUPACIONAL - DOCUMENTO LEGAL</div>
