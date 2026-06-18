@@ -36,10 +36,9 @@
     <div class="filter-box no-print">
         <span class="label-patologias">CONCLUSIONES</span>
         <select id="campoSelect" class="form-select w-50">
-            <option value="cefaleas">APTO</option>
-            <option value="cefaleas">APTO CON RESTRICCIONES</option>
-            <option value="cefaleas">NO APTO</option>
-
+            <option value="APTO">APTO</option>
+            <option value="APTO CON RESTRICCIONES">APTO CON RESTRICCIONES</option>
+            <option value="NO APTO">NO APTO</option>
         </select>
         <button onclick="filtrar()">BUSCAR</button>
     </div>
@@ -49,7 +48,7 @@
             <tr>
                 <th>CÓDIGO PACIENTE</th>
                 <th>NOMBRE COMPLETO</th>
-                <th>VALOR REGISTRADO</th>
+                <th>RESULTADO</th>
             </tr>
         </thead>
         <tbody id="listaPacientes"></tbody>
@@ -64,17 +63,17 @@
     const API = 'https://historial-clinico-nube.onrender.com';
 
 async function filtrar() {
-    const campo = document.getElementById('campoSelect').value;
+    const estado = document.getElementById('campoSelect').value;
     const tbody = document.getElementById('listaPacientes');
     tbody.innerHTML = "<tr><td colspan='3' class='text-center'>CARGANDO...</td></tr>";
 
     try {
-        const res = await fetch(`${API}/consultar-electro-por-campo/${campo}`);
+        // Corregido al endpoint de aptitud
+        const res = await fetch(`${API}/filtrar-aptitud/${encodeURIComponent(estado)}`);
         const resultados = await res.json();
         
         tbody.innerHTML = "";
         
-        // Verificación de seguridad antes de iterar
         if (!Array.isArray(resultados) || resultados.length === 0) {
             tbody.innerHTML = "<tr><td colspan='3' class='text-center'>NO HAY DATOS</td></tr>";
             return;
@@ -83,9 +82,9 @@ async function filtrar() {
         resultados.forEach(item => {
             tbody.innerHTML += `
                 <tr>
-                    <td>${item.codigo_paciente}</td>
-                    <td>${item.nombre_paciente}</td>
-                    <td>${item.valor}</td>
+                    <td>${item.codigo}</td>
+                    <td>${item.nombre}</td>
+                    <td>${item.resultado}</td>
                 </tr>
             `;
         });
