@@ -644,6 +644,12 @@ def filtrar_aptitud_por_resultado(resultado: str, db: Session = Depends(get_db))
 # ----------- FICHA APTITUD FISICA Y PSICOLOGICA -----------
 @app.post("/guardar-aptitud-fisica")
 def guardar_aptitud_fisica(data: dict, db: Session = Depends(get_db)):
+    # Verificación de existencia del paciente para evitar registros huérfanos
+    paciente_existente = db.query(Paciente).filter(Paciente.codigo_paciente == data.get("codigo_paciente")).first()
+    
+    if not paciente_existente:
+        raise HTTPException(status_code=404, detail="El Código del Paciente no existe en la base de datos.")
+    
     try:
         nueva_ficha = FichaAptitudFisica(
             codigo_paciente=data.get("codigo_paciente"),
@@ -676,6 +682,5 @@ def guardar_aptitud_fisica(data: dict, db: Session = Depends(get_db)):
         db.refresh(nueva_ficha)
         return {"status": "success", "id": nueva_ficha.id}
     except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
-
-
