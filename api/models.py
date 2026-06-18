@@ -219,3 +219,37 @@ class FichaElectroencefalograma(Base):
     reposo = Column(String)
     fotoestimulacion = Column(String)
     hipernea = Column(String)
+
+
+class FichaAptitud(Base):
+    __tablename__ = "ficha_aptitud"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    paciente_id = Column(Integer, ForeignKey("pacientes.id", ondelete="CASCADE"), nullable=False)
+    
+    razon_social = Column(String) 
+    actividad_economica = Column(String) 
+ 
+    dia = Column(String)
+    mes = Column(String)
+    anio = Column(String)
+    tipo_examen = Column(String)
+    detalle_otros = Column(String)
+    
+    apellido_paterno = Column(String)
+    apellido_materno = Column(String)
+    nombres = Column(String)
+    edad = Column(String)
+    genero = Column(String)
+    nro_doc_identidad = Column(String)
+    puesto_trabajo = Column(String)
+    
+    resultado = Column(String
+    detalle_resultado = Column(Text) 
+    
+    recomendacion_1 = Column(Text)
+    recomendacion_2 = Column(Text)
+    recomendacion_3 = Column(Text)
+    recomendacion_4 = Column(Text)
+
+
