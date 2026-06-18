@@ -103,25 +103,48 @@
 
 <script>
 async function guardarDatos() {
+    // 1. Recolección de datos
     const data = {
         codigo_paciente: document.getElementById('codigo_paciente').value,
         razon_social: document.querySelector('input[placeholder="Ej: OHS S.A."]').value,
         actividad_economica: document.querySelector('input[placeholder="Ej: Servicios de Salud"]').value,
-        // ... (resto de campos mapeados)
+        dia: document.querySelectorAll('input[type="text"]')[1].value,
+        mes: document.querySelectorAll('input[type="text"]')[2].value,
+        anio: document.querySelectorAll('input[type="text"]')[3].value,
+        tipo_examen: "PREOCUPACIONAL",
+        otros_tipo: "",
+        apellido_paterno: document.querySelectorAll('input[type="text"]')[5].value,
+        apellido_materno: document.querySelectorAll('input[type="text"]')[6].value,
+        nombres: document.querySelectorAll('input[type="text"]')[7].value,
+        edad: document.querySelectorAll('input[type="text"]')[8].value,
+        genero: document.querySelectorAll('input[type="text"]')[9].value,
+        nro_doc_identidad: document.querySelectorAll('input[type="text"]')[10].value,
+        puesto_trabajo: document.querySelectorAll('input[type="text"]')[11].value,
+        resultado: "APTO",
         detalle_conclusion: document.querySelector('textarea').value,
-        resultado: "APTO" // Ajustar lógica según checkbox seleccionado
+        recomendacion_1: document.querySelectorAll('input[type="text"]')[12].value,
+        recomendacion_2: document.querySelectorAll('input[type="text"]')[13].value,
+        recomendacion_3: document.querySelectorAll('input[type="text"]')[14].value,
+        recomendacion_4: document.querySelectorAll('input[type="text"]')[15].value
     };
 
+    // 2. Envío al Backend (Render)
     try {
         const response = await fetch('https://historial-clinico-nube.onrender.com/guardar-aptitud', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
+
+        // 3. Verificación de resultado
         const result = await response.json();
-        alert('Respuesta del servidor: ' + JSON.stringify(result));
+        if (response.ok) {
+            alert('¡Guardado exitosamente!');
+        } else {
+            alert('Error en el servidor: ' + JSON.stringify(result));
+        }
     } catch (error) {
-        alert('Error al conectar con el servidor: ' + error);
+        alert('Error crítico de conexión: ' + error);
     }
 }
 </script>
