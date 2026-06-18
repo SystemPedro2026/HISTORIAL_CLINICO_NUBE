@@ -245,7 +245,7 @@ class FichaAptitud(Base):
     puesto_trabajo = Column(String)
     
     resultado = Column(String)
-    detalle_resultado = Column(Text) 
+    detalle_conclusion = Column(Text) 
     
     recomendacion_1 = Column(Text)
     recomendacion_2 = Column(Text)
