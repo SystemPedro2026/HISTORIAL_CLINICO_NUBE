@@ -569,3 +569,79 @@ async def consultar_electro_por_campo(campo: str, db: Session = Depends(get_db))
                 "valor": valor
             })
     return lista # Esto siempre será una lista, nunca dará error al iterar
+
+# ----------- FICHA APTITUD MÉDICO OCUPACIONAL -----------
+@app.post("/guardar-aptitud")
+async def guardar_aptitud(data: dict, db: Session = Depends(get_db)):
+    # Búsqueda normalizada por código paciente
+    codigo = str(data.get("codigo_paciente", "")).strip().upper()
+    paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
+    
+    if not paciente:
+        raise HTTPException(status_code=404, detail="Paciente no encontrado")
+
+    try:
+        nueva_ficha = models.FichaAptitud(
+            paciente_id=paciente.id,
+            razon_social=data.get("razon_social"),
+            actividad_economica=data.get("actividad_economica"),
+            dia=data.get("dia"),
+            mes=data.get("mes"),
+            anio=data.get("anio"),
+            tipo_examen=data.get("tipo_examen"),
+            otros_tipo=data.get("otros_tipo"),
+            apellido_paterno=data.get("apellido_paterno"),
+            apellido_materno=data.get("apellido_materno"),
+            nombres=data.get("nombres"),
+            edad=data.get("edad"),
+            genero=data.get("genero"),
+            nro_doc_identidad=data.get("nro_doc_identidad"),
+            puesto_trabajo=data.get("puesto_trabajo"),
+            resultado=data.get("resultado"),
+            detalle_conclusion=data.get("detalle_conclusion"),
+            recomendacion_1=data.get("recomendacion_1"),
+            recomendacion_2=data.get("recomendacion_2"),
+            recomendacion_3=data.get("recomendacion_3"),
+            recomendacion_4=data.get("recomendacion_4")
+        )
+        db.add(nueva_ficha)
+        db.commit()
+        db.refresh(nueva_ficha)
+        return {"status": "success", "message": "GUARDADO EXITOSAMENTE"}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/consultar-aptitud/{codigo_paciente}")
+async def consultar_aptitud(codigo_paciente: str, db: Session = Depends(get_db)):
+    paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo_paciente.upper().strip()).first()
+    if not paciente:
+        return {"status": "error", "message": "Paciente no encontrado"}
+    
+    ficha = db.query(models.FichaAptitud).filter(models.FichaAptitud.paciente_id == paciente.id).first()
+    if not ficha:
+        return {"status": "error", "message": "Ficha no encontrada"}
+        
+    return ficha
+
+@app.get("/filtrar-aptitud/{resultado}")
+def filtrar_aptitud_por_resultado(resultado: str, db: Session = Depends(get_db)):
+    # Consulta optimizada para el listado de pacientes según su resultado
+    fichas = db.query(models.FichaAptitud).filter(models.FichaAptitud.resultado == resultado.upper()).all()
+    resultados = []
+    for f in fichas:
+        paciente = db.query(models.Paciente).filter(models.Paciente.id == f.paciente_id).first()
+        if paciente:
+            resultados.append({
+                "codigo": paciente.codigo_paciente,
+                "nombre": f"{paciente.apellido} {paciente.nombre}",
+                "resultado": f.resultado
+            })
+    return resultados
+
+
+
+
+
+
+
