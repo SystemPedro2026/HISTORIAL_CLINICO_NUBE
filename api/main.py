@@ -692,5 +692,18 @@ def buscar_aptitud_fisica(codigo_paciente: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="No se encontró registro para este código.")
     return ficha
 
-
+@app.get("/filtrar-aptitud/{fisico}/{psico}")
+def filtrar_aptitud(fisico: str, psico: str, db: Session = Depends(get_db)):
+    resultados = db.query(FichaAptitudFisica).filter(
+        FichaAptitudFisica.resultado_fisico == fisico,
+        FichaAptitudFisica.resultado_psicologico == psico
+    ).all()
+    
+    return [
+        {
+            "codigo": f.codigo_paciente,
+            "nombre": f"{f.nombres} {f.ape_pat} {f.ape_mat}",
+            "resultado": f"Físico: {f.resultado_fisico} / Psico: {f.resultado_psicologico}"
+        } for f in resultados
+    ]
 
