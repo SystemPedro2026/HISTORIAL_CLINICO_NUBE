@@ -71,18 +71,19 @@
     const API = 'https://historial-clinico-nube.onrender.com';
 
 async function filtrar() {
-    const estado = document.getElementById('campoSelect').value;
+    const fisico = document.getElementById('selectFisico').value;
+    const psico = document.getElementById('selectPsico').value;
     const tbody = document.getElementById('listaPacientes');
+    
     tbody.innerHTML = "<tr><td colspan='3' class='text-center'>CARGANDO...</td></tr>";
 
     try {
-        // Corregido al endpoint de aptitud
-        const res = await fetch(`${API}/filtrar-aptitud/${encodeURIComponent(estado)}`);
+        const res = await fetch(`${API}/filtrar-aptitud/${encodeURIComponent(fisico)}/${encodeURIComponent(psico)}`);
         const resultados = await res.json();
         
         tbody.innerHTML = "";
         
-        if (!Array.isArray(resultados) || resultados.length === 0) {
+        if (resultados.length === 0) {
             tbody.innerHTML = "<tr><td colspan='3' class='text-center'>NO HAY DATOS</td></tr>";
             return;
         }
