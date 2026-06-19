@@ -33,23 +33,23 @@
         <h2>CONSULTA DE APTITUD FISICA Y PSICOLOGICA</h2>
     </div>
 
-    <div class="filter-box no-print">
-        <span class="label-patologias">FISICAMENTE</span>
-        <select id="campoSelect" class="form-select w-50">
-            <option value="">APTO</option>
-            <option value="">APTO CON RECOMENDACION</option>
-            <option value="">APTO CON RESTRICCION</option>
-            <option value="">NO APTO</option>
-        </select>
-        <span class="label-patologias">PSICOLOGICAMENTE</span>
-        <select id="campoSelect" class="form-select w-50">
-            <option value="">APTO</option>
-            <option value="">APTO CON RECOMENDACION</option>
-            <option value="">APTO CON RESTRICCION</option>
-            <option value="">NO APTO</option>
-        </select>
-        <button onclick="filtrar()">BUSCAR</button>
-    </div>
+<div class="filter-box no-print">
+    <span class="label-patologias">FISICAMENTE</span>
+    <select id="selectFisico" class="form-select w-25">
+        <option value="APTO">APTO</option>
+        <option value="APTO CON RECOMENDACIÓN">APTO CON RECOMENDACIÓN</option>
+        <option value="APTO CON RESTRICCIÓN">APTO CON RESTRICCIÓN</option>
+        <option value="NO APTO">NO APTO</option>
+    </select>
+    <span class="label-patologias">PSICOLÓGICAMENTE</span>
+    <select id="selectPsico" class="form-select w-25">
+        <option value="APTO">APTO</option>
+        <option value="APTO CON RECOMENDACIÓN">APTO CON RECOMENDACIÓN</option>
+        <option value="APTO CON RESTRICCIÓN">APTO CON RESTRICCIÓN</option>
+        <option value="NO APTO">NO APTO</option>
+    </select>
+    <button onclick="filtrar()">BUSCAR</button>
+</div>
 
     <table class="table table-bordered" id="tablaResultados">
         <thead>
