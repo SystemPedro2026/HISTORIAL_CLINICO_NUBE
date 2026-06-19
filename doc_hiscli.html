@@ -306,12 +306,12 @@
             }
         });
 
-        // Envío al backend
-        fetch('/guardar_historial', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
+		// ------- ENVIO AL BACKEND ---------------
+		fetch('https://historial-clinico-nube.orender.onrender.com/guardar-historial-clinico', {
+		    method: 'POST',
+		    headers: { 'Content-Type': 'application/json' },
+		    body: JSON.stringify(datos)
+		})
         .then(response => response.json())
         .then(result => {
             alert('Ficha guardada exitosamente');
