@@ -281,4 +281,85 @@ class FichaAptitudFisica(Base):
     rec5 = Column(String)
     rec6 = Column(String)
 
+class HistorialClinico(Base):
+    __tablename__ = "historial_clinico"
+    id = Column(Integer, primary_key=True, index=True)
+    paciente_id = Column(Integer, ForeignKey("pacientes.id", ondelete="CASCADE"))
+    codigo_paciente = Column(String, index=True) # Clave para el mapeo y búsqueda (Punto 5)
 
+    # SECCION I: DATOS GENERALES
+    empresa = Column(String); nombre = Column(String); fecha = Column(String)
+    ci = Column(String); sexo = Column(String); edad = Column(String)
+
+    # SECCION II: OCUPACIÓN
+    puesto = Column(String); area = Column(String); anos = Column(String); riesgos = Column(String)
+
+    # SECCION III: RIESGOS
+    ruido = Column(String); radiacion = Column(String); vibracion = Column(String); mecanicos = Column(String)
+    temp_ext = Column(String); otros_fis = Column(String); polvo = Column(String); humos = Column(String)
+    gases = Column(String); metales = Column(String); otros_quim = Column(String); mov_rep = Column(String)
+    lev_carga = Column(String); otros_erg = Column(String); psico = Column(String); bio = Column(String)
+    altura = Column(String); confinados = Column(String); tipo_control = Column(String)
+
+    # SECCION IV: ANTECEDENTES
+    antecedentes_det = Column(Text); enf1 = Column(String); si1 = Column(String); no1 = Column(String)
+    fecha1 = Column(String); dias1 = Column(String); enf2 = Column(String); si2 = Column(String)
+    no2 = Column(String); fecha2 = Column(String); dias2 = Column(String)
+
+    # SECCION V: ANAMNESIS
+    hab_anamnesis = Column(String); anamnesis_det = Column(String)
+
+    # SECCION VI: EXAMEN FÍSICO
+    ta_m = Column(String); ta_cm = Column(String); fc = Column(String); peso = Column(String)
+    talla = Column(String); imc = Column(String); sat = Column(String); pam = Column(String)
+    piel_n = Column(String); piel_a = Column(String); piel_d = Column(String)
+    cabello_n = Column(String); cabello_a = Column(String); cabello_d = Column(String)
+    ojos_n = Column(String); ojos_a = Column(String); ojos_d = Column(String)
+    oidos_n = Column(String); oidos_a = Column(String); oidos_d = Column(String)
+    nariz_n = Column(String); nariz_a = Column(String); nariz_d = Column(String)
+    boca_n = Column(String); boca_a = Column(String); boca_d = Column(String)
+    faringe_n = Column(String); faringe_a = Column(String); faringe_d = Column(String)
+    cuello_n = Column(String); cuello_a = Column(String); cuello_d = Column(String)
+    resp_n = Column(String); resp_a = Column(String); resp_d = Column(String)
+    cardio_n = Column(String); cardio_a = Column(String); cardio_d = Column(String)
+    dig_n = Column(String); dig_a = Column(String); dig_d = Column(String)
+    gen_n = Column(String); gen_a = Column(String); gen_d = Column(String)
+    loc_n = Column(String); loc_a = Column(String); loc_d = Column(String)
+    col_n = Column(String); col_a = Column(String); col_d = Column(String)
+    linf_n = Column(String); linf_a = Column(String); linf_d = Column(String)
+    nerv_n = Column(String); nerv_a = Column(String); nerv_d = Column(String)
+
+    # SECCION VII: EXÁMENES COMPLEMENTARIOS
+    hem_na = Column(String); hem_n = Column(String); hem_a = Column(String); hem_d = Column(String)
+    glu_na = Column(String); glu_n = Column(String); glu_a = Column(String); glu_d = Column(String)
+    ure_na = Column(String); ure_n = Column(String); ure_a = Column(String); ure_d = Column(String)
+    aur_na = Column(String); aur_n = Column(String); aur_a = Column(String); aur_d = Column(String)
+    cre_na = Column(String); cre_n = Column(String); cre_a = Column(String); cre_d = Column(String)
+    per_na = Column(String); per_n = Column(String); per_a = Column(String); per_d = Column(String)
+    vdr_na = Column(String); vdr_n = Column(String); vdr_a = Column(String); vdr_d = Column(String)
+    cha_na = Column(String); cha_n = Column(String); cha_a = Column(String); cha_d = Column(String)
+    ego_na = Column(String); ego_n = Column(String); ego_a = Column(String); ego_d = Column(String)
+    psa_na = Column(String); psa_n = Column(String); psa_a = Column(String); psa_d = Column(String)
+    rxt_na = Column(String); rxt_n = Column(String); rxt_a = Column(String); rxt_d = Column(String)
+    eca_na = Column(String); eca_n = Column(String); eca_a = Column(String); eca_d = Column(String)
+    ecg_na = Column(String); ecg_n = Column(String); ecg_a = Column(String); ecg_d = Column(String)
+    esp_na = Column(String); esp_n = Column(String); esp_a = Column(String); esp_d = Column(String)
+    aud_na = Column(String); aud_n = Column(String); aud_a = Column(String); aud_d = Column(String)
+    teq_na = Column(String); teq_n = Column(String); teq_a = Column(String); teq_d = Column(String)
+
+    # SECCION VIII: DIAGNÓSTICOS
+    diag1 = Column(String); diag2 = Column(String); diag3 = Column(String); diag4 = Column(String)
+    diag5 = Column(String); diag6 = Column(String); diag7 = Column(String)
+
+    # SECCION IX: CONCLUSIONES
+    aptitud_apto = Column(String)
+    aptitud_no_apto = Column(String)
+    aptitud_restriccion = Column(String)
+    observaciones = Column(Text)
+
+    # SECCION X: RECOMENDACIONES
+    rec_nutricion = Column(String)
+    rec_especialidad = Column(String)
+    rec_laboratorio = Column(String)
+    rec_otras = Column(String)
+    medidas_higiene = Column(Text)
