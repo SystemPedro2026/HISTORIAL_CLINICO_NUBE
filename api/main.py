@@ -684,3 +684,13 @@ def guardar_aptitud_fisica(data: dict, db: Session = Depends(get_db)):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/buscar-aptitud-fisica/{codigo_paciente}")
+def buscar_aptitud_fisica(codigo_paciente: str, db: Session = Depends(get_db)):
+    ficha = db.query(FichaAptitudFisica).filter(FichaAptitudFisica.codigo_paciente == codigo_paciente).order_by(FichaAptitudFisica.id.desc()).first()
+    if not ficha:
+        raise HTTPException(status_code=404, detail="No se encontró registro para este código.")
+    return ficha
+
+
+
