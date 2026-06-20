@@ -707,76 +707,49 @@ def filtrar_aptitud(fisico: str, psico: str, db: Session = Depends(get_db)):
         } for f in resultados
     ]
 
-# ----------- FICHA HISTORIAL CLÍNICO (NUEVO) -----------------------------------------------
+
+# ----------- FICHA HISTORIAL CLÍNICO (COMPLETO) -----------------------------------------------
 @app.post("/guardar-historial-clinico")
 async def guardar_historial_clinico(data: dict, db: Session = Depends(get_db)):
     try:
-        # Validación: buscar paciente
         codigo = str(data.get("codigo_paciente", "")).strip().upper()
         paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
         
         if not paciente:
-            raise HTTPException(status_code=404, detail="Paciente no encontrado en el sistema")
+            raise HTTPException(status_code=404, detail="Paciente no encontrado")
 
-        # Crear objeto con mapeo estricto 1:1 según models.py
-        nueva_ficha = models.HistorialClinico(
-            paciente_id=paciente.id,
-            codigo_paciente=codigo,
-            empresa=data.get("empresa"), nombre=data.get("nombre"), fecha=data.get("fecha"),
-            ci=data.get("ci"), sexo=data.get("sexo"), edad=data.get("edad"),
-            puesto=data.get("puesto"), area=data.get("area"), anos=data.get("anos"), riesgos=data.get("riesgos"),
-            ruido=data.get("ruido"), radiacion=data.get("radiacion"), vibracion=data.get("vibracion"), mecanicos=data.get("mecanicos"),
-            temp_ext=data.get("temp_ext"), otros_fis=data.get("otros_fis"), polvo=data.get("polvo"), humos=data.get("humos"),
-            gases=data.get("gases"), metales=data.get("metales"), otros_quim=data.get("otros_quim"), mov_rep=data.get("mov_rep"),
-            lev_carga=data.get("lev_carga"), otros_erg=data.get("otros_erg"), psico=data.get("psico"), bio=data.get("bio"),
-            altura=data.get("altura"), confinados=data.get("confinados"), tipo_control=data.get("tipo_control"),
-            antecedentes_det=data.get("antecedentes_det"), enf1=data.get("enf1"), si1=data.get("si1"), no1=data.get("no1"),
-            fecha1=data.get("fecha1"), dias1=data.get("dias1"), enf2=data.get("enf2"), si2=data.get("si2"),
-            no2=data.get("no2"), fecha2=data.get("fecha2"), dias2=data.get("dias2"),
-            hab_anamnesis=data.get("hab_anamnesis"), anamnesis_det=data.get("anamnesis_det"),
-            ta_m=data.get("ta_m"), ta_cm=data.get("ta_cm"), fc=data.get("fc"), peso=data.get("peso"),
-            talla=data.get("talla"), imc=data.get("imc"), sat=data.get("sat"), pam=data.get("pam"),
-            piel_n=data.get("piel_n"), piel_a=data.get("piel_a"), piel_d=data.get("piel_d"),
-            cabello_n=data.get("cabello_n"), cabello_a=data.get("cabello_a"), cabello_d=data.get("cabello_d"),
-            ojos_n=data.get("ojos_n"), ojos_a=data.get("ojos_a"), ojos_d=data.get("ojos_d"),
-            oidos_n=data.get("oidos_n"), oidos_a=data.get("oidos_a"), oidos_d=data.get("oidos_d"),
-            nariz_n=data.get("nariz_n"), nariz_a=data.get("nariz_a"), nariz_d=data.get("nariz_d"),
-            boca_n=data.get("boca_n"), boca_a=data.get("boca_a"), boca_d=data.get("boca_d"),
-            faringe_n=data.get("faringe_n"), faringe_a=data.get("faringe_a"), faringe_d=data.get("faringe_d"),
-            cuello_n=data.get("cuello_n"), cuello_a=data.get("cuello_a"), cuello_d=data.get("cuello_d"),
-            resp_n=data.get("resp_n"), resp_a=data.get("resp_a"), resp_d=data.get("resp_d"),
-            cardio_n=data.get("cardio_n"), cardio_a=data.get("cardio_a"), cardio_d=data.get("cardio_d"),
-            dig_n=data.get("dig_n"), dig_a=data.get("dig_a"), dig_d=data.get("dig_d"),
-            gen_n=data.get("gen_n"), gen_a=data.get("gen_a"), gen_d=data.get("gen_d"),
-            loc_n=data.get("loc_n"), loc_a=data.get("loc_a"), loc_d=data.get("loc_d"),
-            col_n=data.get("col_n"), col_a=data.get("col_a"), col_d=data.get("col_d"),
-            linf_n=data.get("linf_n"), linf_a=data.get("linf_a"), linf_d=data.get("linf_d"),
-            nerv_n=data.get("nerv_n"), nerv_a=data.get("nerv_a"), nerv_d=data.get("nerv_d"),
-            hem_na=data.get("hem_na"), hem_n=data.get("hem_n"), hem_a=data.get("hem_a"), hem_d=data.get("hem_d"),
-            glu_na=data.get("glu_na"), glu_n=data.get("glu_n"), glu_a=data.get("glu_a"), glu_d=data.get("glu_d"),
-            ure_na=data.get("ure_na"), ure_n=data.get("ure_n"), ure_a=data.get("ure_a"), ure_d=data.get("ure_d"),
-            aur_na=data.get("aur_na"), aur_n=data.get("aur_n"), aur_a=data.get("aur_a"), aur_d=data.get("aur_d"),
-            cre_na=data.get("cre_na"), cre_n=data.get("cre_n"), cre_a=data.get("cre_a"), cre_d=data.get("cre_d"),
-            per_na=data.get("per_na"), per_n=data.get("per_n"), per_a=data.get("per_a"), per_d=data.get("per_d"),
-            vdr_na=data.get("vdr_na"), vdr_n=data.get("vdr_n"), vdr_a=data.get("vdr_a"), vdr_d=data.get("vdr_d"),
-            cha_na=data.get("cha_na"), cha_n=data.get("cha_n"), cha_a=data.get("cha_a"), cha_d=data.get("cha_d"),
-            ego_na=data.get("ego_na"), ego_n=data.get("ego_n"), ego_a=data.get("ego_a"), ego_d=data.get("ego_d"),
-            psa_na=data.get("psa_na"), psa_n=data.get("psa_n"), psa_a=data.get("psa_a"), psa_d=data.get("psa_d"),
-            rxt_na=data.get("rxt_na"), rxt_n=data.get("rxt_n"), rxt_a=data.get("rxt_a"), rxt_d=data.get("rxt_d"),
-            eca_na=data.get("eca_na"), eca_n=data.get("eca_n"), eca_a=data.get("eca_a"), eca_d=data.get("eca_d"),
-            ecg_na=data.get("ecg_na"), ecg_n=data.get("ecg_n"), ecg_a=data.get("ecg_a"), ecg_d=data.get("ecg_d"),
-            esp_na=data.get("esp_na"), esp_n=data.get("esp_n"), esp_a=data.get("esp_a"), esp_d=data.get("esp_d"),
-            aud_na=data.get("aud_na"), aud_n=data.get("aud_n"), aud_a=data.get("aud_a"), aud_d=data.get("aud_d"),
-            teq_na=data.get("teq_na"), teq_n=data.get("teq_n"), teq_a=data.get("teq_a"), teq_d=data.get("teq_d"),
-            diag1=data.get("diag1"), diag2=data.get("diag2"), diag3=data.get("diag3"), diag4=data.get("diag4"),
-            diag5=data.get("diag5"), diag6=data.get("diag6"), diag7=data.get("diag7"),
-            aptitud_apto=data.get("aptitud_apto"), aptitud_no_apto=data.get("aptitud_no_apto"),
-            aptitud_restriccion=data.get("aptitud_restriccion"), observaciones=data.get("observaciones"),
-            rec_nutricion=data.get("rec_nutricion"), rec_especialidad=data.get("rec_especialidad"),
-            rec_laboratorio=data.get("rec_laboratorio"), rec_otras=data.get("rec_otras"),
-            medidas_higiene=data.get("medidas_higiene")
-        )
+        # Lista de columnas exactas que existen en tu tabla HistorialClinico
+        campos_permitidos = {
+            "empresa", "nombre", "fecha", "ci", "sexo", "edad", "puesto", "area", "anos", "riesgos",
+            "ruido", "radiacion", "vibracion", "mecanicos", "temp_ext", "otros_fis", "polvo", "humos",
+            "gases", "metales", "otros_quim", "mov_rep", "lev_carga", "otros_erg", "psico", "bio",
+            "altura", "confinados", "tipo_control", "antecedentes_det", "enf1", "si1", "no1", "fecha1",
+            "dias1", "enf2", "si2", "no2", "fecha2", "dias2", "hab_anamnesis", "anamnesis_det", "ta_m",
+            "ta_cm", "fc", "peso", "talla", "imc", "sat", "pam", "piel_n", "piel_a", "piel_d",
+            "cabello_n", "cabello_a", "cabello_d", "ojos_n", "ojos_a", "ojos_d", "oidos_n", "oidos_a",
+            "oidos_d", "nariz_n", "nariz_a", "nariz_d", "boca_n", "boca_a", "boca_d", "faringe_n",
+            "faringe_a", "faringe_d", "cuello_n", "cuello_a", "cuello_d", "resp_n", "resp_a", "resp_d",
+            "cardio_n", "cardio_a", "cardio_d", "dig_n", "dig_a", "dig_d", "gen_n", "gen_a", "gen_d",
+            "loc_n", "loc_a", "loc_d", "col_n", "col_a", "col_d", "linf_n", "linf_a", "linf_d",
+            "nerv_n", "nerv_a", "nerv_d", "hem_na", "hem_n", "hem_a", "hem_d", "glu_na", "glu_n",
+            "glu_a", "glu_d", "ure_na", "ure_n", "ure_a", "ure_d", "aur_na", "aur_n", "aur_a",
+            "aur_d", "cre_na", "cre_n", "cre_a", "cre_d", "per_na", "per_n", "per_a", "per_d",
+            "vdr_na", "vdr_n", "vdr_a", "vdr_d", "cha_na", "cha_n", "cha_a", "cha_d", "ego_na",
+            "ego_n", "ego_a", "ego_d", "psa_na", "psa_n", "psa_a", "psa_d", "rxt_na", "rxt_n",
+            "rxt_a", "rxt_d", "eca_na", "eca_n", "eca_a", "eca_d", "ecg_na", "ecg_n", "ecg_a",
+            "ecg_d", "esp_na", "esp_n", "esp_a", "esp_d", "aud_na", "aud_n", "aud_a", "aud_d",
+            "teq_na", "teq_n", "teq_a", "teq_d", "diag1", "diag2", "diag3", "diag4", "diag5",
+            "diag6", "diag7", "aptitud_apto", "aptitud_no_apto", "aptitud_restriccion",
+            "observaciones", "rec_nutricion", "rec_especialidad", "rec_laboratorio",
+            "rec_otras", "medidas_higiene"
+        }
 
+        # Filtrado de seguridad
+        datos_limpios = {k: v for k, v in data.items() if k in campos_permitidos}
+        datos_limpios["paciente_id"] = paciente.id
+        datos_limpios["codigo_paciente"] = codigo
+
+        nueva_ficha = models.HistorialClinico(**datos_limpios)
         db.add(nueva_ficha)
         db.commit()
         db.refresh(nueva_ficha)
@@ -784,15 +757,3 @@ async def guardar_historial_clinico(data: dict, db: Session = Depends(get_db)):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/consultar-historial-clinico/{codigo_paciente}")
-async def consultar_historial_clinico(codigo_paciente: str, db: Session = Depends(get_db)):
-    paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo_paciente.upper().strip()).first()
-    if not paciente:
-        return {"status": "error", "message": "Paciente no encontrado"}
-    
-    ficha = db.query(models.HistorialClinico).filter(models.HistorialClinico.paciente_id == paciente.id).first()
-    if not ficha:
-        return {"status": "error", "message": "Ficha no encontrada"}
-        
-    return ficha
