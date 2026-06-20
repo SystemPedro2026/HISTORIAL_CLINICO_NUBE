@@ -65,11 +65,15 @@
     async function filtrar() {
         const estadoFiltro = document.getElementById('estadoSelect').value;
         const tbody = document.getElementById('listaPacientes');
+        
         tbody.innerHTML = "<tr><td colspan='3' class='text-center'>CARGANDO DATOS...</td></tr>";
     
         try {
-            // Llamada única al nuevo endpoint que filtra desde el servidor
-            const res = await fetch(`${API}/ficha-psicologia-filtrada/${encodeURIComponent(estadoFiltro)}`);
+            // Corrección: El endpoint ahora apunta a la ruta correcta de historial
+            const res = await fetch(`${API}/historial-filtrado/${encodeURIComponent(estadoFiltro)}`);
+            
+            if (!res.ok) throw new Error("Error en la respuesta del servidor");
+            
             const resultados = await res.json();
             
             tbody.innerHTML = "";
@@ -82,9 +86,9 @@
             for (let item of resultados) {
                 tbody.innerHTML += `
                     <tr>
-                        <td>${item.codigo || '---'}</td>
-                        <td>${item.nombre}</td>
-                        <td>${item.estado}</td>
+                        <td>${item.codigo_paciente || '---'}</td>
+                        <td>${item.nombre || '---'}</td>
+                        <td>${item.estado || estadoFiltro}</td>
                     </tr>
                 `;
             }
@@ -94,9 +98,6 @@
             tbody.innerHTML = "";
         }
     }
-
-    
-
 </script>
 
 </body>
