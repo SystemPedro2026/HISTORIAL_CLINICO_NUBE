@@ -56,209 +56,313 @@
 
     <form id="hoja1">
         <h3>TIPO DE CONTROL</h3>
-        <div class="row">
-            <label><input type="checkbox"> PRE-OCUPACIONAL</label>
-            <label><input type="checkbox"> PERIÓDICO</label>
-            <label><input type="checkbox"> POST-OCUPACIONAL</label>
-            <label><input type="checkbox"> OTRO</label>
-        </div>
+		<div class="row">
+		        <label><input type="checkbox" id="tipo_pre"> PRE-OCUPACIONAL</label>
+		        <label><input type="checkbox" id="tipo_per"> PERIÓDICO</label>
+		        <label><input type="checkbox" id="tipo_post"> POST-OCUPACIONAL</label>
+		        <label><input type="checkbox" id="tipo_otro"> OTRO</label>
+		 </div>
 
         <h3>I. DATOS GENERALES</h3>
-        <div class="row">
-            <div style="flex: 2;"><input type="text" placeholder="EMPRESA"></div>
-            <div style="flex: 2;"><input type="text" placeholder="APELLIDOS Y NOMBRE"></div>
-            <div style="flex: 1;"><input type="date"></div>
-        </div>
-        <div class="row">
-            <div style="flex: 1;"><input type="text" placeholder="CARNET IDENTIDAD"></div>
-            <div style="flex: 1;"><input type="text" placeholder="SEXO"></div>
-            <div style="flex: 1;"><input type="number" placeholder="EDAD"></div>
-        </div>
+		<div class="row">
+		    <div style="flex: 2;"><input type="text" id="empresa" placeholder="EMPRESA"></div>
+		    <div style="flex: 2;"><input type="text" id="nombre" placeholder="APELLIDOS Y NOMBRE"></div>
+		    <div style="flex: 1;"><input type="date" id="fecha_atencion"></div>
+		</div>
+		<div class="row">
+		    <div style="flex: 1;"><input type="text" id="carnet_identidad" placeholder="CARNET IDENTIDAD"></div>
+		    <div style="flex: 1;"><input type="text" id="sexo" placeholder="SEXO"></div>
+		    <div style="flex: 1;"><input type="number" id="edad" placeholder="EDAD"></div>
+		</div>
 
         <h3>II. DATOS DE LA OCUPACIÓN ACTUAL</h3>
-        <div class="row">
-            <div style="flex: 1;"><input type="text" placeholder="PUESTO O CARGO"></div>
-            <div style="flex: 1;"><input type="text" placeholder="ÁREA"></div>
-            <div style="flex: 1;"><input type="number" placeholder="AÑOS TRABAJO"></div>
-        </div>
-        <div class="row">
-            <div style="flex: 1;"><input type="text" placeholder="RIESGOS A LA SALUD"></div>
-        </div>
+		<div class="row">
+		    <div style="flex: 1;"><input type="text" id="puesto_cargo" placeholder="PUESTO O CARGO"></div>
+		    <div style="flex: 1;"><input type="text" id="area" placeholder="ÁREA"></div>
+		    <div style="flex: 1;"><input type="number" id="anos_trabajo" placeholder="AÑOS TRABAJO"></div>
+		</div>
+		<div class="row">
+		    <div style="flex: 1;"><input type="text" id="riesgos_salud" placeholder="RIESGOS A LA SALUD"></div>
+		</div>
 
         <h3>III. ANTECEDENTES DE RIESGOS (MARCAR CON X)</h3>
-        <div class="grid-risgos">
-            <div class="risk-item">RUIDO <input type="checkbox"></div>
-            <div class="risk-item">RADIACIÓN <input type="checkbox"></div>
-            <div class="risk-item">VIBRACIÓN <input type="checkbox"></div>
-            <div class="risk-item">MECÁNICOS <input type="checkbox"></div>
-            <div class="risk-item">TEMP. EXTREMAS <input type="checkbox"></div>
-            <div class="risk-item">OTROS FÍSICOS <input type="checkbox"></div>
-            <div class="risk-item">POLVO <input type="checkbox"></div>
-            <div class="risk-item">HUMOS <input type="checkbox"></div>
-            <div class="risk-item">GASES <input type="checkbox"></div>
-            <div class="risk-item">METALES PESADOS <input type="checkbox"></div>
-            <div class="risk-item">OTROS QUÍMICOS <input type="checkbox"></div>
-            <div class="risk-item">MOV. REPETITIVOS <input type="checkbox"></div>
-            <div class="risk-item">LEV. CARGA <input type="checkbox"></div>
-            <div class="risk-item">OTROS ERGON. <input type="checkbox"></div>
-            <div class="risk-item">PSICOLÓGICOS <input type="checkbox"></div>
-            <div class="risk-item">BIOLÓGICOS <input type="checkbox"></div>
-            <div class="risk-item">TRABAJO ALTURA <input type="checkbox"></div>
-            <div class="risk-item">ESP. CONFINADOS <input type="checkbox"></div>
-        </div>
+		<div class="grid-risgos">
+		    <div class="risk-item">RUIDO <input type="checkbox" id="risgo_ruido"></div>
+		    <div class="risk-item">RADIACIÓN <input type="checkbox" id="risgo_radiacion"></div>
+		    <div class="risk-item">VIBRACIÓN <input type="checkbox" id="risgo_vibracion"></div>
+		    <div class="risk-item">MECÁNICOS <input type="checkbox" id="risgo_mecanicos"></div>
+		    <div class="risk-item">TEMP. EXTREMAS <input type="checkbox" id="risgo_temp_ext"></div>
+		    <div class="risk-item">OTROS FÍSICOS <input type="checkbox" id="risgo_otros_fis"></div>
+		    <div class="risk-item">POLVO <input type="checkbox" id="risgo_polvo"></div>
+		    <div class="risk-item">HUMOS <input type="checkbox" id="risgo_humos"></div>
+		    <div class="risk-item">GASES <input type="checkbox" id="risgo_gases"></div>
+		    <div class="risk-item">METALES PESADOS <input type="checkbox" id="risgo_metales"></div>
+		    <div class="risk-item">OTROS QUÍMICOS <input type="checkbox" id="risgo_otros_quim"></div>
+		    <div class="risk-item">MOV. REPETITIVOS <input type="checkbox" id="risgo_mov_rep"></div>
+		    <div class="risk-item">LEV. CARGA <input type="checkbox" id="risgo_lev_carga"></div>
+		    <div class="risk-item">OTROS ERGON. <input type="checkbox" id="risgo_otros_erg"></div>
+		    <div class="risk-item">PSICOLÓGICOS <input type="checkbox" id="risgo_psicologicos"></div>
+		    <div class="risk-item">BIOLÓGICOS <input type="checkbox" id="risgo_biologicos"></div>
+		    <div class="risk-item">TRABAJO ALTURA <input type="checkbox" id="risgo_trab_altura"></div>
+		    <div class="risk-item">ESP. CONFINADOS <input type="checkbox" id="risgo_esp_confin"></div>
+		</div>
 
         <h3>IV. ANTECEDENTES DE IMPORTANCIA</h3>
-        <input type="text" placeholder="Detalle de accidentes, enf. crónicas, cirugías...">
-        <br><br>
-        <strong>Absentismo en el último periodo: Enfermedades y Accidentes</strong>
-        <table>
-            <tr>
-                <td rowspan="2">Enfermedad / Accidente</td>
-                <td colspan="2">Asociado al trabajo</td>
-                <td rowspan="2">FECHA</td>
-                <td rowspan="2">Días de descanso</td>
-            </tr>
-            <tr>
-                <td>SI</td>
-                <td>NO</td>
-            </tr>
-            <tr>
-                <td><input type="text"></td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
-                <td><input type="date"></td>
-                <td><input type="number"></td>
-            </tr>
-            <tr>
-                <td><input type="text"></td>
-                <td><input type="checkbox"></td>
-                <td><input type="checkbox"></td>
-                <td><input type="date"></td>
-                <td><input type="number"></td>
-            </tr>
-        </table>
+		<input type="text" id="antecedentes_importancia" placeholder="Detalle de accidentes, enf. crónicas, cirugías...">
+		<br><br>
+		<strong>Absentismo en el último periodo: Enfermedades y Accidentes</strong>
+		<table>
+		    <tr>
+		        <td rowspan="2">Enfermedad / Accidente</td>
+		        <td colspan="2">Asociado al trabajo</td>
+		        <td rowspan="2">FECHA</td>
+		        <td rowspan="2">Días de descanso</td>
+		    </tr>
+		    <tr>
+		        <td>SI</td>
+		        <td>NO</td>
+		    </tr>
+		    <tr>
+		        <td><input type="text" id="enf_acc_1"></td>
+		        <td><input type="checkbox" id="asoc_trab_si_1"></td>
+		        <td><input type="checkbox" id="asoc_trab_no_1"></td>
+		        <td><input type="date" id="fecha_enf_1"></td>
+		        <td><input type="number" id="dias_descanso_1"></td>
+		    </tr>
+		    <tr>
+		        <td><input type="text" id="enf_acc_2"></td>
+		        <td><input type="checkbox" id="asoc_trab_si_2"></td>
+		        <td><input type="checkbox" id="asoc_trab_no_2"></td>
+		        <td><input type="date" id="fecha_enf_2"></td>
+		        <td><input type="number" id="dias_descanso_2"></td>
+		    </tr>
+		</table>
 
         <h3>V. ANAMNESIS - ENFERMEDAD ACTUAL (si corresponde)</h3>
-        <label><input type="checkbox" id="check_anamnesis" onchange="toggleAnamnesis()"> Habilitar Sección</label>
-        <div id="anamnesis_desc">
-            <input type="text" placeholder="ASINTOMÁTICO AL MOMENTO DE LA EVALUACIÓN">
-        </div>
+		<label><input type="checkbox" id="check_anamnesis" onchange="toggleAnamnesis()"> Habilitar Sección</label>
+		<div id="anamnesis_desc">
+		    <input type="text" id="anamnesis_descripcion" placeholder="ASINTOMÁTICO AL MOMENTO DE LA EVALUACIÓN">
+		</div>
 
 	<h3>VI. EXAMEN FÍSICO GENERAL</h3>
-    <div class="row">
-        <div style="flex:1">TA(m)<input type="number"></div><div style="flex:1">TA(cm)<input type="number"></div>
-        <div style="flex:1">FC<input type="text"></div><div style="flex:1">PESO<input type="text"></div>
-        <div style="flex:1">TALLA<input type="text"></div><div style="flex:1">IMC<input type="text"></div>
-        <div style="flex:1">SAT<input type="text"></div><div style="flex:1">PAM<input type="text"></div>
-    </div>
-
-    <table>
-        <tr><th>ORGANO/SISTEMA</th><th>NORMAL</th><th>ANORMAL</th><th>DESCRIPCIÓN</th></tr>
-        <tr><td>PIEL</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>CABELLO</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>OJOS Y ANEXOS</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>OIDOS</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>NARIZ</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>BOCA</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>FARINGE</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>CUELLO</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>AP. RESPIRATORIO</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>AP. CARDIOVASCULAR</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>AP. DIGESTIVO</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>AP. GENITOURINARIO</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>AP. LOCOMOTOR</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>COLUMNA</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>SIST. LINFATICO</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>SIST. NERVIOSO</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-    </table>
+		<div class="row">
+		    <div style="flex:1">TA(m)<input type="number" id="ta_m"></div>
+		    <div style="flex:1">TA(cm)<input type="number" id="ta_cm"></div>
+		    <div style="flex:1">FC<input type="text" id="fc"></div>
+		    <div style="flex:1">PESO<input type="text" id="peso"></div>
+		    <div style="flex:1">TALLA<input type="text" id="talla"></div>
+		    <div style="flex:1">IMC<input type="text" id="imc"></div>
+		    <div style="flex:1">SAT<input type="text" id="sat"></div>
+		    <div style="flex:1">PAM<input type="text" id="pam"></div>
+		</div>
+		
+		<table>
+		    <tr><th>ORGANO/SISTEMA</th><th>NORMAL</th><th>ANORMAL</th><th>DESCRIPCIÓN</th></tr>
+		    <tr><td>PIEL</td><td><input type="checkbox" id="piel_n"></td><td><input type="checkbox" id="piel_a"></td><td><input type="text" id="piel_d"></td></tr>
+		    <tr><td>CABELLO</td><td><input type="checkbox" id="cabello_n"></td><td><input type="checkbox" id="cabello_a"></td><td><input type="text" id="cabello_d"></td></tr>
+		    <tr><td>OJOS Y ANEXOS</td><td><input type="checkbox" id="ojos_n"></td><td><input type="checkbox" id="ojos_a"></td><td><input type="text" id="ojos_d"></td></tr>
+		    <tr><td>OIDOS</td><td><input type="checkbox" id="oidos_n"></td><td><input type="checkbox" id="oidos_a"></td><td><input type="text" id="oidos_d"></td></tr>
+		    <tr><td>NARIZ</td><td><input type="checkbox" id="nariz_n"></td><td><input type="checkbox" id="nariz_a"></td><td><input type="text" id="nariz_d"></td></tr>
+		    <tr><td>BOCA</td><td><input type="checkbox" id="boca_n"></td><td><input type="checkbox" id="boca_a"></td><td><input type="text" id="boca_d"></td></tr>
+		    <tr><td>FARINGE</td><td><input type="checkbox" id="faringe_n"></td><td><input type="checkbox" id="faringe_a"></td><td><input type="text" id="faringe_d"></td></tr>
+		    <tr><td>CUELLO</td><td><input type="checkbox" id="cuello_n"></td><td><input type="checkbox" id="cuello_a"></td><td><input type="text" id="cuello_d"></td></tr>
+		    <tr><td>AP. RESPIRATORIO</td><td><input type="checkbox" id="resp_n"></td><td><input type="checkbox" id="resp_a"></td><td><input type="text" id="resp_d"></td></tr>
+		    <tr><td>AP. CARDIOVASCULAR</td><td><input type="checkbox" id="cardio_n"></td><td><input type="checkbox" id="cardio_a"></td><td><input type="text" id="cardio_d"></td></tr>
+		    <tr><td>AP. DIGESTIVO</td><td><input type="checkbox" id="dig_n"></td><td><input type="checkbox" id="dig_a"></td><td><input type="text" id="dig_d"></td></tr>
+		    <tr><td>AP. GENITOURINARIO</td><td><input type="checkbox" id="gen_n"></td><td><input type="checkbox" id="gen_a"></td><td><input type="text" id="gen_d"></td></tr>
+		    <tr><td>AP. LOCOMOTOR</td><td><input type="checkbox" id="loc_n"></td><td><input type="checkbox" id="loc_a"></td><td><input type="text" id="loc_d"></td></tr>
+		    <tr><td>COLUMNA</td><td><input type="checkbox" id="col_n"></td><td><input type="checkbox" id="col_a"></td><td><input type="text" id="col_d"></td></tr>
+		    <tr><td>SIST. LINFATICO</td><td><input type="checkbox" id="linf_n"></td><td><input type="checkbox" id="linf_a"></td><td><input type="text" id="linf_d"></td></tr>
+		    <tr><td>SIST. NERVIOSO</td><td><input type="checkbox" id="nerv_n"></td><td><input type="checkbox" id="nerv_a"></td><td><input type="text" id="nerv_d"></td></tr>
+		</table>
 
     <h3>VII. RESULTADOS EXÁMENES COMPLEMENTARIOS</h3>
-    <table>
-        <tr><th>EXAMEN</th><th>N/A</th><th>NORMAL</th><th>ANORMAL</th><th>DESCRIPCIÓN</th></tr>
-        <tr><td>HEMOGRAMA</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>GLUCOSA</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>UREA</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>A. URICO</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>CREATININA</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>PERFIL LIPIDICO</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>VDRL</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>CHAGAS</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>EGO</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>PSA</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>RX DE TORAX</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>E. CARDIOLOGICA</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>ECG</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>ESPIROMETRIA</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>AUDIOMETRIA</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-        <tr><td>T. EQUILIBRIO</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="text"></td></tr>
-    </table>
+<table>
+    <tr><th>EXAMEN</th><th>N/A</th><th>NORMAL</th><th>ANORMAL</th><th>DESCRIPCIÓN</th></tr>
+    <tr>
+        <td>HEMOGRAMA</td>
+        <td><input type="checkbox" id="hemo_na"></td>
+        <td><input type="checkbox" id="hemo_n"></td>
+        <td><input type="checkbox" id="hemo_a"></td>
+        <td><input type="text" id="hemo_d"></td>
+    </tr>
+    <tr>
+        <td>GLUCOSA</td>
+        <td><input type="checkbox" id="glu_na"></td>
+        <td><input type="checkbox" id="glu_n"></td>
+        <td><input type="checkbox" id="glu_a"></td>
+        <td><input type="text" id="glu_d"></td>
+    </tr>
+    <tr>
+        <td>UREA</td>
+        <td><input type="checkbox" id="urea_na"></td>
+        <td><input type="checkbox" id="urea_n"></td>
+        <td><input type="checkbox" id="urea_a"></td>
+        <td><input type="text" id="urea_d"></td>
+    </tr>
+    <tr>
+        <td>A. URICO</td>
+        <td><input type="checkbox" id="aurico_na"></td>
+        <td><input type="checkbox" id="aurico_n"></td>
+        <td><input type="checkbox" id="aurico_a"></td>
+        <td><input type="text" id="aurico_d"></td>
+    </tr>
+    <tr>
+        <td>CREATININA</td>
+        <td><input type="checkbox" id="creat_na"></td>
+        <td><input type="checkbox" id="creat_n"></td>
+        <td><input type="checkbox" id="creat_a"></td>
+        <td><input type="text" id="creat_d"></td>
+    </tr>
+    <tr>
+        <td>PERFIL LIPIDICO</td>
+        <td><input type="checkbox" id="lip_na"></td>
+        <td><input type="checkbox" id="lip_n"></td>
+        <td><input type="checkbox" id="lip_a"></td>
+        <td><input type="text" id="lip_d"></td>
+    </tr>
+    <tr>
+        <td>VDRL</td>
+        <td><input type="checkbox" id="vdrl_na"></td>
+        <td><input type="checkbox" id="vdrl_n"></td>
+        <td><input type="checkbox" id="vdrl_a"></td>
+        <td><input type="text" id="vdrl_d"></td>
+    </tr>
+    <tr>
+        <td>CHAGAS</td>
+        <td><input type="checkbox" id="chagas_na"></td>
+        <td><input type="checkbox" id="chagas_n"></td>
+        <td><input type="checkbox" id="chagas_a"></td>
+        <td><input type="text" id="chagas_d"></td>
+    </tr>
+    <tr>
+        <td>EGO</td>
+        <td><input type="checkbox" id="ego_na"></td>
+        <td><input type="checkbox" id="ego_n"></td>
+        <td><input type="checkbox" id="ego_a"></td>
+        <td><input type="text" id="ego_d"></td>
+    </tr>
+    <tr>
+        <td>PSA</td>
+        <td><input type="checkbox" id="psa_na"></td>
+        <td><input type="checkbox" id="psa_n"></td>
+        <td><input type="checkbox" id="psa_a"></td>
+        <td><input type="text" id="psa_d"></td>
+    </tr>
+    <tr>
+        <td>RX DE TORAX</td>
+        <td><input type="checkbox" id="rx_na"></td>
+        <td><input type="checkbox" id="rx_n"></td>
+        <td><input type="checkbox" id="rx_a"></td>
+        <td><input type="text" id="rx_d"></td>
+    </tr>
+    <tr>
+        <td>E. CARDIOLOGICA</td>
+        <td><input type="checkbox" id="ecardio_na"></td>
+        <td><input type="checkbox" id="ecardio_n"></td>
+        <td><input type="checkbox" id="ecardio_a"></td>
+        <td><input type="text" id="ecardio_d"></td>
+    </tr>
+    <tr>
+        <td>ECG</td>
+        <td><input type="checkbox" id="ecg_na"></td>
+        <td><input type="checkbox" id="ecg_n"></td>
+        <td><input type="checkbox" id="ecg_a"></td>
+        <td><input type="text" id="ecg_d"></td>
+    </tr>
+    <tr>
+        <td>ESPIROMETRIA</td>
+        <td><input type="checkbox" id="espiro_na"></td>
+        <td><input type="checkbox" id="espiro_n"></td>
+        <td><input type="checkbox" id="espiro_a"></td>
+        <td><input type="text" id="espiro_d"></td>
+    </tr>
+    <tr>
+        <td>AUDIOMETRIA</td>
+        <td><input type="checkbox" id="audio_na"></td>
+        <td><input type="checkbox" id="audio_n"></td>
+        <td><input type="checkbox" id="audio_a"></td>
+        <td><input type="text" id="audio_d"></td>
+    </tr>
+    <tr>
+        <td>T. EQUILIBRIO</td>
+        <td><input type="checkbox" id="teq_na"></td>
+        <td><input type="checkbox" id="teq_n"></td>
+        <td><input type="checkbox" id="teq_a"></td>
+        <td><input type="text" id="teq_d"></td>
+    </tr>
+</table>
 
  	<h3>VIII. DIAGNÓSTICOS</h3>
-<div id="seccion8">
-    <div style="display: flex; align-items: center; margin-bottom: 2px;">
-        <span style="width: 30px; font-weight: bold;">1.-</span>
-        <input type="text">
-    </div>
-    <div style="display: flex; align-items: center; margin-bottom: 2px;">
-        <span style="width: 30px; font-weight: bold;">2.-</span>
-        <input type="text">
-    </div>
-    <div style="display: flex; align-items: center; margin-bottom: 2px;">
-        <span style="width: 30px; font-weight: bold;">3.-</span>
-        <input type="text">
-    </div>
-    <div style="display: flex; align-items: center; margin-bottom: 2px;">
-        <span style="width: 30px; font-weight: bold;">4.-</span>
-        <input type="text">
-    </div>
-    <div style="display: flex; align-items: center; margin-bottom: 2px;">
-        <span style="width: 30px; font-weight: bold;">5.-</span>
-        <input type="text">
-    </div>
-    <div style="display: flex; align-items: center; margin-bottom: 2px;">
-        <span style="width: 30px; font-weight: bold;">6.-</span>
-        <input type="text">
-    </div>
-    <div style="display: flex; align-items: center; margin-bottom: 2px;">
-        <span style="width: 30px; font-weight: bold;">7.-</span>
-        <input type="text">
-    </div>
-</div>
+		<div id="seccion8">
+		    <div style="display: flex; align-items: center; margin-bottom: 2px;">
+		        <span style="width: 30px; font-weight: bold;">1.-</span>
+		        <input type="text" id="diag_1">
+		    </div>
+		    <div style="display: flex; align-items: center; margin-bottom: 2px;">
+		        <span style="width: 30px; font-weight: bold;">2.-</span>
+		        <input type="text" id="diag_2">
+		    </div>
+		    <div style="display: flex; align-items: center; margin-bottom: 2px;">
+		        <span style="width: 30px; font-weight: bold;">3.-</span>
+		        <input type="text" id="diag_3">
+		    </div>
+		    <div style="display: flex; align-items: center; margin-bottom: 2px;">
+		        <span style="width: 30px; font-weight: bold;">4.-</span>
+		        <input type="text" id="diag_4">
+		    </div>
+		    <div style="display: flex; align-items: center; margin-bottom: 2px;">
+		        <span style="width: 30px; font-weight: bold;">5.-</span>
+		        <input type="text" id="diag_5">
+		    </div>
+		    <div style="display: flex; align-items: center; margin-bottom: 2px;">
+		        <span style="width: 30px; font-weight: bold;">6.-</span>
+		        <input type="text" id="diag_6">
+		    </div>
+		    <div style="display: flex; align-items: center; margin-bottom: 2px;">
+		        <span style="width: 30px; font-weight: bold;">7.-</span>
+		        <input type="text" id="diag_7">
+		    </div>
+		</div>
 
 	<h3>IX. CONCLUSIONES</h3>
-<div class="row" style="display: flex; justify-content: space-between; align-items: center; border: 1px solid #ccc; padding: 10px;">
-    <label><input type="radio" name="aptitud"> APTO</label>
-    <label><input type="radio" name="aptitud"> NO APTO</label>
-    <label><input type="radio" name="aptitud"> APTO CON RESTRICCIÓN</label>
-</div>
-
-
-<div style="margin-top: 10px;">
-    <strong>OBSERVACIONES:</strong>
-    <textarea style="width: 100%; border: 1px solid #ccc; padding: 8px; min-height: 60px; resize: none; box-sizing: border-box; display: block;" 
-              placeholder="Requiere prueba de laboratorio u otro examen adicional...">
-    </textarea>
-</div>
-
+		<div class="row" style="display: flex; justify-content: space-between; align-items: center; border: 1px solid #ccc; padding: 10px;">
+		    <label><input type="radio" name="aptitud" id="apto_si" value="APTO"> APTO</label>
+		    <label><input type="radio" name="aptitud" id="apto_no" value="NO APTO"> NO APTO</label>
+		    <label><input type="radio" name="aptitud" id="apto_res" value="APTO CON RESTRICCIÓN"> APTO CON RESTRICCIÓN</label>
+		</div>
+		
+		<div style="margin-top: 10px;">
+		    <strong>OBSERVACIONES:</strong>
+		    <textarea id="observaciones" style="width: 100%; border: 1px solid #ccc; padding: 8px; min-height: 60px; resize: none; box-sizing: border-box; display: block;" placeholder="Requiera prueba de laboratorio u otro examen adicional..."></textarea>
+		</div>
 
 <h3>X. RECOMENDACIONES</h3>
 <div id="seccion10">
-    <div style="margin-bottom: 5px;"><input type="checkbox"> Requiere valoración y control por nutrición</div>
-    <div style="margin-bottom: 5px;"><input type="checkbox"> Requiere valoración por especialidad médica</div>
-    <div style="margin-bottom: 5px;"><input type="checkbox"> Requiere prueba de laboratorio u otro examen adicional</div>
+    <div style="margin-bottom: 5px;">
+        <input type="checkbox" id="rec_nutricion"> Requiere valoración y control por nutrición
+    </div>
+    <div style="margin-bottom: 5px;">
+        <input type="checkbox" id="rec_especialidad"> Requiere valoración por especialidad médica
+    </div>
+    <div style="margin-bottom: 5px;">
+        <input type="checkbox" id="rec_laboratorio"> Requiere prueba de laboratorio u otro examen adicional
+    </div>
     <div style="display: flex; align-items: center; gap: 10px;">
         <span>Otras:</span>
-        <input type="text" style="flex-grow: 1; border: none; border-bottom: 1px solid #ccc;">
+        <input type="text" id="rec_otras" style="flex-grow: 1; border: none; border-bottom: 1px solid #ccc;">
     </div>
 </div>
 
 <h4 style="margin-top: 20px; font-size: 13px; text-align: center; border-bottom: 1px solid #ccc;">MEDIDAS DE HIGIENE, SEGURIDAD Y ERGONÓMICAS EN PUESTO DE TRABAJO</h4>
 <div id="medidas_seguridad" style="border: 1px solid #ccc; height: 80px; margin-bottom: 20px;">
-    <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #eee;">
-    <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #eee;">
-    <input type="text" style="width: 100%; border: none;">
+    <input type="text" id="medida_1" style="width: 100%; border: none; border-bottom: 1px solid #eee;">
+    <input type="text" id="medida_2" style="width: 100%; border: none; border-bottom: 1px solid #eee;">
+    <input type="text" id="medida_3" style="width: 100%; border: none;">
 </div>
 
+
+		
 <div style="display: flex; border: 1px solid #ccc; height: 120px;">
     <div style="width: 50%; padding: 10px; border-right: 1px solid #ccc; text-align: center; font-size: 12px; display: flex; flex-direction: column; justify-content: flex-end;">
         <strong>Dra. Karla Noya Barrera</strong><br>
@@ -271,7 +375,7 @@
     </div>
 </div>
 
-
+		
         <button type="button" class="btn-guardar">GUARDAR</button>
     </form>
 </div>
