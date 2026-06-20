@@ -712,16 +712,15 @@ def filtrar_aptitud(fisico: str, psico: str, db: Session = Depends(get_db)):
 @app.post("/guardar-historial-clinico")
 async def guardar_historial_clinico(data: dict, db: Session = Depends(get_db)):
     try:
-        # Normalización y validación inicial
+        # Validación estricta del código
         codigo = str(data.get("codigo_paciente", "")).strip().upper()
         if not codigo:
-            raise HTTPException(status_code=400, detail="Código paciente requerido")
+            raise HTTPException(status_code=400, detail="Código paciente es obligatorio")
         
         paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
         if not paciente:
-            raise HTTPException(status_code=404, detail="Paciente no registrado")
+            raise HTTPException(status_code=404, detail="Paciente no encontrado")
 
-        # Lista maestra de campos presentes en la estructura de tu ficha
         campos_permitidos = {
             "empresa", "nombre", "fecha", "ci", "sexo", "edad", "puesto", "area", "anos", "riesgos",
             "ruido", "radiacion", "vibracion", "mecanicos", "temp_ext", "otros_fis", "polvo", "humos",
@@ -741,14 +740,14 @@ async def guardar_historial_clinico(data: dict, db: Session = Depends(get_db)):
             "esp_d", "aud_na", "aud_n", "aud_a", "aud_d", "teq_na", "teq_n", "teq_a", "teq_d", "diag1", 
             "diag2", "diag3", "diag4", "diag5", "diag6", "diag7", "aptitud_apto", "aptitud_no_apto", 
             "aptitud_restriccion", "observaciones", "rec_nutricion", "rec_especialidad", "rec_laboratorio", 
-            "rec_otras", "medidas_higiene"
+            "rec_otras", "medidas_higiene", "codigo_paciente"
         }
 
-        # Filtrado de datos enviados desde el frontend
+        # Filtrar datos y asegurar que el código paciente siempre esté presente
         datos_a_guardar = {k: v for k, v in data.items() if k in campos_permitidos}
-        datos_a_guardar.update({"paciente_id": paciente.id, "codigo_paciente": codigo})
+        datos_a_guardar["codigo_paciente"] = codigo
+        datos_a_guardar["paciente_id"] = paciente.id
 
-        # Persistencia
         nueva_ficha = models.HistorialClinico(**datos_a_guardar)
         db.add(nueva_ficha)
         db.commit()
@@ -758,10 +757,3 @@ async def guardar_historial_clinico(data: dict, db: Session = Depends(get_db)):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
-
-
-
-
-
-
-
