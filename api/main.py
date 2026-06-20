@@ -718,8 +718,7 @@ async def guardar_historial_clinico(data: dict, db: Session = Depends(get_db)):
         if not paciente:
             raise HTTPException(status_code=404, detail="Paciente no encontrado")
 
-        # Lista de columnas exactas que existen en tu tabla HistorialClinico
-        campos_permitidos = {
+        campos_validos = {
             "empresa", "nombre", "fecha", "ci", "sexo", "edad", "puesto", "area", "anos", "riesgos",
             "ruido", "radiacion", "vibracion", "mecanicos", "temp_ext", "otros_fis", "polvo", "humos",
             "gases", "metales", "otros_quim", "mov_rep", "lev_carga", "otros_erg", "psico", "bio",
@@ -744,8 +743,7 @@ async def guardar_historial_clinico(data: dict, db: Session = Depends(get_db)):
             "rec_otras", "medidas_higiene"
         }
 
-        # Filtrado de seguridad
-        datos_limpios = {k: v for k, v in data.items() if k in campos_permitidos}
+        datos_limpios = {k: v for k, v in data.items() if k in campos_validos}
         datos_limpios["paciente_id"] = paciente.id
         datos_limpios["codigo_paciente"] = codigo
 
@@ -757,3 +755,11 @@ async def guardar_historial_clinico(data: dict, db: Session = Depends(get_db)):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+
+
+
+
