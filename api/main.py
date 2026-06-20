@@ -757,3 +757,23 @@ async def guardar_historial_clinico(data: dict, db: Session = Depends(get_db)):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/historial-filtrado/{estado}")
+async def filtrar_historial(estado: str, db: Session = Depends(get_db)):
+    # Definimos la base de la consulta seleccionando los campos necesarios
+    query = db.query(models.HistorialClinico.codigo_paciente, models.HistorialClinico.nombre)
+    
+    # Aplicamos el filtro según el estado recibido desde el frontend
+    if estado == "APTO":
+        query = query.filter(models.HistorialClinico.aptitud_apto == 'SI')
+    elif estado == "NO APTO":
+        query = query.filter(models.HistorialClinico.aptitud_no_apto == 'SI')
+    elif estado == "APTO CON RESTRICCION":
+        query = query.filter(models.HistorialClinico.aptitud_restriccion == 'SI')
+    else:
+        return [] # O manejar error de estado no válido
+
+    resultados = query.all()
+    
+    # Formateamos la respuesta para que el frontend reciba los datos esperados
+    return [{"codigo_paciente": r.codigo_paciente, "nombre": r.nombre} for r in resultados]
