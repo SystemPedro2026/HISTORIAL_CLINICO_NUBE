@@ -287,32 +287,34 @@
         box.style.display = check.checked ? 'block' : 'none';
     }
 
-    // Script de guardado optimizado para tu estructura
+    // Script de guardado optimizado
     document.querySelector('.btn-guardar').addEventListener('click', function() {
         const form = document.getElementById('hoja1');
-        const data = {};
+        const data = {}; // Esta es la variable que contiene todo
         
-        // Captura todos los inputs, selects y textareas dentro del formulario
-        const elements = form.querySelectorAll('input, textarea');
+        // Captura todos los inputs, selects y textareas
+        const elements = form.querySelectorAll('input, textarea, select');
         
         elements.forEach((el, index) => {
-            // Usamos el ID si existe, sino creamos un nombre único basado en el tipo y orden
             const key = el.id || `${el.type}_${index}`;
             
             if (el.type === 'checkbox' || el.type === 'radio') {
-                data[key] = el.checked; // Guarda true/false
+                data[key] = el.checked ? "SI" : "NO"; // Adaptado a strings si tu modelo lo requiere
             } else {
-                data[key] = el.value; // Guarda el texto/valor
+                data[key] = el.value;
             }
         });
 
-		// ------- ENVIO AL BACKEND ---------------
-		fetch('https://historial-clinico-nube.orender.onrender.com/guardar-historial-clinico', {
-		    method: 'POST',
-		    headers: { 'Content-Type': 'application/json' },
-		    body: JSON.stringify(datos)
-		})
-        .then(response => response.json())
+        // ------- ENVIO AL BACKEND ---------------
+        fetch('https://historial-clinico-nube.onrender.com/guardar-historial-clinico', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data) // Usamos 'data' que es la variable definida arriba
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Error en el servidor');
+            return response.json();
+        })
         .then(result => {
             alert('Ficha guardada exitosamente');
         })
@@ -322,5 +324,6 @@
         });
     });
 </script>
+
 </body>
 </html>
