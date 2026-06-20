@@ -712,50 +712,52 @@ def filtrar_aptitud(fisico: str, psico: str, db: Session = Depends(get_db)):
 @app.post("/guardar-historial-clinico")
 async def guardar_historial_clinico(data: dict, db: Session = Depends(get_db)):
     try:
+        # Normalización y validación inicial
         codigo = str(data.get("codigo_paciente", "")).strip().upper()
-        paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
+        if not codigo:
+            raise HTTPException(status_code=400, detail="Código paciente requerido")
         
+        paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
         if not paciente:
-            raise HTTPException(status_code=404, detail="Paciente no encontrado")
+            raise HTTPException(status_code=404, detail="Paciente no registrado")
 
-        campos_validos = {
+        # Lista maestra de campos presentes en la estructura de tu ficha
+        campos_permitidos = {
             "empresa", "nombre", "fecha", "ci", "sexo", "edad", "puesto", "area", "anos", "riesgos",
             "ruido", "radiacion", "vibracion", "mecanicos", "temp_ext", "otros_fis", "polvo", "humos",
-            "gases", "metales", "otros_quim", "mov_rep", "lev_carga", "otros_erg", "psico", "bio",
-            "altura", "confinados", "tipo_control", "antecedentes_det", "enf1", "si1", "no1", "fecha1",
-            "dias1", "enf2", "si2", "no2", "fecha2", "dias2", "hab_anamnesis", "anamnesis_det", "ta_m",
-            "ta_cm", "fc", "peso", "talla", "imc", "sat", "pam", "piel_n", "piel_a", "piel_d",
-            "cabello_n", "cabello_a", "cabello_d", "ojos_n", "ojos_a", "ojos_d", "oidos_n", "oidos_a",
-            "oidos_d", "nariz_n", "nariz_a", "nariz_d", "boca_n", "boca_a", "boca_d", "faringe_n",
-            "faringe_a", "faringe_d", "cuello_n", "cuello_a", "cuello_d", "resp_n", "resp_a", "resp_d",
-            "cardio_n", "cardio_a", "cardio_d", "dig_n", "dig_a", "dig_d", "gen_n", "gen_a", "gen_d",
-            "loc_n", "loc_a", "loc_d", "col_n", "col_a", "col_d", "linf_n", "linf_a", "linf_d",
-            "nerv_n", "nerv_a", "nerv_d", "hem_na", "hem_n", "hem_a", "hem_d", "glu_na", "glu_n",
-            "glu_a", "glu_d", "ure_na", "ure_n", "ure_a", "ure_d", "aur_na", "aur_n", "aur_a",
-            "aur_d", "cre_na", "cre_n", "cre_a", "cre_d", "per_na", "per_n", "per_a", "per_d",
-            "vdr_na", "vdr_n", "vdr_a", "vdr_d", "cha_na", "cha_n", "cha_a", "cha_d", "ego_na",
-            "ego_n", "ego_a", "ego_d", "psa_na", "psa_n", "psa_a", "psa_d", "rxt_na", "rxt_n",
-            "rxt_a", "rxt_d", "eca_na", "eca_n", "eca_a", "eca_d", "ecg_na", "ecg_n", "ecg_a",
-            "ecg_d", "esp_na", "esp_n", "esp_a", "esp_d", "aud_na", "aud_n", "aud_a", "aud_d",
-            "teq_na", "teq_n", "teq_a", "teq_d", "diag1", "diag2", "diag3", "diag4", "diag5",
-            "diag6", "diag7", "aptitud_apto", "aptitud_no_apto", "aptitud_restriccion",
-            "observaciones", "rec_nutricion", "rec_especialidad", "rec_laboratorio",
+            "gases", "metales", "otros_quim", "mov_rep", "lev_carga", "otros_erg", "psicologicos", "biologicos", 
+            "altura", "confinados", "antecedentes_det", "enf1", "si1", "no1", "fecha1", "dias1", "enf2", "si2", 
+            "no2", "fecha2", "dias2", "hab_anamnesis", "anamnesis_det", "ta_m", "ta_cm", "fc", "peso", "talla", 
+            "imc", "sat", "pam", "piel_n", "piel_a", "piel_d", "cabello_n", "cabello_a", "cabello_d", "ojos_n", 
+            "ojos_a", "ojos_d", "oidos_n", "oidos_a", "oidos_d", "nariz_n", "nariz_a", "nariz_d", "boca_n", 
+            "boca_d", "faringe_a", "faringe_d", "cuello_n", "cuello_a", "cuello_d", "resp_n", "resp_a", "resp_d", 
+            "cardio_n", "cardio_a", "cardio_d", "dig_n", "dig_a", "dig_d", "gen_n", "gen_a", "gen_d", "loc_n", 
+            "loc_a", "loc_d", "col_n", "col_a", "col_d", "linf_n", "linf_a", "linf_d", "nerv_n", "nerv_a", 
+            "nerv_d", "hem_n", "hem_a", "hem_d", "glu_na", "glu_n", "glu_a", "glu_d", "ure_na", "ure_n", 
+            "ure_a", "ure_d", "aur_na", "aur_n", "aur_a", "cre_na", "cre_n", "cre_a", "cre_d", "per_na", 
+            "per_n", "per_a", "per_d", "vdr_na", "vdr_n", "vdr_a", "vdr_d", "cha_na", "cha_n", "cha_a", 
+            "cha_d", "ego_na", "ego_n", "ego_a", "ego_d", "psa_na", "psa_n", "psa_a", "psa_d", "rxt_na", 
+            "rxt_n", "rxt_a", "rxt_d", "ecg_na", "ecg_n", "ecg_a", "ecg_d", "esp_na", "esp_n", "esp_a", 
+            "esp_d", "aud_na", "aud_n", "aud_a", "aud_d", "teq_na", "teq_n", "teq_a", "teq_d", "diag1", 
+            "diag2", "diag3", "diag4", "diag5", "diag6", "diag7", "aptitud_apto", "aptitud_no_apto", 
+            "aptitud_restriccion", "observaciones", "rec_nutricion", "rec_especialidad", "rec_laboratorio", 
             "rec_otras", "medidas_higiene"
         }
 
-        datos_limpios = {k: v for k, v in data.items() if k in campos_validos}
-        datos_limpios["paciente_id"] = paciente.id
-        datos_limpios["codigo_paciente"] = codigo
+        # Filtrado de datos enviados desde el frontend
+        datos_a_guardar = {k: v for k, v in data.items() if k in campos_permitidos}
+        datos_a_guardar.update({"paciente_id": paciente.id, "codigo_paciente": codigo})
 
-        nueva_ficha = models.HistorialClinico(**datos_limpios)
+        # Persistencia
+        nueva_ficha = models.HistorialClinico(**datos_a_guardar)
         db.add(nueva_ficha)
         db.commit()
         db.refresh(nueva_ficha)
-        return {"status": "success", "message": "GUARDADO EXITOSAMENTE"}
+        
+        return {"status": "success", "message": "HISTORIAL CLÍNICO GUARDADO EXITOSAMENTE"}
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
-
 
 
 
