@@ -300,7 +300,6 @@
         if (!form) return;
 
         const data = {};
-        
         // Captura todos los inputs, selects y textareas
         const elements = form.querySelectorAll('input, textarea, select');
         
@@ -316,11 +315,13 @@
             }
         });
 
-        // Aseguramos el campo clave
-        if (!data.codigo_paciente) {
-            alert('Por favor, ingrese el código del paciente');
-            return;
-        }
+		// LOG PARA DEBUG: Esto saldrá en la consola del navegador (F12 -> Console)
+		console.log("Datos enviados al servidor:", data);
+		// Validación forzada
+		if (!data.codigo_paciente || data.codigo_paciente.trim() === "") {
+		    alert('Error: No se detectó el código del paciente. Verifica que el input tenga id="codigo_paciente"');
+		    return;
+		}
 
         // ------- ENVIO AL BACKEND ---------------
         fetch('https://historial-clinico-nube.onrender.com/guardar-historial-clinico', {
