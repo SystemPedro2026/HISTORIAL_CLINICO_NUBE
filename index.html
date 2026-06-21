@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { transform-origin: top center; }
-        /* Mejora del loader: menos opaco y más elegante */
         .loader { 
             border: 6px solid rgba(255, 255, 255, 0.1);
             border-top: 6px solid #3b82f6; 
@@ -44,7 +43,7 @@
         <h1 class="text-white text-4xl font-bold uppercase tracking-tighter mb-2">Historial Clínico Nube</h1>
         <p class="text-slate-500 text-[12px] uppercase tracking-[0.4em] mb-14">Panel de Control de Acceso</p>
 
-        <div class="flex flex-wrap gap-10 justify-center items-start">
+        <div class="flex flex-wrap gap-10 justify-center items-start mb-10">
             <div class="flex flex-col items-center">
                 <button onclick="location.href='lista_personal.html'" 
                     class="w-52 py-12 bg-slate-900 rounded-[3rem] border border-slate-800 hover:border-blue-500 transition-all duration-500 group flex flex-col items-center shadow-2xl">
@@ -61,22 +60,33 @@
                 </button>
             </div>
         </div>
+
+        <div class="flex justify-center">
+            <button onclick="location.href='opciones_visor.html'"
+                class="flex items-center gap-3 px-8 py-3 bg-slate-900/50 border border-slate-800 rounded-full hover:bg-slate-800 hover:border-slate-700 transition-all duration-300 group">
+                <span class="text-lg opacity-60 group-hover:opacity-100 transition-opacity">🔍</span>
+                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em] group-hover:text-slate-300">Visor de Historial</span>
+            </button>
+        </div>
+        <div class="mt-10">
+            <p class="text-slate-700 text-[10px] uppercase tracking-widest font-medium">__Sistema de Gestión Hospitalaria v2.0__</p>
+        </div>
+
     </div>
 
     <script>
         const CLAVE = "2026"; 
 
-        // CAMBIO 4: Lógica de flujo secuencial
+        // 1. Al cargar, mostramos el loader.
+        // 2. Después de 2 segundos, quitamos el loader y mostramos el modal de contraseña.
         setTimeout(() => {
-            // 1. Ocultar loader
             document.getElementById('loader-screen').classList.add('hidden');
-            // 2. Mostrar el modal de contraseña ANTES de mostrar el menú
             document.getElementById('modal-pass').classList.remove('hidden');
         }, 2000);
 
         function validar() {
             if(document.getElementById('pass-input').value === CLAVE) {
-                // 3. Si es correcto, ocultar modal y mostrar el portal
+                // 3. Si la clave es correcta, ocultamos el modal y mostramos el portal.
                 document.getElementById('modal-pass').classList.add('hidden');
                 document.getElementById('portal').classList.remove('hidden');
             } else {
