@@ -33,6 +33,13 @@
     <div id="loader-screen" class="text-center">
         <div class="loader mb-4 mx-auto"></div>
         <p class="text-slate-500 text-[10px] uppercase tracking-[0.3em]">Inicializando Nube...</p>
+        <p id="percentage" class="text-blue-500 font-black text-lg mt-2">0%</p>
+    </div>
+
+    
+    <div id="loader-screen" class="text-center">
+        <div class="loader mb-4 mx-auto"></div>
+        <p class="text-slate-500 text-[10px] uppercase tracking-[0.3em]">Inicializando Nube...</p>
     </div>
 
     <div id="portal" class="hidden text-center fade-in w-full max-w-xl">
@@ -76,7 +83,16 @@
 
     <script>
         const CLAVE = "2026"; 
+        // CAMBIO: Lógica del contador
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 1;
+            document.getElementById('percentage').innerText = progress + "%";
+            if (progress >= 100) clearInterval(interval);
+        }, 20); // 20ms * 100 = 2000ms (2 segundos)
 
+
+        
         // 1. Al cargar, mostramos el loader.
         // 2. Después de 2 segundos, quitamos el loader y mostramos el modal de contraseña.
         setTimeout(() => {
