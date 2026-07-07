@@ -1338,273 +1338,179 @@
 <button class="btn-guardar" onclick="guardarDatos()">GUARDAR REGISTRO FINAL</button>
 <!--==========================================================================================================================-->
 <script>
-function capturarDatos(){
-    const datos = {
-        // DATOS DEL PACIENTE
-        codigo_paciente: document.getElementById("codigo_paciente").value,
-        nombre_completo: document.getElementById("nombre_completo").value,
-        edad: document.getElementById("edad").value,
-        sexo: document.querySelector('input[name="sexo"]:checked')?.value || "",
-        ci: document.getElementById("ci").value,
-        fecha: document.getElementById("fecha").value,
+    // Corrección: Conversión automática a mayúsculas para CÓDIGO PACIENTE
+    document.getElementById("codigo_paciente").addEventListener("input", function(e) {
+        this.value = this.value.toUpperCase();
+    });
 
-        // I. DETALLE DEL PUESTO
-        carga_menor_25: document.getElementById('carga_menor_25').checked,
-        carga_25_50: document.getElementById('carga_25_50').checked,
-        carga_mayor_50: document.getElementById('carga_mayor_50').checked,
-        postura_pie: document.getElementById('postura_pie').checked,
-        postura_sentado: document.getElementById('postura_sentado').checked,
-        mov_cabeza: document.getElementById('mov_cabeza').checked,
-        mov_tronco: document.getElementById('mov_tronco').checked,
-        mov_mms: document.getElementById('mov_mms').checked,
-        mov_mmi: document.getElementById('mov_mmi').checked,
+    function guardarDatos() {
+        // Objeto con la estructura unificada
+        const datos = {
+            codigo_paciente: document.getElementById("codigo_paciente").value,
+            nombre_completo: document.getElementById("nombre_completo").value,
+            edad: document.getElementById("edad").value,
+            sexo: document.querySelector('input[name="sexo"]:checked')?.value || "",
+            ci: document.getElementById("ci").value,
+            fecha: document.getElementById("fecha").value,
 
-        // II. ANTECEDENTES MÉDICOS
-        ant1_fecha: document.getElementById('ant1_fecha').value,
-        ant1_diagnostico: document.getElementById('ant1_diagnostico').value,
-        ant1_tratamiento: document.getElementById('ant1_tratamiento').value,
-        ant1_comentario: document.getElementById('ant1_comentario').value,
-        
-        ant2_fecha: document.getElementById('ant2_fecha').value,
-        ant2_diagnostico: document.getElementById('ant2_diagnostico').value,
-        ant2_tratamiento: document.getElementById('ant2_tratamiento').value,
-        ant2_comentario: document.getElementById('ant2_comentario').value,
-        
-        ant3_fecha: document.getElementById('ant3_fecha').value,
-        ant3_diagnostico: document.getElementById('ant3_diagnostico').value,
-        ant3_tratamiento: document.getElementById('ant3_tratamiento').value,
-        ant3_comentario: document.getElementById('ant3_comentario').value,
+            // I. PUESTO
+            carga_menor_25: document.getElementById('carga_menor_25').checked,
+            carga_25_50: document.getElementById('carga_25_50').checked,
+            carga_mayor_50: document.getElementById('carga_mayor_50').checked,
+            postura_pie: document.getElementById('postura_pie').checked,
+            postura_sentado: document.getElementById('postura_sentado').checked,
+            mov_cabeza: document.getElementById('mov_cabeza').checked,
+            mov_tronco: document.getElementById('mov_tronco').checked,
+            mov_mms: document.getElementById('mov_mms').checked,
+            mov_mmi: document.getElementById('mov_mmi').checked,
 
-        // III. EXAMEN OBJETIVO - HOMBRO
-        // Molestias
-        hombro_dx_desde: document.getElementById('hombro_dx_desde').value,
-        hombro_ix_desde: document.getElementById('hombro_ix_desde').value,
-        // Dolor a la palpación - Derecha
-        dolor_ant_der: document.getElementById('dolor_ant_der').checked,
-        dolor_lat_der: document.getElementById('dolor_lat_der').checked,
-        dolor_pos_der: document.getElementById('dolor_pos_der').checked,
-        // Movilidad - Derecha
-        flexion_der: document.getElementById('flexion_der').checked,
-        abduccion_der: document.getElementById('abduccion_der').checked,
-        rotacion_int_der: document.getElementById('rotacion_int_der').checked,
-        rotacion_ext_der: document.getElementById('rotacion_ext_der').checked,
-        // Dolor a la palpación - Izquierda
-        dolor_ant_izq: document.getElementById('dolor_ant_izq').checked,
-        dolor_lat_izq: document.getElementById('dolor_lat_izq').checked,
-        dolor_pos_izq: document.getElementById('dolor_pos_izq').checked,
-        // Movilidad - Izquierda
-        flexion_izq: document.getElementById('flexion_izq').checked,
-        abduccion_izq: document.getElementById('abduccion_izq').checked,
-        rotacion_int_izq: document.getElementById('rotacion_int_izq').checked,
-        rotacion_ext_izq: document.getElementById('rotacion_ext_izq').checked,
-        // Arco doloroso
-        arco_der_presente: document.getElementById('arco_der_presente').checked,
-        arco_der_ausente: document.getElementById('arco_der_ausente').checked,
-        arco_izq_presente: document.getElementById('arco_izq_presente').checked,
-        arco_izq_ausente: document.getElementById('arco_izq_ausente').checked,
-        // Bíceps
-        biceps_der_presente: document.getElementById('biceps_der_presente').checked,
-        biceps_der_ausente: document.getElementById('biceps_der_ausente').checked,
-        biceps_izq_presente: document.getElementById('biceps_izq_presente').checked,
-        biceps_izq_ausente: document.getElementById('biceps_izq_ausente').checked,
-        // Gravedad hombro
-        grave_hombro_der: document.querySelector('input[name="grave_hombro_der"]:checked')?.value || "",
-        grave_hombro_izq: document.querySelector('input[name="grave_hombro_izq"]:checked')?.value || "",
-        // Observaciones
-        observaciones_hombro: document.getElementById('observaciones_hombro').value,
+            // II. ANTECEDENTES
+            ant1_fecha: document.getElementById('fecha_ant_1').value,
+            ant1_diagnostico: document.getElementById('diagnostico_1').value,
+            ant1_tratamiento: document.getElementById('tratamiento_1').value,
+            ant1_comentario: document.getElementById('comentario_1').value,
+            ant2_fecha: document.getElementById('fecha_ant_2').value,
+            ant2_diagnostico: document.getElementById('diagnostico_2').value,
+            ant2_tratamiento: document.getElementById('tratamiento_2').value,
+            ant2_comentario: document.getElementById('comentario_2').value,
+            ant3_fecha: document.getElementById('fecha_ant_3').value,
+            ant3_diagnostico: document.getElementById('diagnostico_3').value,
+            ant3_tratamiento: document.getElementById('tratamiento_3').value,
+            ant3_comentario: document.getElementById('comentario_3').value,
 
-        // III. EXAMEN OBJETIVO - CODO
-        // Molestias
-        codo_dx_desde: document.getElementById('codo_dx_desde').value,
-        codo_ix_desde: document.getElementById('codo_ix_desde').value,
-        // Epicóndilo - Derecha
-        epicondilo_der: document.getElementById('epicondilo_der').checked,
-        epitroclea_der: document.getElementById('epitroclea_der').checked,
-        // Movilidad - Derecha
-        flexion_codo_der: document.getElementById('flexion_codo_der').checked,
-        extension_codo_der: document.getElementById('extension_codo_der').checked,
-        // Epicóndilo - Izquierda
-        epicondilo_izq: document.getElementById('epicondilo_izq').checked,
-        epitroclea_izq: document.getElementById('epitroclea_izq').checked,
-        // Movilidad - Izquierda
-        flexion_codo_izq: document.getElementById('flexion_codo_izq').checked,
-        extension_codo_izq: document.getElementById('extension_codo_izq').checked,
-        // Cozen
-        cozen_der_presente: document.getElementById('cozen_der_presente').checked,
-        cozen_der_ausente: document.getElementById('cozen_der_ausente').checked,
-        cozen_izq_presente: document.getElementById('cozen_izq_presente').checked,
-        cozen_izq_ausente: document.getElementById('cozen_izq_ausente').checked,
-        // Flexión resistida
-        flexion_resistida_der_presente: document.getElementById('flexion_resistida_der_presente').checked,
-        flexion_resistida_der_ausente: document.getElementById('flexion_resistida_der_ausente').checked,
-        flexion_resistida_izq_presente: document.getElementById('flexion_resistida_izq_presente').checked,
-        flexion_resistida_izq_ausente: document.getElementById('flexion_resistida_izq_ausente').checked,
-        // Gravedad
-        grave_codo_der: document.querySelector('input[name="grave_codo_der"]:checked')?.value || "",
-        grave_codo_izq: document.querySelector('input[name="grave_codo_izq"]:checked')?.value || "",
-        // Observaciones
-        observaciones_codo: document.getElementById('observaciones_codo').value,
+            // III. HOMBRO
+            hombro_dx_desde: document.getElementById('hombro_dx_desde').value,
+            hombro_ix_desde: document.getElementById('hombro_ix_desde').value,
+            dolor_ant_der: document.getElementById('dolor_ant_der').checked,
+            dolor_lat_der: document.getElementById('dolor_lat_der').checked,
+            dolor_pos_der: document.getElementById('dolor_pos_der').checked,
+            flexion_der: document.getElementById('flexion_der').checked,
+            abduccion_der: document.getElementById('abduccion_der').checked,
+            rotacion_int_der: document.getElementById('rotacion_int_der').checked,
+            rotacion_ext_der: document.getElementById('rotacion_ext_der').checked,
+            dolor_ant_izq: document.getElementById('dolor_ant_izq').checked,
+            dolor_lat_izq: document.getElementById('dolor_lat_izq').checked,
+            dolor_pos_izq: document.getElementById('dolor_pos_izq').checked,
+            flexion_izq: document.getElementById('flexion_izq').checked,
+            abduccion_izq: document.getElementById('abduccion_izq').checked,
+            rotacion_int_izq: document.getElementById('rotacion_int_izq').checked,
+            rotacion_ext_izq: document.getElementById('rotacion_ext_izq').checked,
+            arco_der_presente: document.getElementById('arco_der_presente').checked,
+            arco_der_ausente: document.getElementById('arco_der_ausente').checked,
+            arco_izq_presente: document.getElementById('arco_izq_presente').checked,
+            arco_izq_ausente: document.getElementById('arco_izq_ausente').checked,
+            biceps_der_presente: document.getElementById('biceps_der_presente').checked,
+            biceps_der_ausente: document.getElementById('biceps_der_ausente').checked,
+            biceps_izq_presente: document.getElementById('biceps_izq_presente').checked,
+            biceps_izq_ausente: document.getElementById('biceps_izq_ausente').checked,
+            grave_hombro_der: document.querySelector('input[name="grave_hombro_der"]:checked')?.value || "",
+            grave_hombro_izq: document.querySelector('input[name="grave_hombro_izq"]:checked')?.value || "",
+            observaciones_hombro: document.getElementById('observaciones_hombro').value,
 
-        // III. EXAMEN OBJETIVO - MUÑECA
-        // Molestias
-        muneca_dx_desde: document.getElementById('muneca_dx_desde').value,
-        muneca_ix_desde: document.getElementById('muneca_ix_desde').value,
-        // Tinel
-        tinel_der: document.getElementById('tinel_der').checked,
-        tinel_izq: document.getElementById('tinel_izq').checked,
-        // Phalen
-        phalen_der: document.getElementById('phalen_der').checked,
-        phalen_izq: document.getElementById('phalen_izq').checked,
-        // Palpación
-        trapecio_dx: document.getElementById('trapecio_dx').checked,
-        trapecio_ix: document.getElementById('trapecio_ix').checked,
-        estiloide_radial_dx: document.getElementById('estiloide_radial_dx').checked,
-        estiloide_radial_ix: document.getElementById('estiloide_radial_ix').checked,
-        // Clic
-        clic_dx: document.getElementById('clic_dx').checked,
-        clic_ix: document.getElementById('clic_ix').checked,
-        // Finkelsten
-        finkelsten_der: document.getElementById('finkelsten_der').checked,
-        finkelsten_izq: document.getElementById('finkelsten_izq').checked,
-        // Flexo - Extensión
-        cr_der: document.getElementById('cr_der').checked,
-        mp_der: document.getElementById('mp_der').checked,
-        cr_resistencia_der: document.getElementById('cr_resistencia_der').checked,
-        dolor_extension_der: document.getElementById('dolor_extension_der').checked,
-        cr_izq: document.getElementById('cr_izq').checked,
-        mp_izq: document.getElementById('mp_izq').checked,
-        cr_resistencia_izq: document.getElementById('cr_resistencia_izq').checked,
-        dolor_extension_izq: document.getElementById('dolor_extension_izq').checked,
-        // Sintomatología
-        sintomatologia_si: document.getElementById('sintomatologia_si').checked,
-        sintomatologia_no: document.getElementById('sintomatologia_no').checked,
-        // Región proximal
-        apofisis_espinoza: document.getElementById('apofisis_espinoza').value,
-        trapecio_sup: document.getElementById('trapecio_sup').value,
-        paravertebral: document.getElementById('paravertebral').value,
-        flexion_muneca: document.getElementById('flexion_muneca').value,
-        extension_muneca: document.getElementById('extension_muneca').value,
-        inclinacion_der: document.getElementById('inclinacion_der').value,
-        inclinacion_izq: document.getElementById('inclinacion_izq').value,
-        rotacion_der: document.getElementById('rotacion_der').value,
-        rotacion_izq: document.getElementById('rotacion_izq').value,
-        parestesia_fatiga1: document.getElementById('parestesia_fatiga1').value,
-        fatiga1_derecha: document.getElementById('fatiga1_derecha').value,
-        fatiga1_izquierda: document.getElementById('fatiga1_izquierda').value,
-        parestesia_fatiga2: document.getElementById('parestesia_fatiga2').value,
-        fatiga2_derecha: document.getElementById('fatiga2_derecha').value,
-        fatiga2_izquierda: document.getElementById('fatiga2_izquierda').value,
-        // Región distal
-        phalen_mediano_der: document.getElementById('phalen_mediano_der').checked,
-        phalen_cubital_der: document.getElementById('phalen_cubital_der').checked,
-        phalen_noterr_der: document.getElementById('phalen_noterr_der').checked,
-        phalen_mediano_izq: document.getElementById('phalen_mediano_izq').checked,
-        phalen_cubital_izq: document.getElementById('phalen_cubital_izq').checked,
-        phalen_noterr_izq: document.getElementById('phalen_noterr_izq').checked,
-        presion_mediano_der: document.getElementById('presion_mediano_der').checked,
-        presion_cubital_der: document.getElementById('presion_cubital_der').checked,
-        presion_noterr_der: document.getElementById('presion_noterr_der').checked,
-        presion_mediano_izq: document.getElementById('presion_mediano_izq').checked,
-        presion_cubital_izq: document.getElementById('presion_cubital_izq').checked,
-        presion_noterr_izq: document.getElementById('presion_noterr_izq').checked,
-        // Gravedad
-        grado_codo_der: document.querySelector('input[name="grado_codo_der"]:checked')?.value || "",
-        grado_codo_izq: document.querySelector('input[name="grado_codo_izq"]:checked')?.value || "",
-        // Observaciones
-        observaciones_muneca: document.getElementById('observaciones_muneca').value,
+            // CODO
+            codo_dx_desde: document.getElementById('codo_dx_desde').value,
+            codo_ix_desde: document.getElementById('codo_ix_desde').value,
+            edema_localizado_der: document.getElementById('edema_localizado_der').checked,
+            edema_nolocalizado_der: document.getElementById('edema_nolocalizado_der').checked,
+            epicondilio_der: document.getElementById('epicondilio_der').checked,
+            epitroclea_der: document.getElementById('epitroclea_der').checked,
+            olecranon_der: document.getElementById('olecranon_der').checked,
+            musculo_epicondilio_der: document.getElementById('musculo_epicondilio_der').checked,
+            musculo_epitroclea_der: document.getElementById('musculo_epitroclea_der').checked,
+            edema_localizado_izq: document.getElementById('edema_localizado_izq').checked,
+            edema_nolocalizado_izq: document.getElementById('edema_nolocalizado_izq').checked,
+            epicondilio_izq: document.getElementById('epicondilio_izq').checked,
+            epitroclea_izq: document.getElementById('epitroclea_izq').checked,
+            olecranon_izq: document.getElementById('olecranon_izq').checked,
+            musculo_epicondilio_izq: document.getElementById('musculo_epicondilio_izq').checked,
+            musculo_epitroclea_izq: document.getElementById('musculo_epitroclea_izq').checked,
+            epicondilitis_der_presente: document.getElementById('epicondilitis_der_presente').checked,
+            epicondilitis_der_ausente: document.getElementById('epicondilitis_der_ausente').checked,
+            parestesia_der: document.getElementById('parestesia_der').checked,
+            gravedad_codo_der: document.querySelector('input[name="gravedad_codo_der"]:checked')?.value || "",
+            epicondilitis_izq_presente: document.getElementById('epicondilitis_izq_presente').checked,
+            epicondilitis_izq_ausente: document.getElementById('epicondilitis_izq_ausente').checked,
+            parestesia_izq: document.getElementById('parestesia_izq').checked,
+            gravedad_codo_izq: document.querySelector('input[name="gravedad_codo_izq"]:checked')?.value || "",
+            observaciones_codo: document.getElementById('observaciones_codo').value,
 
-        // III. EXAMEN OBJETIVO - COLUMNA
-        // Tiempo de molestias
-        cervical_desde: document.getElementById('cervical_desde').value,
-        dorsal_desde: document.getElementById('dorsal_desde').value,
-        lumbar_desde: document.getElementById('lumbar_desde').value,
-        // CERVICAL
-        cervical_antpost_ejes_normal: document.getElementsByName('cervical_antpost_ejes_normal')[0].checked,
-        cervical_antpost_ejes_anormal: document.getElementsByName('cervical_antpost_ejes_anormal')[0].checked,
-        cervical_antpost_mov_normal: document.getElementsByName('cervical_antpost_mov_normal')[0].checked,
-        cervical_antpost_mov_anormal: document.getElementsByName('cervical_antpost_mov_anormal')[0].checked,
-        cervical_antpost_dolor: document.getElementsByName('cervical_antpost_dolor')[0].checked,
-        cervical_antpost_contractura_normal: document.getElementsByName('cervical_antpost_contractura_normal')[0].checked,
-        cervical_antpost_contractura_anormal: document.getElementsByName('cervical_antpost_contractura_anormal')[0].checked,
-        cervical_antpost_percusion_normal: document.getElementsByName('cervical_antpost_percusion_normal')[0].checked,
-        cervical_antpost_percusion_anormal: document.getElementsByName('cervical_antpost_percusion_anormal')[0].checked,
-        
-        cervical_lat_ejes_normal: document.getElementsByName('cervical_lat_ejes_normal')[0].checked,
-        cervical_lat_ejes_anormal: document.getElementsByName('cervical_lat_ejes_anormal')[0].checked,
-        cervical_lat_mov_normal: document.getElementsByName('cervical_lat_mov_normal')[0].checked,
-        cervical_lat_mov_anormal: document.getElementsByName('cervical_lat_mov_anormal')[0].checked,
-        cervical_lat_dolor: document.getElementsByName('cervical_lat_dolor')[0].checked,
-        cervical_lat_contractura_normal: document.getElementsByName('cervical_lat_contractura_normal')[0].checked,
-        cervical_lat_contractura_anormal: document.getElementsByName('cervical_lat_contractura_anormal')[0].checked,
-        cervical_lat_percusion_normal: document.getElementsByName('cervical_lat_percusion_normal')[0].checked,
-        cervical_lat_percusion_anormal: document.getElementsByName('cervical_lat_percusion_anormal')[0].checked,
-        // DORSAL
-        dorsal_antpost_ejes_normal: document.getElementsByName('dorsal_antpost_ejes_normal')[0].checked,
-        dorsal_antpost_ejes_anormal: document.getElementsByName('dorsal_antpost_ejes_anormal')[0].checked,
-        dorsal_antpost_mov_normal: document.getElementsByName('dorsal_antpost_mov_normal')[0].checked,
-        dorsal_antpost_mov_anormal: document.getElementsByName('dorsal_antpost_mov_anormal')[0].checked,
-        dorsal_antpost_dolor: document.getElementsByName('dorsal_antpost_dolor')[0].checked,
-        dorsal_antpost_contractura_normal: document.getElementsByName('dorsal_antpost_contractura_normal')[0].checked,
-        dorsal_antpost_contractura_anormal: document.getElementsByName('dorsal_antpost_contractura_anormal')[0].checked,
-        dorsal_antpost_percusion_normal: document.getElementsByName('dorsal_antpost_percusion_normal')[0].checked,
-        dorsal_antpost_percusion_anormal: document.getElementsByName('dorsal_antpost_percusion_anormal')[0].checked,
-        
-        dorsal_lat_ejes_normal: document.getElementsByName('dorsal_lat_ejes_normal')[0].checked,
-        dorsal_lat_ejes_anormal: document.getElementsByName('dorsal_lat_ejes_anormal')[0].checked,
-        dorsal_lat_mov_normal: document.getElementsByName('dorsal_lat_mov_normal')[0].checked,
-        dorsal_lat_mov_anormal: document.getElementsByName('dorsal_lat_mov_anormal')[0].checked,
-        dorsal_lat_dolor: document.getElementsByName('dorsal_lat_dolor')[0].checked,
-        dorsal_lat_contractura_normal: document.getElementsByName('dorsal_lat_contractura_normal')[0].checked,
-        dorsal_lat_contractura_anormal: document.getElementsByName('dorsal_lat_contractura_anormal')[0].checked,
-        dorsal_lat_percusion_normal: document.getElementsByName('dorsal_lat_percusion_normal')[0].checked,
-        dorsal_lat_percusion_anormal: document.getElementsByName('dorsal_lat_percusion_anormal')[0].checked,
-        // LUMBAR
-        lumbar_antpost_ejes_normal: document.getElementsByName('lumbar_antpost_ejes_normal')[0].checked,
-        lumbar_antpost_ejes_anormal: document.getElementsByName('lumbar_antpost_ejes_anormal')[0].checked,
-        lumbar_antpost_mov_normal: document.getElementsByName('lumbar_antpost_mov_normal')[0].checked,
-        lumbar_antpost_mov_anormal: document.getElementsByName('lumbar_antpost_mov_anormal')[0].checked,
-        lumbar_antpost_dolor: document.getElementsByName('lumbar_antpost_dolor')[0].checked,
-        lumbar_antpost_contractura_normal: document.getElementsByName('lumbar_antpost_contractura_normal')[0].checked,
-        lumbar_antpost_contractura_anormal: document.getElementsByName('lumbar_antpost_contractura_anormal')[0].checked,
-        lumbar_antpost_percusion_normal: document.getElementsByName('lumbar_antpost_percusion_normal')[0].checked,
-        lumbar_antpost_percusion_anormal: document.getElementsByName('lumbar_antpost_percusion_anormal')[0].checked,
-        
-        lumbar_lat_ejes_normal: document.getElementsByName('lumbar_lat_ejes_normal')[0].checked,
-        lumbar_lat_ejes_anormal: document.getElementsByName('lumbar_lat_ejes_anormal')[0].checked,
-        lumbar_lat_mov_normal: document.getElementsByName('lumbar_lat_mov_normal')[0].checked,
-        lumbar_lat_mov_anormal: document.getElementsByName('lumbar_lat_mov_anormal')[0].checked,
-        lumbar_lat_dolor: document.getElementsByName('lumbar_lat_dolor')[0].checked,
-        lumbar_lat_contractura_normal: document.getElementsByName('lumbar_lat_contractura_normal')[0].checked,
-        lumbar_lat_contractura_anormal: document.getElementsByName('lumbar_lat_contractura_anormal')[0].checked,
-        lumbar_lat_percusion_normal: document.getElementsByName('lumbar_lat_percusion_normal')[0].checked,
-        lumbar_lat_percusion_anormal: document.getElementsByName('lumbar_lat_percusion_anormal')[0].checked,
-        // Maniobras
-        lasegue: document.getElementById('lasegue').value,
-        schober: document.getElementById('schober').value,
-        // Observaciones
-        observaciones_columna: document.getElementById('observaciones_columna').value,
+            // MUÑECA
+            muneca_dx_desde: document.getElementById('muneca_dx_desde').value,
+            muneca_ix_desde: document.getElementById('muneca_ix_desde').value,
+            quiste_dorsal_der: document.getElementById('quiste_dorsal_der').checked,
+            quiste_ventral_der: document.getElementById('quiste_ventral_der').checked,
+            edema_dorsal_der: document.getElementById('edema_dorsal_der').checked,
+            edema_ventral_der: document.getElementById('edema_ventral_der').checked,
+            edema_estiloide_radial_der: document.getElementById('edema_estiloide_radial_der').checked,
+            edema_estiloide_ulnar_der: document.getElementById('edema_estiloide_ulnar_der').checked,
+            hipotrofia_der: document.getElementById('hipotrofia_der').checked,
+            deformidades_der: document.getElementById('deformidades_der').checked,
+            quiste_dorsal_izq: document.getElementById('quiste_dorsal_izq').checked,
+            quiste_ventral_izq: document.getElementById('quiste_ventral_izq').checked,
+            edema_dorsal_izq: document.getElementById('edema_dorsal_izq').checked,
+            edema_ventral_izq: document.getElementById('edema_ventral_izq').checked,
+            edema_estiloide_radial_izq: document.getElementById('edema_estiloide_radial_izq').checked,
+            edema_estiloide_ulnar_izq: document.getElementById('edema_estiloide_ulnar_izq').checked,
+            hipotrofia_izq: document.getElementById('hipotrofia_izq').checked,
+            deformidades_izq: document.getElementById('deformidades_izq').checked,
+            trapecio_dx: document.getElementById('trapecio_dx').checked,
+            trapecio_ix: document.getElementById('trapecio_ix').checked,
+            estiloide_radial_dx: document.getElementById('estiloide_radial_dx').checked,
+            estiloide_radial_ix: document.getElementById('estiloide_radial_ix').checked,
+            clic_dx: document.getElementById('clic_dx').checked,
+            clic_ix: document.getElementById('clic_ix').checked,
+            finkelsten_der: document.getElementById('finkelsten_der').checked,
+            cr_der: document.getElementById('cr_der').checked,
+            mp_der: document.getElementById('mp_der').checked,
+            cr_resistencia_der: document.getElementById('cr_resistencia_der').checked,
+            dolor_extension_der: document.getElementById('dolor_extension_der').checked,
+            finkelsten_izq: document.getElementById('finkelsten_izq').checked,
+            cr_izq: document.getElementById('cr_izq').checked,
+            mp_izq: document.getElementById('mp_izq').checked,
+            cr_resistencia_izq: document.getElementById('cr_resistencia_izq').checked,
+            dolor_extension_izq: document.getElementById('dolor_extension_izq').checked,
+            sintomatologia_si: document.getElementById('sintomatologia_si').checked,
+            sintomatologia_no: document.getElementById('sintomatologia_no').checked,
+            apofisis_espinoza: document.getElementById('apofisis_espinoza').value,
+            trapecio_sup: document.getElementById('trapecio_sup').value,
+            paravertebral: document.getElementById('paravertebral').value,
+            flexion_muneca: document.getElementById('flexion_muneca').value,
+            extension_muneca: document.getElementById('extension_muneca').value,
+            fatiga1_derecha: document.getElementById('fatiga1_derecha').value,
+            fatiga2_derecha: document.getElementById('fatiga2_derecha').value,
+            fatiga1_izquierda: document.getElementById('fatiga1_izquierda').value,
+            fatiga2_izquierda: document.getElementById('fatiga2_izquierda').value,
+            phalen_mediano_der: document.getElementById('phalen_mediano_der').checked,
+            phalen_cubital_der: document.getElementById('phalen_cubital_der').checked,
+            phalen_noterr_der: document.getElementById('phalen_noterr_der').checked,
+            presion_mediano_der: document.getElementById('presion_mediano_der').checked,
+            presion_cubital_der: document.getElementById('presion_cubital_der').checked,
+            presion_noterr_der: document.getElementById('presion_noterr_der').checked,
+            phalen_mediano_izq: document.getElementById('phalen_mediano_izq').checked,
+            phalen_cubital_izq: document.getElementById('phalen_cubital_izq').checked,
+            phalen_noterr_izq: document.getElementById('phalen_noterr_izq').checked,
+            presion_mediano_izq: document.getElementById('presion_mediano_izq').checked,
+            presion_cubital_izq: document.getElementById('presion_cubital_izq').checked,
+            presion_noterr_izq: document.getElementById('presion_noterr_izq').checked,
+            grado_codo_der: document.querySelector('input[name="grado_codo_der"]:checked')?.value || "",
+            grado_codo_izq: document.querySelector('input[name="grado_codo_izq"]:checked')?.value || "",
+            observaciones_muneca: document.getElementById('observaciones_muneca').value,
 
-        // IV. CONCLUSIONES Y RESULTADO
-        // Conclusión diagnóstica
-        conclusiones_diagnostica: document.getElementById('conclusiones_diagnostica').value,
-        // Gravedad del cuadro
-        gravedad_cuadro: document.querySelector('input[name="gravedad_cuadro"]:checked')?.value || "",
-        // Concepto de aptitud
-        concepto_aptitud: document.querySelector('input[name="concepto_aptitud"]:checked')?.value || "",
-        // Observaciones finales
-        observaciones_final: document.getElementById('observaciones_final').value,
-        // Restricciones
-        restricciones: document.getElementById('restricciones').value,
-        // Firma y fecha
-        fecha_firma: document.getElementById('fecha_firma').value
-};
-    console.log(datos);
-    console.log(JSON.stringify(datos));
+            // COLUMNA Y FINAL
+            cervical_desde: document.getElementById('cervical_desde').value,
+            dorsal_desde: document.getElementById('dorsal_desde').value,
+            lumbar_desde: document.getElementById('lumbar_desde').value,
+            conclusiones_diagnostica: document.getElementById('conclusiones_diagnostica').value,
+            gravedad_cuadro: document.querySelector('input[name="gravedad_cuadro"]:checked')?.value || "",
+            concepto_aptitud: document.querySelector('input[name="concepto_aptitud"]:checked')?.value || "",
+            observaciones_final: document.getElementById('observaciones_final').value,
+            restricciones: document.getElementById('restricciones').value,
+            fecha_firma: document.getElementById('fecha_firma').value
+        };
 
-    return datos;
-}
-
+        console.log("Datos capturados:", datos);
+        alert("Datos capturados correctamente");
+    }
 </script>
-
 </body>
 </html>
