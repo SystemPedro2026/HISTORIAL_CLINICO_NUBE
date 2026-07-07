@@ -1508,9 +1508,22 @@
             fecha_firma: document.getElementById('fecha_firma').value
         };
 
-        console.log("Datos capturados:", datos);
-        alert("Datos capturados correctamente");
-    }
+		const res = await fetch(`${API_BASE}/guardar-osteomuscular`, {
+		        method: 'POST',
+		        headers: { 'Content-Type': 'application/json' },
+		        body: JSON.stringify(datos)
+		    });
+		
+		    if (res.ok) {
+		        alert("GUARDADO CON ÉXITO");
+		        window.location.reload();
+		    } else {
+		        const errorData = await res.json();
+		        alert("ERROR AL GUARDAR: " + JSON.stringify(errorData));
+		    }
+		} catch (err) {
+		    alert("ERROR: " + err.message);
+}
 </script>
 </body>
 </html>
