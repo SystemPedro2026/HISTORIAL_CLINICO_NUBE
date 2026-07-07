@@ -1519,7 +1519,7 @@
 
             if (res.ok) {
                 alert("GUARDADO CON ÉXITO");
-                window.location.reload();
+                //window.location.reload();
             } else {
                 const errorData = await res.json();
                 alert("ERROR AL GUARDAR: " + JSON.stringify(errorData));
