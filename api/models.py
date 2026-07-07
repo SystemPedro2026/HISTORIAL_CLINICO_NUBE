@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, Boolean
 from .database import Base
 from pydantic import BaseModel
 from typing import Optional
