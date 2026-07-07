@@ -776,5 +776,185 @@ async def filtrar_historial(estado: str, db: Session = Depends(get_db)):
     return [{"codigo_paciente": r.codigo_paciente, "nombre": r.nombre, "estado": r.aptitud_apto or r.aptitud_no_apto or r.aptitud_restriccion} for r in resultados]
 
 
+# ----------- FICHA OSTEOMUSCULAR (COMPLETO) -----------
+@app.post("/guardar-osteomuscular")
+async def guardar_osteomuscular(data: dict, db: Session = Depends(get_db)):
+    try:
+        codigo = str(data.get("codigo_paciente", "")).strip().upper()
+        paciente = db.query(models.Paciente).filter(func.upper(models.Paciente.codigo_paciente) == codigo).first()
+        
+        if not paciente:
+            raise HTTPException(status_code=404, detail="Paciente no encontrado")
 
+        nueva_ficha = models.FichaOsteomuscular(
+            paciente_id=paciente.id,
+            codigo_paciente=codigo,
+            nombre_completo=data.get("nombre_completo"),
+            edad=data.get("edad"),
+            sexo=data.get("sexo"),
+            ci=data.get("ci"),
+            fecha=data.get("fecha"),
+            
+            # I. PUESTO
+            carga_menor_25=data.get("carga_menor_25"),
+            carga_25_50=data.get("carga_25_50"),
+            carga_mayor_50=data.get("carga_mayor_50"),
+            postura_pie=data.get("postura_pie"),
+            postura_sentado=data.get("postura_sentado"),
+            mov_cabeza=data.get("mov_cabeza"),
+            mov_tronco=data.get("mov_tronco"),
+            mov_mms=data.get("mov_mms"),
+            mov_mmi=data.get("mov_mmi"),
+
+            # II. ANTECEDENTES
+            ant1_fecha=data.get("ant1_fecha"),
+            ant1_diagnostico=data.get("ant1_diagnostico"),
+            ant1_tratamiento=data.get("ant1_tratamiento"),
+            ant1_comentario=data.get("ant1_comentario"),
+            ant2_fecha=data.get("ant2_fecha"),
+            ant2_diagnostico=data.get("ant2_diagnostico"),
+            ant2_tratamiento=data.get("ant2_tratamiento"),
+            ant2_comentario=data.get("ant2_comentario"),
+            ant3_fecha=data.get("ant3_fecha"),
+            ant3_diagnostico=data.get("ant3_diagnostico"),
+            ant3_tratamiento=data.get("ant3_tratamiento"),
+            ant3_comentario=data.get("ant3_comentario"),
+
+            # III. HOMBRO
+            hombro_dx_desde=data.get("hombro_dx_desde"),
+            hombro_ix_desde=data.get("hombro_ix_desde"),
+            dolor_ant_der=data.get("dolor_ant_der"),
+            dolor_lat_der=data.get("dolor_lat_der"),
+            dolor_pos_der=data.get("dolor_pos_der"),
+            flexion_der=data.get("flexion_der"),
+            abduccion_der=data.get("abduccion_der"),
+            rotacion_int_der=data.get("rotacion_int_der"),
+            rotacion_ext_der=data.get("rotacion_ext_der"),
+            dolor_ant_izq=data.get("dolor_ant_izq"),
+            dolor_lat_izq=data.get("dolor_lat_izq"),
+            dolor_pos_izq=data.get("dolor_pos_izq"),
+            flexion_izq=data.get("flexion_izq"),
+            abduccion_izq=data.get("abduccion_izq"),
+            rotacion_int_izq=data.get("rotacion_int_izq"),
+            rotacion_ext_izq=data.get("rotacion_ext_izq"),
+            arco_der_presente=data.get("arco_der_presente"),
+            arco_der_ausente=data.get("arco_der_ausente"),
+            arco_izq_presente=data.get("arco_izq_presente"),
+            arco_izq_ausente=data.get("arco_izq_ausente"),
+            biceps_der_presente=data.get("biceps_der_presente"),
+            biceps_der_ausente=data.get("biceps_der_ausente"),
+            biceps_izq_presente=data.get("biceps_izq_presente"),
+            biceps_izq_ausente=data.get("biceps_izq_ausente"),
+            grave_hombro_der=data.get("grave_hombro_der"),
+            grave_hombro_izq=data.get("grave_hombro_izq"),
+            observaciones_hombro=data.get("observaciones_hombro"),
+
+            # CODO
+            codo_dx_desde=data.get("codo_dx_desde"),
+            codo_ix_desde=data.get("codo_ix_desde"),
+            edema_localizado_der=data.get("edema_localizado_der"),
+            edema_nolocalizado_der=data.get("edema_nolocalizado_der"),
+            epicondilio_der=data.get("epicondilio_der"),
+            epitroclea_der=data.get("epitroclea_der"),
+            olecranon_der=data.get("olecranon_der"),
+            musculo_epicondilio_der=data.get("musculo_epicondilio_der"),
+            musculo_epitroclea_der=data.get("musculo_epitroclea_der"),
+            edema_localizado_izq=data.get("edema_localizado_izq"),
+            edema_nolocalizado_izq=data.get("edema_nolocalizado_izq"),
+            epicondilio_izq=data.get("epicondilio_izq"),
+            epitroclea_izq=data.get("epitroclea_izq"),
+            olecranon_izq=data.get("olecranon_izq"),
+            musculo_epicondilio_izq=data.get("musculo_epicondilio_izq"),
+            musculo_epitroclea_izq=data.get("musculo_epitroclea_izq"),
+            epicondilitis_der_presente=data.get("epicondilitis_der_presente"),
+            epicondilitis_der_ausente=data.get("epicondilitis_der_ausente"),
+            parestesia_der=data.get("parestesia_der"),
+            gravedad_codo_der=data.get("gravedad_codo_der"),
+            epicondilitis_izq_presente=data.get("epicondilitis_izq_presente"),
+            epicondilitis_izq_ausente=data.get("epicondilitis_izq_ausente"),
+            parestesia_izq=data.get("parestesia_izq"),
+            gravedad_codo_izq=data.get("gravedad_codo_izq"),
+            observaciones_codo=data.get("observaciones_codo"),
+
+            # MUÑECA
+            muneca_dx_desde=data.get("muneca_dx_desde"),
+            muneca_ix_desde=data.get("muneca_ix_desde"),
+            quiste_dorsal_der=data.get("quiste_dorsal_der"),
+            quiste_ventral_der=data.get("quiste_ventral_der"),
+            edema_dorsal_der=data.get("edema_dorsal_der"),
+            edema_ventral_der=data.get("edema_ventral_der"),
+            edema_estiloide_radial_der=data.get("edema_estiloide_radial_der"),
+            edema_estiloide_ulnar_der=data.get("edema_estiloide_ulnar_der"),
+            hipotrofia_der=data.get("hipotrofia_der"),
+            deformidades_der=data.get("deformidades_der"),
+            quiste_dorsal_izq=data.get("quiste_dorsal_izq"),
+            quiste_ventral_izq=data.get("quiste_ventral_izq"),
+            edema_dorsal_izq=data.get("edema_dorsal_izq"),
+            edema_ventral_izq=data.get("edema_ventral_izq"),
+            edema_estiloide_radial_izq=data.get("edema_estiloide_radial_izq"),
+            edema_estiloide_ulnar_izq=data.get("edema_estiloide_ulnar_izq"),
+            hipotrofia_izq=data.get("hipotrofia_izq"),
+            deformidades_izq=data.get("deformidades_izq"),
+            trapecio_dx=data.get("trapecio_dx"),
+            trapecio_ix=data.get("trapecio_ix"),
+            estiloide_radial_dx=data.get("estiloide_radial_dx"),
+            estiloide_radial_ix=data.get("estiloide_radial_ix"),
+            clic_dx=data.get("clic_dx"),
+            clic_ix=data.get("clic_ix"),
+            finkelsten_der=data.get("finkelsten_der"),
+            cr_der=data.get("cr_der"),
+            mp_der=data.get("mp_der"),
+            cr_resistencia_der=data.get("cr_resistencia_der"),
+            dolor_extension_der=data.get("dolor_extension_der"),
+            finkelsten_izq=data.get("finkelsten_izq"),
+            cr_izq=data.get("cr_izq"),
+            mp_izq=data.get("mp_izq"),
+            cr_resistencia_izq=data.get("cr_resistencia_izq"),
+            dolor_extension_izq=data.get("dolor_extension_izq"),
+            sintomatologia_si=data.get("sintomatologia_si"),
+            sintomatologia_no=data.get("sintomatologia_no"),
+            apofisis_espinoza=data.get("apofisis_espinoza"),
+            trapecio_sup=data.get("trapecio_sup"),
+            paravertebral=data.get("paravertebral"),
+            flexion_muneca=data.get("flexion_muneca"),
+            extension_muneca=data.get("extension_muneca"),
+            fatiga1_derecha=data.get("fatiga1_derecha"),
+            fatiga2_derecha=data.get("fatiga2_derecha"),
+            fatiga1_izquierda=data.get("fatiga1_izquierda"),
+            fatiga2_izquierda=data.get("fatiga2_izquierda"),
+            phalen_mediano_der=data.get("phalen_mediano_der"),
+            phalen_cubital_der=data.get("phalen_cubital_der"),
+            phalen_noterr_der=data.get("phalen_noterr_der"),
+            presion_mediano_der=data.get("presion_mediano_der"),
+            presion_cubital_der=data.get("presion_cubital_der"),
+            presion_noterr_der=data.get("presion_noterr_der"),
+            phalen_mediano_izq=data.get("phalen_mediano_izq"),
+            phalen_cubital_izq=data.get("phalen_cubital_izq"),
+            phalen_noterr_izq=data.get("phalen_noterr_izq"),
+            presion_mediano_izq=data.get("presion_mediano_izq"),
+            presion_cubital_izq=data.get("presion_cubital_izq"),
+            presion_noterr_izq=data.get("presion_noterr_izq"),
+            grado_codo_der=data.get("grado_codo_der"),
+            grado_codo_izq=data.get("grado_codo_izq"),
+            observaciones_muneca=data.get("observaciones_muneca"),
+
+            # COLUMNA Y FINAL
+            cervical_desde=data.get("cervical_desde"),
+            dorsal_desde=data.get("dorsal_desde"),
+            lumbar_desde=data.get("lumbar_desde"),
+            conclusiones_diagnostica=data.get("conclusiones_diagnostica"),
+            gravedad_cuadro=data.get("gravedad_cuadro"),
+            concepto_aptitud=data.get("concepto_aptitud"),
+            observaciones_final=data.get("observaciones_final"),
+            restricciones=data.get("restricciones"),
+            fecha_firma=data.get("fecha_firma")
+        )
+        
+        db.add(nueva_ficha)
+        db.commit()
+        db.refresh(nueva_ficha)
+        return {"status": "success", "message": "GUARDADO EXITOSAMENTE"}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
 
