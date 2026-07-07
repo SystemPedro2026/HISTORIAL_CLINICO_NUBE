@@ -1348,7 +1348,7 @@
 	    const API_BASE = 'https://historial-clinico-nube.onrender.com';
         // Objeto con la estructura unificada
         const datos = {
-            paciente_id: document.getElementById("codigo_paciente").value,
+            paciente_id: document.getElementById("codigo_paciente").value.trim(),
             nombre_completo: document.getElementById("nombre_completo").value,
             edad: document.getElementById("edad").value,
             sexo: document.querySelector('input[name="sexo"]:checked')?.value || "",
