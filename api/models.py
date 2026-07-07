@@ -366,164 +366,173 @@ class HistorialClinico(Base):
     rec_otras = Column(String)
     medidas_higiene = Column(Text)
 
-class HistorialClinico(BaseModel):
-    codigo_paciente: str
-    nombre_completo: str
-    edad: int
-    sexo: str
-    ci: str
-    fecha: str
+class FichaOsteomuscular(Base):
+    __tablename__ = "ficha_osteomuscular"
+    id = Column(Integer, primary_key=True, index=True)
     
+    codigo_paciente = Column(String)
+    nombre_completo = Column(String)
+    edad = Column(Integer)
+    sexo = Column(String)
+    ci = Column(String)
+    fecha = Column(String)
+
     # I. PUESTO
-    carga_menor_25: bool
-    carga_25_50: bool
-    carga_mayor_50: bool
-    postura_pie: bool
-    postura_sentado: bool
-    mov_cabeza: bool
-    mov_tronco: bool
-    mov_mms: bool
-    mov_mmi: bool
-    
+    carga_menor_25 = Column(Boolean)
+    carga_25_50 = Column(Boolean)
+    carga_mayor_50 = Column(Boolean)
+    postura_pie = Column(Boolean)
+    postura_sentado = Column(Boolean)
+    mov_cabeza = Column(Boolean)
+    mov_tronco = Column(Boolean)
+    mov_mms = Column(Boolean)
+    mov_mmi = Column(Boolean)
+
     # II. ANTECEDENTES
-    ant1_fecha: str
-    ant1_diagnostico: str
-    ant1_tratamiento: str
-    ant1_comentario: str
-    ant2_fecha: str
-    ant2_diagnostico: str
-    ant2_tratamiento: str
-    ant2_comentario: str
-    ant3_fecha: str
-    ant3_diagnostico: str
-    ant3_tratamiento: str
-    ant3_comentario: str
-    
+    ant1_fecha = Column(String)
+    ant1_diagnostico = Column(String)
+    ant1_tratamiento = Column(String)
+    ant1_comentario = Column(String)
+    ant2_fecha = Column(String)
+    ant2_diagnostico = Column(String)
+    ant2_tratamiento = Column(String)
+    ant2_comentario = Column(String)
+    ant3_fecha = Column(String)
+    ant3_diagnostico = Column(String)
+    ant3_tratamiento = Column(String)
+    ant3_comentario = Column(String)
+
     # III. HOMBRO
-    hombro_dx_desde: str
-    hombro_ix_desde: str
-    dolor_ant_der: bool
-    dolor_lat_der: bool
-    dolor_pos_der: bool
-    flexion_der: bool
-    abduccion_der: bool
-    rotacion_int_der: bool
-    rotacion_ext_der: bool
-    dolor_ant_izq: bool
-    dolor_lat_izq: bool
-    dolor_pos_izq: bool
-    flexion_izq: bool
-    abduccion_izq: bool
-    rotacion_int_izq: bool
-    rotacion_ext_izq: bool
-    arco_der_presente: bool
-    arco_der_ausente: bool
-    arco_izq_presente: bool
-    arco_izq_ausente: bool
-    biceps_der_presente: bool
-    biceps_der_ausente: bool
-    biceps_izq_presente: bool
-    biceps_izq_ausente: bool
-    grave_hombro_der: str
-    grave_hombro_izq: str
-    observaciones_hombro: str
-    
+    hombro_dx_desde = Column(String)
+    hombro_ix_desde = Column(String)
+    dolor_ant_der = Column(Boolean)
+    dolor_lat_der = Column(Boolean)
+    dolor_pos_der = Column(Boolean)
+    flexion_der = Column(Boolean)
+    abduccion_der = Column(Boolean)
+    rotacion_int_der = Column(Boolean)
+    rotacion_ext_der = Column(Boolean)
+    dolor_ant_izq = Column(Boolean)
+    dolor_lat_izq = Column(Boolean)
+    dolor_pos_izq = Column(Boolean)
+    flexion_izq = Column(Boolean)
+    abduccion_izq = Column(Boolean)
+    rotacion_int_izq = Column(Boolean)
+    rotacion_ext_izq = Column(Boolean)
+    arco_der_presente = Column(Boolean)
+    arco_der_ausente = Column(Boolean)
+    arco_izq_presente = Column(Boolean)
+    arco_izq_ausente = Column(Boolean)
+    biceps_der_presente = Column(Boolean)
+    biceps_der_ausente = Column(Boolean)
+    biceps_izq_presente = Column(Boolean)
+    biceps_izq_ausente = Column(Boolean)
+    grave_hombro_der = Column(String)
+    grave_hombro_izq = Column(String)
+    observaciones_hombro = Column(Text)
+
     # CODO
-    codo_dx_desde: str
-    codo_ix_desde: str
-    edema_localizado_der: bool
-    edema_nolocalizado_der: bool
-    epicondilio_der: bool
-    epitroclea_der: bool
-    olecranon_der: bool
-    musculo_epicondilio_der: bool
-    musculo_epitroclea_der: bool
-    edema_localizado_izq: bool
-    edema_nolocalizado_izq: bool
-    epicondilio_izq: bool
-    epitroclea_izq: bool
-    olecranon_izq: bool
-    musculo_epicondilio_izq: bool
-    musculo_epitroclea_izq: bool
-    epicondilitis_der_presente: bool
-    epicondilitis_der_ausente: bool
-    parestesia_der: bool
-    gravedad_codo_der: str
-    epicondilitis_izq_presente: bool
-    epicondilitis_izq_ausente: bool
-    parestesia_izq: bool
-    gravedad_codo_izq: str
-    observaciones_codo: str
-    
+    codo_dx_desde = Column(String)
+    codo_ix_desde = Column(String)
+    edema_localizado_der = Column(Boolean)
+    edema_nolocalizado_der = Column(Boolean)
+    epicondilio_der = Column(Boolean)
+    epitroclea_der = Column(Boolean)
+    olecranon_der = Column(Boolean)
+    musculo_epicondilio_der = Column(Boolean)
+    musculo_epitroclea_der = Column(Boolean)
+    edema_localizado_izq = Column(Boolean)
+    edema_nolocalizado_izq = Column(Boolean)
+    epicondilio_izq = Column(Boolean)
+    epitroclea_izq = Column(Boolean)
+    olecranon_izq = Column(Boolean)
+    musculo_epicondilio_izq = Column(Boolean)
+    musculo_epitroclea_izq = Column(Boolean)
+    epicondilitis_der_presente = Column(Boolean)
+    epicondilitis_der_ausente = Column(Boolean)
+    parestesia_der = Column(Boolean)
+    gravedad_codo_der = Column(String)
+    epicondilitis_izq_presente = Column(Boolean)
+    epicondilitis_izq_ausente = Column(Boolean)
+    parestesia_izq = Column(Boolean)
+    gravedad_codo_izq = Column(String)
+    observaciones_codo = Column(Text)
+
     # MUÑECA
-    muneca_dx_desde: str
-    muneca_ix_desde: str
-    quiste_dorsal_der: bool
-    quiste_ventral_der: bool
-    edema_dorsal_der: bool
-    edema_ventral_der: bool
-    edema_estiloide_radial_der: bool
-    edema_estiloide_ulnar_der: bool
-    hipotrofia_der: bool
-    deformidades_der: bool
-    quiste_dorsal_izq: bool
-    quiste_ventral_izq: bool
-    edema_dorsal_izq: bool
-    edema_ventral_izq: bool
-    edema_estiloide_radial_izq: bool
-    edema_estiloide_ulnar_izq: bool
-    hipotrofia_izq: bool
-    deformidades_izq: bool
-    trapecio_dx: bool
-    trapecio_ix: bool
-    estiloide_radial_dx: bool
-    estiloide_radial_ix: bool
-    clic_dx: bool
-    clic_ix: bool
-    finkelsten_der: bool
-    cr_der: bool
-    mp_der: bool
-    cr_resistencia_der: bool
-    dolor_extension_der: bool
-    finkelsten_izq: bool
-    cr_izq: bool
-    mp_izq: bool
-    cr_resistencia_izq: bool
-    dolor_extension_izq: bool
-    sintomatologia_si: bool
-    sintomatologia_no: bool
-    apofisis_espinoza: str
-    trapecio_sup: str
-    paravertebral: str
-    flexion_muneca: str
-    extension_muneca: str
-    fatiga1_derecha: str
-    fatiga2_derecha: str
-    fatiga1_izquierda: str
-    fatiga2_izquierda: str
-    phalen_mediano_der: bool
-    phalen_cubital_der: bool
-    phalen_noterr_der: bool
-    presion_mediano_der: bool
-    presion_cubital_der: bool
-    presion_noterr_der: bool
-    phalen_mediano_izq: bool
-    phalen_cubital_izq: bool
-    phalen_noterr_izq: bool
-    presion_mediano_izq: bool
-    presion_cubital_izq: bool
-    presion_noterr_izq: bool
-    grado_codo_der: str
-    grado_codo_izq: str
-    observaciones_muneca: str
-    
+    muneca_dx_desde = Column(String)
+    muneca_ix_desde = Column(String)
+    quiste_dorsal_der = Column(Boolean)
+    quiste_ventral_der = Column(Boolean)
+    edema_dorsal_der = Column(Boolean)
+    edema_ventral_der = Column(Boolean)
+    edema_estiloide_radial_der = Column(Boolean)
+    edema_estiloide_ulnar_der = Column(Boolean)
+    hipotrofia_der = Column(Boolean)
+    deformidades_der = Column(Boolean)
+    quiste_dorsal_izq = Column(Boolean)
+    quiste_ventral_izq = Column(Boolean)
+    edema_dorsal_izq = Column(Boolean)
+    edema_ventral_izq = Column(Boolean)
+    edema_estiloide_radial_izq = Column(Boolean)
+    edema_estiloide_ulnar_izq = Column(Boolean)
+    hipotrofia_izq = Column(Boolean)
+    deformidades_izq = Column(Boolean)
+    trapecio_dx = Column(Boolean)
+    trapecio_ix = Column(Boolean)
+    estiloide_radial_dx = Column(Boolean)
+    estiloide_radial_ix = Column(Boolean)
+    clic_dx = Column(Boolean)
+    clic_ix = Column(Boolean)
+    finkelsten_der = Column(Boolean)
+    cr_der = Column(Boolean)
+    mp_der = Column(Boolean)
+    cr_resistencia_der = Column(Boolean)
+    dolor_extension_der = Column(Boolean)
+    finkelsten_izq = Column(Boolean)
+    cr_izq = Column(Boolean)
+    mp_izq = Column(Boolean)
+    cr_resistencia_izq = Column(Boolean)
+    dolor_extension_izq = Column(Boolean)
+    sintomatologia_si = Column(Boolean)
+    sintomatologia_no = Column(Boolean)
+    apofisis_espinoza = Column(String)
+    trapecio_sup = Column(String)
+    paravertebral = Column(String)
+    flexion_muneca = Column(String)
+    extension_muneca = Column(String)
+    fatiga1_derecha = Column(String)
+    fatiga2_derecha = Column(String)
+    fatiga1_izquierda = Column(String)
+    fatiga2_izquierda = Column(String)
+    phalen_mediano_der = Column(Boolean)
+    phalen_cubital_der = Column(Boolean)
+    phalen_noterr_der = Column(Boolean)
+    presion_mediano_der = Column(Boolean)
+    presion_cubital_der = Column(Boolean)
+    presion_noterr_der = Column(Boolean)
+    phalen_mediano_izq = Column(Boolean)
+    phalen_cubital_izq = Column(Boolean)
+    phalen_noterr_izq = Column(Boolean)
+    presion_mediano_izq = Column(Boolean)
+    presion_cubital_izq = Column(Boolean)
+    presion_noterr_izq = Column(Boolean)
+    grado_codo_der = Column(String)
+    grado_codo_izq = Column(String)
+    observaciones_muneca = Column(Text)
+
     # COLUMNA Y FINAL
-    cervical_desde: str
-    dorsal_desde: str
-    lumbar_desde: str
-    conclusiones_diagnostica: str
-    gravedad_cuadro: str
-    concepto_aptitud: str
-    observaciones_final: str
-    restricciones: str
-    fecha_firma: str
+    cervical_desde = Column(String)
+    dorsal_desde = Column(String)
+    lumbar_desde = Column(String)
+    conclusiones_diagnostica = Column(Text)
+    gravedad_cuadro = Column(String)
+    concepto_aptitud = Column(String)
+    observaciones_final = Column(Text)
+    restricciones = Column(Text)
+    fecha_firma = Column(String)
+
+
+
+
+
+
