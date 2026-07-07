@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from .database import Base
+from pydantic import BaseModel
+from typing import Optional
 
 class Paciente(Base):
     __tablename__ = "pacientes"
@@ -363,3 +365,165 @@ class HistorialClinico(Base):
     rec_laboratorio = Column(String)
     rec_otras = Column(String)
     medidas_higiene = Column(Text)
+
+class HistorialClinico(BaseModel):
+    codigo_paciente: str
+    nombre_completo: str
+    edad: int
+    sexo: str
+    ci: str
+    fecha: str
+    
+    # I. PUESTO
+    carga_menor_25: bool
+    carga_25_50: bool
+    carga_mayor_50: bool
+    postura_pie: bool
+    postura_sentado: bool
+    mov_cabeza: bool
+    mov_tronco: bool
+    mov_mms: bool
+    mov_mmi: bool
+    
+    # II. ANTECEDENTES
+    ant1_fecha: str
+    ant1_diagnostico: str
+    ant1_tratamiento: str
+    ant1_comentario: str
+    ant2_fecha: str
+    ant2_diagnostico: str
+    ant2_tratamiento: str
+    ant2_comentario: str
+    ant3_fecha: str
+    ant3_diagnostico: str
+    ant3_tratamiento: str
+    ant3_comentario: str
+    
+    # III. HOMBRO
+    hombro_dx_desde: str
+    hombro_ix_desde: str
+    dolor_ant_der: bool
+    dolor_lat_der: bool
+    dolor_pos_der: bool
+    flexion_der: bool
+    abduccion_der: bool
+    rotacion_int_der: bool
+    rotacion_ext_der: bool
+    dolor_ant_izq: bool
+    dolor_lat_izq: bool
+    dolor_pos_izq: bool
+    flexion_izq: bool
+    abduccion_izq: bool
+    rotacion_int_izq: bool
+    rotacion_ext_izq: bool
+    arco_der_presente: bool
+    arco_der_ausente: bool
+    arco_izq_presente: bool
+    arco_izq_ausente: bool
+    biceps_der_presente: bool
+    biceps_der_ausente: bool
+    biceps_izq_presente: bool
+    biceps_izq_ausente: bool
+    grave_hombro_der: str
+    grave_hombro_izq: str
+    observaciones_hombro: str
+    
+    # CODO
+    codo_dx_desde: str
+    codo_ix_desde: str
+    edema_localizado_der: bool
+    edema_nolocalizado_der: bool
+    epicondilio_der: bool
+    epitroclea_der: bool
+    olecranon_der: bool
+    musculo_epicondilio_der: bool
+    musculo_epitroclea_der: bool
+    edema_localizado_izq: bool
+    edema_nolocalizado_izq: bool
+    epicondilio_izq: bool
+    epitroclea_izq: bool
+    olecranon_izq: bool
+    musculo_epicondilio_izq: bool
+    musculo_epitroclea_izq: bool
+    epicondilitis_der_presente: bool
+    epicondilitis_der_ausente: bool
+    parestesia_der: bool
+    gravedad_codo_der: str
+    epicondilitis_izq_presente: bool
+    epicondilitis_izq_ausente: bool
+    parestesia_izq: bool
+    gravedad_codo_izq: str
+    observaciones_codo: str
+    
+    # MUÑECA
+    muneca_dx_desde: str
+    muneca_ix_desde: str
+    quiste_dorsal_der: bool
+    quiste_ventral_der: bool
+    edema_dorsal_der: bool
+    edema_ventral_der: bool
+    edema_estiloide_radial_der: bool
+    edema_estiloide_ulnar_der: bool
+    hipotrofia_der: bool
+    deformidades_der: bool
+    quiste_dorsal_izq: bool
+    quiste_ventral_izq: bool
+    edema_dorsal_izq: bool
+    edema_ventral_izq: bool
+    edema_estiloide_radial_izq: bool
+    edema_estiloide_ulnar_izq: bool
+    hipotrofia_izq: bool
+    deformidades_izq: bool
+    trapecio_dx: bool
+    trapecio_ix: bool
+    estiloide_radial_dx: bool
+    estiloide_radial_ix: bool
+    clic_dx: bool
+    clic_ix: bool
+    finkelsten_der: bool
+    cr_der: bool
+    mp_der: bool
+    cr_resistencia_der: bool
+    dolor_extension_der: bool
+    finkelsten_izq: bool
+    cr_izq: bool
+    mp_izq: bool
+    cr_resistencia_izq: bool
+    dolor_extension_izq: bool
+    sintomatologia_si: bool
+    sintomatologia_no: bool
+    apofisis_espinoza: str
+    trapecio_sup: str
+    paravertebral: str
+    flexion_muneca: str
+    extension_muneca: str
+    fatiga1_derecha: str
+    fatiga2_derecha: str
+    fatiga1_izquierda: str
+    fatiga2_izquierda: str
+    phalen_mediano_der: bool
+    phalen_cubital_der: bool
+    phalen_noterr_der: bool
+    presion_mediano_der: bool
+    presion_cubital_der: bool
+    presion_noterr_der: bool
+    phalen_mediano_izq: bool
+    phalen_cubital_izq: bool
+    phalen_noterr_izq: bool
+    presion_mediano_izq: bool
+    presion_cubital_izq: bool
+    presion_noterr_izq: bool
+    grado_codo_der: str
+    grado_codo_izq: str
+    observaciones_muneca: str
+    
+    # COLUMNA Y FINAL
+    cervical_desde: str
+    dorsal_desde: str
+    lumbar_desde: str
+    conclusiones_diagnostica: str
+    gravedad_cuadro: str
+    concepto_aptitud: str
+    observaciones_final: str
+    restricciones: str
+    fecha_firma: str
