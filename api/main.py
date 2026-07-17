@@ -957,8 +957,8 @@ async def guardar_osteomuscular(data: dict, db: Session = Depends(get_db)):
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/filtrar-aptitud/{estado}")
-async def filtrar_aptitud(estado: str, db: Session = Depends(get_db)):
+@app.get("/filtrar-osteomuscular/{estado}")
+async def filtrar_osteomuscular(estado: str, db: Session = Depends(get_db)):
     # Buscamos en la tabla ficha_osteomuscular
     resultados = db.query(models.FichaOsteomuscular).filter(models.FichaOsteomuscular.concepto_aptitud == estado).all()
     
