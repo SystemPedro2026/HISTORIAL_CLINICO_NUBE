@@ -69,7 +69,7 @@ async function filtrar() {
 
     try {
         // Corregido al endpoint de aptitud
-        const res = await fetch(`${API}/filtrar-aptitud/${encodeURIComponent(estado)}`);
+        const res = await fetch(`${API}/filtrar-osteomuscular/${encodeURIComponent(estado)}`);
         const resultados = await res.json();
         
         tbody.innerHTML = "";
