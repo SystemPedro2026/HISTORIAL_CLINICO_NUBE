@@ -787,7 +787,6 @@ async def guardar_osteomuscular(data: dict, db: Session = Depends(get_db)):
             raise HTTPException(status_code=404, detail="Paciente no encontrado")
 
         nueva_ficha = models.FichaOsteomuscular(
-            paciente_id=paciente.id,
             codigo_paciente=codigo,
             nombre_completo=data.get("nombre_completo"),
             edad=data.get("edad"),
