@@ -23,7 +23,6 @@
         .status-icon { font-weight: bold; font-size: 1.2em; }
         .text-green { color: #28a745; }
         .text-red { color: #dc3545; }
-        /* Oculto en pantalla, visible solo en impresión */
         #footerFirma { display: none; text-align: center; margin-top: 50px; }
         .linea-firma { width: 300px; border-top: 1px solid #000; margin: 0 auto 10px auto; }
         @media print {
@@ -90,25 +89,40 @@
             
             const body = document.getElementById('resultadosBody');
             body.innerHTML = '';
+            const res = data.resultados_medicos;
             
-            const listaExamenes = [
-                "01. APTITUD OCUPACIONAL", "02. APTITUD FÍSICA", "03. APTITUD PSICOLÓGICA", 
-                "04. OSTEOMUSCULAR", "05. ESPIROMETRÍA", "06. OFTALMOLOGÍA", 
-                "07. CARDIOLOGÍA", "08. ELECTROENCEFALOGRAMA", "09. ALTURA", 
-                "10. DECLARACIÓN JURADA", "11. HISTORIAL CLÍNICO", "12. PSICOLOGÍA DETALLADA"
+            // Mapeo dinámico: [Nombre, Valor recibido del servidor]
+            const filas = [
+                ["01. APTITUD OCUPACIONAL", res["01_aptitud_ocupacional"]],
+                ["02. APTITUD FÍSICA", res["02_aptitud_fisica_psicologica"]?.fisico],
+                ["03. APTITUD PSICOLÓGICA", res["02_aptitud_fisica_psicologica"]?.psico],
+                ["04. OSTEOMUSCULAR", res["03_osteomuscular"]],
+                ["05. ESPIROMETRÍA", res["04_espirometria"]],
+                ["06. OFTALMOLOGÍA", res["05_oftalmologia"]],
+                ["07. CARDIOLOGÍA", res["06_cardiologia"]],
+                ["08. ELECTROENCEFALOGRAMA", res["07_electroencefalograma"]],
+                ["09. ALTURA", res["08_altura"]],
+                ["10. DECLARACIÓN JURADA", res["09_declaracion_jurada"]],
+                ["11. HISTORIAL CLÍNICO", res["10_historial_clinico"]],
+                ["12. PSICOLOGÍA DETALLADA", res["11_psicologia_detallada"]]
             ];
 
-            listaExamenes.forEach(nombreExamen => {
-                // Lógica estricta: Solo marcamos con check la Declaración Jurada
-                const esDeclaracion = nombreExamen === "10. DECLARACIÓN JURADA";
-                const valorDisplay = esDeclaracion ? "COMPLETADA" : "SIN EXAMEN";
-                const icono = esDeclaracion ? '<span class="status-icon text-green">✔</span>' : '<span class="status-icon text-red">✘</span>';
+            filas.forEach(f => {
+                const val = f[1];
+                // VALIDACIÓN REAL: Es válido si no es null, no es undefined y no es "SIN EXAMEN"
+                const esValido = (val !== null && val !== undefined && 
+                                 String(val).trim().toUpperCase() !== "SIN EXAMEN" && 
+                                 String(val).trim() !== "");
                 
-                body.innerHTML += `<tr><td>${nombreExamen}</td><td style="text-align: center">${valorDisplay}</td><td style="text-align: center">${icono}</td></tr>`;
+                const valorDisplay = esValido ? String(val).toUpperCase() : "SIN EXAMEN";
+                const icono = esValido ? '<span class="status-icon text-green">✔</span>' : '<span class="status-icon text-red">✘</span>';
+                
+                body.innerHTML += `<tr><td>${f[0]}</td><td style="text-align: center">${valorDisplay}</td><td style="text-align: center">${icono}</td></tr>`;
             });
             
             document.getElementById('tablaInforme').style.display = 'table';
-        } catch (e) { alert("Error al cargar datos."); }
+            document.getElementById('footerFirma').style.display = 'block';
+        } catch (e) { alert("Error al cargar datos del paciente."); }
     }
 </script>
 </body>
