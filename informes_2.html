@@ -15,10 +15,10 @@
         .field-group input, .field-group select { flex-grow: 1; padding: 8px; border: 1px solid #999; border-radius: 4px; text-transform: uppercase; }
         .btn-buscar { grid-column: span 2; padding: 15px; background: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; font-size: 14px; border-radius: 5px; }
         
-        /* Tabla Profesional */
+        /* Estilos de tabla e impresión */
         table { width: 100%; border-collapse: collapse; margin-top: 30px; }
-        th { border-bottom: 2px solid #2c55d0; color: #2c55d0; padding: 12px; text-transform: uppercase; }
-        td { padding: 12px; border-bottom: 1px solid #eee; text-transform: uppercase; }
+        th { border-bottom: 2px solid #2c55d0; color: #2c55d0; padding: 12px; text-transform: uppercase; text-align: center; }
+        td { padding: 12px; border-bottom: 1px solid #eee; text-transform: uppercase; text-align: center; }
         .col-num { width: 50px; text-align: center; }
         .col-nom { padding-left: 40px !important; text-align: left; }
         
@@ -37,6 +37,7 @@
         <button class="btn-nav" onclick="history.back()">← VOLVER</button>
         <button class="btn-nav" onclick="window.print()">IMPRIMIR</button>
     </div>
+    
     <div class="no-print"><h2 class="titulo-informe">BÚSQUEDA AVANZADA</h2></div>
 
     <div class="search-grid no-print">
@@ -69,18 +70,20 @@
                     encontrados.push({ nombre: `${det.paciente.nombre} ${det.paciente.apellido}`, codigo: det.paciente.codigo_paciente });
                 }
             }
+
             const now = new Date();
-           //
             const criterios = [];
             if (document.getElementById('sexo').value) criterios.push(`SEXO: ${document.getElementById('sexo').value}`);
             if (document.getElementById('lugar').value) criterios.push(`LUGAR: ${document.getElementById('lugar').value.toUpperCase()}`);
             if (document.getElementById('est_civil').value) criterios.push(`ESTADO CIVIL: ${document.getElementById('est_civil').value}`);
             if (document.getElementById('profesion').value) criterios.push(`PROFESIÓN: ${document.getElementById('profesion').value.toUpperCase()}`);
+            const criterioText = criterios.length > 0 ? `<p style="font-size: 11px; color: #555;">FILTROS: ${criterios.join(' | ')}</p>` : "";
 
-            const criterioText = criterios.length > 0 ? `<p style="font-size: 11px; margin-top: -15px; color: #555;">FILTROS: ${criterios.join(' | ')}</p>` : "";
-            // 
             container.innerHTML = encontrados.length > 0 ? `
-                <div class="print-only"><h2>INFORME DE BÚSQUEDA DE PACIENTES</h2></div>
+                <div class="print-only">
+                    <h2>INFORME DE BÚSQUEDA DE PACIENTES</h2>
+                    ${criterioText}
+                </div>
                 <table>
                     <thead><tr><th class="col-num">#</th><th class="col-nom">PACIENTE</th><th>CÓDIGO PACIENTE</th></tr></thead>
                     <tbody>${encontrados.map((p, i) => `<tr><td class="col-num">${i + 1}</td><td class="col-nom">${p.nombre.toUpperCase()}</td><td>${p.codigo.toUpperCase()}</td></tr>`).join('')}</tbody>
