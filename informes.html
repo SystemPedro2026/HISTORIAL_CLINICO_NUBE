@@ -108,20 +108,22 @@
             ];
 
             filas.forEach(f => {
-                const nombreExamen = f[0];
-                const valorRaw = f[1];
+                const val = f[1];
+                // 1. Convertimos el valor a string, quitamos espacios y lo pasamos a minúsculas para comparar
+                const valorNormalizado = String(val || "").trim().toLowerCase();
                 
-                // Lógica estricta: Solo es válido si hay datos reales
-                // Excluimos explícitamente "SIN EXAMEN" y vacíos
-                const esValido = (valorRaw !== null && 
-                                  valorRaw !== undefined && 
-                                  String(valorRaw).trim().toUpperCase() !== "SIN EXAMEN" && 
-                                  String(valorRaw).trim() !== "");
-
-                const valorDisplay = esValido ? String(valorRaw).toUpperCase() : "SIN EXAMEN";
-                const icono = esValido ? '<span class="status-icon text-green">✔</span>' : '<span class="status-icon text-red">✘</span>';
+                // 2. Definimos qué constituye un "vacío" o "sin examen"
+                const esInvalido = (
+                    valorNormalizado === "" || 
+                    valorNormalizado === "sin examen" || 
+                    valorNormalizado === "sin examén"
+                );
                 
-                body.innerHTML += `<tr><td>${nombreExamen}</td><td style="text-align: center">${valorDisplay}</td><td style="text-align: center">${icono}</td></tr>`;
+                // 3. Si es inválido, marcamos con X, si no, con Check
+                const valorDisplay = esInvalido ? "SIN EXAMEN" : String(val).toUpperCase();
+                const icono = esInvalido ? '<span class="status-icon text-red">✘</span>' : '<span class="status-icon text-green">✔</span>';
+                
+                body.innerHTML += `<tr><td>${f[0]}</td><td style="text-align: center">${valorDisplay}</td><td style="text-align: center">${icono}</td></tr>`;
             });
             
             document.getElementById('tablaInforme').style.display = 'table';
