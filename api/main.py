@@ -985,16 +985,19 @@ async def obtener_informe_consolidado(codigo_paciente: str, db: Session = Depend
     return {
         "datos_generales": {"codigo": p.codigo_paciente, "nombre": f"{p.nombre} {p.apellido}"},
         "resultados_medicos": {
-            "01_aptitud_ocupacional": apt.resultado if apt else "N/A",
-            "02_aptitud_fisica_psicologica": {"fisico": fis.resultado_fisico if fis else "N/A", "psico": fis.resultado_psicologico if fis else "N/A"},
-            "03_osteomuscular": ost.concepto_aptitud if ost else "N/A",
-            "04_espirometria": "Registrada" if esp else "N/A",
-            "05_oftalmologia": oft.diagnostico if oft else "N/A",
-            "06_cardiologia": car.diagnostico_recomendaciones if car else "N/A",
-            "07_electroencefalograma": ele.resultado_estudio if ele else "N/A",
-            "08_altura": "Registrada" if alt else "N/A",
-            "09_declaracion_jurada": "Registrada" if dec else "N/A",
-            "10_historial_clinico": "Registrado" if his else "N/A",
-            "11_psicologia_detallada": psi.resultado_psicologico if psi else "N/A"
+            "01_aptitud_ocupacional": apt.resultado if apt else "Sin examén",
+            "02_aptitud_fisica_psicologica": {
+                "fisico": fis.resultado_fisico if fis else "Sin examén", 
+                "psico": fis.resultado_psicologico if fis else "Sin examén"
+            },
+            "03_osteomuscular": ost.concepto_aptitud if ost else "Sin examén",
+            "04_espirometria": "Examen realizado" if esp else "Sin examén",
+            "05_oftalmologia": oft.diagnostico if oft and oft.diagnostico else "Sin examén",
+            "06_cardiologia": car.diagnostico_recomendaciones if car and car.diagnostico_recomendaciones else "Sin examén",
+            "07_electroencefalograma": ele.resultado_estudio if ele and ele.resultado_estudio else "Sin examén",
+            "08_altura": "Examen realizado" if alt else "Sin examén",
+            "09_declaracion_jurada": "Completada" if dec else "Sin examén",
+            "10_historial_clinico": "Completado" if his else "Sin examén",
+            "11_psicologia_detallada": psi.resultado_psicologico if psi and psi.resultado_psicologico else "Sin examén"
         }
     }
