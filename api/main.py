@@ -992,7 +992,7 @@ async def obtener_informe_consolidado(codigo_paciente: str, db: Session = Depend
             },
             "03_osteomuscular": ost.concepto_aptitud if ost else "Sin examén",
             "04_espirometria": "Examen realizado" if esp else "Sin examén",
-            "05_oftalmologia": oft.diagnostico if oft and oft.diagnostico else "Sin examén",
+            "05_oftalmologia": f"LENTES: {oft.lentes or 'NO'}, ESTRABISMO: {oft.estrabismo or 'NO'}, DALTONISMO: {oft.daltonismo or 'NO'}" if oft else "SIN EXAMEN",
             "06_cardiologia": car.diagnostico_recomendaciones if car and car.diagnostico_recomendaciones else "Sin examén",
             "07_electroencefalograma": ele.resultado_estudio if ele and ele.resultado_estudio else "Sin examén",
             "08_altura": "Examen realizado" if alt else "Sin examén",
