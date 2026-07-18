@@ -11,7 +11,6 @@
         .titulo-informe { text-align: center; color: #2c55d0; text-transform: uppercase; margin-bottom: 25px; border-bottom: 3px solid #2c55d0; padding-bottom: 10px; }
         .search-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; background: #f9f9f9; border-radius: 8px; }
         .field-group { display: flex; flex-direction: column; }
-        .habitos-group { grid-column: span 2; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
         input, select { padding: 10px; border: 1px solid #ccc; border-radius: 5px; text-transform: uppercase; }
         .btn-buscar { grid-column: span 2; padding: 15px; background: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; border-radius: 5px; margin-top: 10px; }
         .ficha-paciente { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #2c55d0; padding: 15px; border-radius: 8px; margin-top: 20px; color: white; }
@@ -30,18 +29,11 @@
     <h2 class="titulo-informe">BÚSQUEDA AVANZADA</h2>
     
     <div class="search-grid">
-        <div class="field-group"><label>Sexo</label><select id="sexo"><option value="">SELECCIONE...</option><option value="MASCULINO">MASCULINO</option><option value="FEMENINO">FEMENINO</option></select></div>
-        <div class="field-group"><label>Lugar</label><input type="text" id="lugar" placeholder="CIUDAD/LUGAR"></div>
-        <div class="field-group"><label>Estado Civil</label><select id="estadoCivil"><option value="">SELECCIONE...</option><option value="SOLTERO">SOLTERO</option><option value="CASADO">CASADO</option></select></div>
-        <div class="field-group"><label>Profesión/Labor</label><input type="text" id="profesion" placeholder="PROFESIÓN..."></div>
-        <div class="field-group" style="grid-column: span 2;"><label>Empresa</label><input type="text" id="empresa" placeholder="NOMBRE DE EMPRESA..."></div>
-        
-        <div class="habitos-group">
-            <label>ALCOHOL <select id="hab_alcohol"><option value="SI">SI</option><option value="NO">NO</option></select></label>
-            <label>TABACO <select id="hab_tabaco"><option value="SI">SI</option><option value="NO">NO</option></select></label>
-            <label>DROGAS <select id="hab_drogas"><option value="SI">SI</option><option value="NO">NO</option></select></label>
-            <label>COCA <select id="hab_coca"><option value="SI">SI</option><option value="NO">NO</option></select></label>
-        </div>
+        <div class="field-group"><label>SEXO</label><select id="sexo"><option value="">SELECCIONE...</option><option value="MASCULINO">MASCULINO</option><option value="FEMENINO">FEMENINO</option></select></div>
+        <div class="field-group"><label>LUGAR</label><input type="text" id="lugar" placeholder="CIUDAD/LUGAR"></div>
+        <div class="field-group"><label>ESTADO CIVIL</label><select id="estadoCivil"><option value="">SELECCIONE...</option><option value="SOLTERO">SOLTERO</option><option value="CASADO">CASADO</option></select></div>
+        <div class="field-group"><label>PROFESIÓN/LABOR</label><input type="text" id="profesion" placeholder="PROFESIÓN..."></div>
+        <div class="field-group" style="grid-column: span 2;"><label>EMPRESA</label><input type="text" id="empresa" placeholder="NOMBRE DE EMPRESA..."></div>
         <button class="btn-buscar" onclick="buscarDetallado()">BUSCAR PACIENTE</button>
     </div>
 
@@ -53,48 +45,37 @@
 </div>
 
 <script>
-  async function buscarDetallado() {
-    // Obtenemos los valores de los inputs
-    const filtros = {
-        sexo: document.getElementById('sexo').value,
-        lugar: document.getElementById('lugar').value.toUpperCase(),
-        estado_civil: document.getElementById('estadoCivil').value,
-        profesion: document.getElementById('profesion').value.toUpperCase(),
-        empresa: document.getElementById('empresa').value.toUpperCase(),
-        alc: document.getElementById('hab_alcohol').value,
-        tab: document.getElementById('hab_tabaco').value,
-        dro: document.getElementById('hab_drogas').value,
-        coc: document.getElementById('hab_coca').value
-    };
+    async function buscarDetallado() {
+        const filtros = {
+            sexo: document.getElementById('sexo').value,
+            lugar: document.getElementById('lugar').value.trim(),
+            estado_civil: document.getElementById('estadoCivil').value,
+            profesion: document.getElementById('profesion').value.trim(),
+            empresa: document.getElementById('empresa').value.trim()
+        };
 
-    // Construimos los parámetros SOLAMENTE con campos que tengan valor
-    const params = new URLSearchParams();
-    for (const [key, value] of Object.entries(filtros)) {
-        if (value && value !== "SELECCIONE..." && value !== "CIUDAD/LUGAR" && value !== "PROFESIÓN..." && value !== "NOMBRE DE EMPRESA...") {
-            params.append(key, value);
+        const params = new URLSearchParams();
+        for (const [key, value] of Object.entries(filtros)) {
+            if (value && value !== "SELECCIONE..." && value !== "CIUDAD/LUGAR" && value !== "PROFESIÓN..." && value !== "NOMBRE DE EMPRESA...") {
+                params.append(key, value.toUpperCase());
+            }
+        }
+
+        try {
+            const response = await fetch(`https://historial-clinico-nube.onrender.com/api/buscar-paciente-detallado?${params.toString()}`);
+            const data = await response.json();
+            
+            document.getElementById('infoPaciente').innerHTML = `
+                <div class="ficha-paciente">
+                    <div><label>PACIENTE</label><div class="valor-dato">${data.datos_generales.nombre.toUpperCase()}</div></div>
+                    <div><label>CÓDIGO PACIENTE</label><div class="valor-dato">${data.datos_generales.codigo.toUpperCase()}</div></div>
+                </div>`;
+            
+            document.getElementById('tablaInforme').style.display = 'table';
+        } catch(e) { 
+            alert("NO SE ENCONTRARON PACIENTES. VERIFIQUE LOS FILTROS."); 
         }
     }
-
-    try {
-        // Hacemos la petición al servidor solo con los filtros activos
-        const response = await fetch(`https://historial-clinico-nube.onrender.com/api/buscar-paciente-detallado?${params.toString()}`);
-        
-        if (!response.ok) throw new Error("No se encontraron resultados");
-        
-        const data = await response.json();
-        
-        // Presentación en MAYÚSCULAS
-        document.getElementById('infoPaciente').innerHTML = `
-            <div class="ficha-paciente">
-                <div><label>PACIENTE</label><div class="valor-dato">${data.datos_generales.nombre.toUpperCase()}</div></div>
-                <div><label>CÓDIGO PACIENTE</label><div class="valor-dato">${data.datos_generales.codigo.toUpperCase()}</div></div>
-            </div>`;
-        
-        document.getElementById('tablaInforme').style.display = 'table';
-    } catch(e) { 
-        alert("NO SE ENCONTRARON PACIENTES CON ESOS FILTROS. INTENTE CON MENOS CRITERIOS."); 
-    }
-}  
 </script>
 </body>
 </html>
