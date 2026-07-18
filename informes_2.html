@@ -70,6 +70,15 @@
                 }
             }
             const now = new Date();
+           //
+            const criterios = [];
+            if (document.getElementById('sexo').value) criterios.push(`SEXO: ${document.getElementById('sexo').value}`);
+            if (document.getElementById('lugar').value) criterios.push(`LUGAR: ${document.getElementById('lugar').value.toUpperCase()}`);
+            if (document.getElementById('est_civil').value) criterios.push(`ESTADO CIVIL: ${document.getElementById('est_civil').value}`);
+            if (document.getElementById('profesion').value) criterios.push(`PROFESIÓN: ${document.getElementById('profesion').value.toUpperCase()}`);
+
+            const criterioText = criterios.length > 0 ? `<p style="font-size: 11px; margin-top: -15px; color: #555;">FILTROS: ${criterios.join(' | ')}</p>` : "";
+            // 
             container.innerHTML = encontrados.length > 0 ? `
                 <div class="print-only"><h2>INFORME DE BÚSQUEDA DE PACIENTES</h2></div>
                 <table>
