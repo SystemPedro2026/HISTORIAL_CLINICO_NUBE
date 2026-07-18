@@ -2,82 +2,66 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Búsqueda Avanzada - Historial Clínico Nube</title>
+    <title>BÚSQUEDA AVANZADA</title>
+    <!-- Mismos estilos de siempre -->
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .container { background: white; max-width: 900px; margin: auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .btn-nav { padding: 10px 20px; cursor: pointer; background: #2c55d0; color: white; border: none; border-radius: 6px; font-weight: bold; }
-        .titulo-informe { text-align: center; color: #2c55d0; text-transform: uppercase; margin-bottom: 25px; border-bottom: 3px solid #2c55d0; padding-bottom: 10px; }
-        .search-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; background: #f9f9f9; border-radius: 8px; }
-        .field-group { display: flex; flex-direction: column; }
+        .search-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; background: #f9f9f9; padding: 20px; border-radius: 8px; }
+        .btn-buscar { grid-column: span 2; padding: 15px; background: #28a745; color: white; border: none; cursor: pointer; border-radius: 5px; font-weight: bold; }
+        .ficha-paciente { background: #2c55d0; padding: 20px; border-radius: 8px; color: white; margin-top: 20px; text-transform: uppercase; }
         input, select { padding: 10px; border: 1px solid #ccc; border-radius: 5px; text-transform: uppercase; }
-        .btn-buscar { grid-column: span 2; padding: 15px; background: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; border-radius: 5px; margin-top: 10px; }
-        .ficha-paciente { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #2c55d0; padding: 15px; border-radius: 8px; margin-top: 20px; color: white; }
-        .valor-dato { font-size: 1.3em; font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { background-color: #2c55d0; color: white; padding: 12px; }
-        td { padding: 10px; border-bottom: 1px solid #eee; text-align: center; }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="header">
-        <button class="btn-nav" onclick="history.back()">← VOLVER</button>
-        <button class="btn-nav" onclick="window.print()">IMPRIMIR</button>
-    </div>
-    <h2 class="titulo-informe">BÚSQUEDA AVANZADA</h2>
-    
     <div class="search-grid">
         <div class="field-group"><label>SEXO</label><select id="sexo"><option value="">SELECCIONE...</option><option value="MASCULINO">MASCULINO</option><option value="FEMENINO">FEMENINO</option></select></div>
-        <div class="field-group"><label>LUGAR</label><input type="text" id="lugar" placeholder="CIUDAD/LUGAR"></div>
-        <div class="field-group"><label>ESTADO CIVIL</label><select id="estadoCivil"><option value="">SELECCIONE...</option><option value="SOLTERO">SOLTERO</option><option value="CASADO">CASADO</option></select></div>
-        <div class="field-group"><label>PROFESIÓN/LABOR</label><input type="text" id="profesion" placeholder="PROFESIÓN..."></div>
-        <div class="field-group" style="grid-column: span 2;"><label>EMPRESA</label><input type="text" id="empresa" placeholder="NOMBRE DE EMPRESA..."></div>
-        <button class="btn-buscar" onclick="buscarDetallado()">BUSCAR PACIENTE</button>
+        <div class="field-group"><label>LUGAR NACIMIENTO</label><input type="text" id="lugar" placeholder="LUGAR"></div>
+        <div class="field-group"><label>ESTADO CIVIL</label><select id="est_civil"><option value="">SELECCIONE...</option><option value="SOLTERO/A">SOLTERO/A</option><option value="CASADO/A">CASADO/A</option></select></div>
+        <div class="field-group"><label>PROFESIÓN</label><input type="text" id="profesion" placeholder="PROFESIÓN"></div>
+        <button class="btn-buscar" onclick="buscarPaciente()">BUSCAR PACIENTE</button>
     </div>
-
     <div id="infoPaciente"></div>
-    <table id="tablaInforme" style="display:none;">
-        <thead><tr><th>EXAMEN</th><th>RESULTADO</th><th>ESTADO</th></tr></thead>
-        <tbody id="resultadosBody"></tbody>
-    </table>
 </div>
 
 <script>
-async function buscarDetallado() {
-    try {
-        // Obtenemos la lista base de pacientes
-        const response = await fetch('https://historial-clinico-nube.onrender.com/pacientes/');
-        const listaPacientes = await response.json();
+    const API = 'https://historial-clinico-nube.onrender.com';
 
-        // Valores de búsqueda del usuario
-        const filtroSexo = document.getElementById('sexo').value; // MASCULINO / FEMENINO
-        const filtroEmpresa = document.getElementById('empresa').value.toUpperCase();
+    async function buscarPaciente() {
+        try {
+            // 1. Obtenemos lista de IDs
+            const resp = await fetch(`${API}/pacientes/`);
+            const pacientes = await resp.json();
+            
+            let encontrado = null;
 
-        // Nota: Como los datos de 'sexo' y 'empresa' no están en la lista base de /pacientes/,
-        // la búsqueda solo funcionará si tu backend ya devuelve esos campos en la lista.
-        // Si no aparecen en el console.log, el backend NO los está enviando.
-        
-        const pacienteEncontrado = listaPacientes.find(p => {
-            // Ajusta aquí los campos basándote en lo que realmente devuelve tu API
-            return (p.nombre.toUpperCase() === filtroEmpresa || p.apellido.toUpperCase() === filtroEmpresa);
-        });
+            // 2. Buscamos en cada paciente (esto puede tardar un poco si hay muchos)
+            for (let p of pacientes) {
+                const det = await fetch(`${API}/api/paciente-completo/${p.id}`).then(r => r.json());
+                const f = det.filiacion || {};
+                
+                // Comparamos los filtros (si están vacíos, se ignoran)
+                const cumpleSexo = !document.getElementById('sexo').value || f.sexo === document.getElementById('sexo').value;
+                const cumpleLugar = !document.getElementById('lugar').value || (f.lugar_nacimiento && f.lugar_nacimiento.includes(document.getElementById('lugar').value.toUpperCase()));
+                
+                if (cumpleSexo && cumpleLugar) {
+                    encontrado = { nombre: `${det.paciente.nombre} ${det.paciente.apellido}`, codigo: det.paciente.codigo_paciente };
+                    break;
+                }
+            }
 
-        if (pacienteEncontrado) {
-            document.getElementById('infoPaciente').innerHTML = `
-                <div class="ficha-paciente">
-                    <div><label>PACIENTE</label><div class="valor-dato">${(pacienteEncontrado.nombre + " " + pacienteEncontrado.apellido).toUpperCase()}</div></div>
-                    <div><label>CÓDIGO PACIENTE</label><div class="valor-dato">${pacienteEncontrado.codigo_paciente.toUpperCase()}</div></div>
-                </div>`;
-            document.getElementById('tablaInforme').style.display = 'table';
-        } else {
-            alert("NO SE ENCONTRARON RESULTADOS. VERIFIQUE LOS FILTROS.");
-        }
-    } catch(e) {
-        alert("ERROR DE CONEXIÓN CON EL SERVIDOR.");
+            if (encontrado) {
+                document.getElementById('infoPaciente').innerHTML = `
+                    <div class="ficha-paciente">
+                        PACIENTE: ${encontrado.nombre.toUpperCase()}<br>
+                        CÓDIGO PACIENTE: ${encontrado.codigo.toUpperCase()}
+                    </div>`;
+            } else {
+                alert("NO SE ENCONTRÓ NINGÚN PACIENTE CON ESOS FILTROS.");
+            }
+        } catch(e) { alert("ERROR AL BUSCAR."); }
     }
-}
 </script>
 </body>
 </html>
