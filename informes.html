@@ -6,22 +6,45 @@
     <style>
         body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
         .container { background: white; max-width: 900px; margin: auto; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .search-box { margin-bottom: 20px; }
-        input { padding: 10px; width: 200px; text-transform: uppercase; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
+        
+        /* Cabecera */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .logo { height: 50px; }
+        .btn-nav { padding: 8px 15px; cursor: pointer; background: #333; color: white; border: none; border-radius: 4px; }
+        
+        /* Selector */
+        .selector-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-mode { flex: 1; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        
+        .search-box { margin-bottom: 20px; text-align: center; }
+        input { padding: 10px; width: 300px; text-transform: uppercase; border: 1px solid #ccc; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; text-transform: uppercase; }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; }
         th { background-color: #2c55d0; color: white; }
-        table { text-transform: uppercase; }
-        h2, h3 { text-transform: uppercase; }
     </style>
 </head>
 <body>
+
 <div class="container">
+    <div class="header">
+        <button class="btn-nav" onclick="history.back()">← VOLVER</button>
+        <img src="logo.png" alt="Logo OHS" class="logo"> <!-- Asegúrate de tener tu logo.png -->
+        <button class="btn-nav" onclick="window.print()">IMPRIMIR</button>
+    </div>
+
     <h2>INFORME CONSOLIDADO</h2>
+
+    <div class="selector-box">
+        <button id="btn-codigo" class="btn-mode" style="background-color: #2c55d0; color: white;" onclick="cambiarModo('codigo')">POR CÓDIGO</button>
+        <button id="btn-datos" class="btn-mode" style="background-color: #e0e0e0;" onclick="cambiarModo('datos')">POR DATOS</button>
+    </div>
+
     <div class="search-box">
-        <input type="text" id="codigoInput" placeholder="CÓDIGO PACIENTE">
+        <input type="text" id="codigoInput" placeholder="INGRESE CÓDIGO PACIENTE">
         <button onclick="buscarInforme()">BUSCAR</button>
     </div>
+
     <div id="infoPaciente"></div>
     <table id="tablaInforme" style="display:none;">
         <thead><tr><th>EXAMEN</th><th>RESULTADO</th></tr></thead>
@@ -30,16 +53,34 @@
 </div>
 
 <script>
+    function cambiarModo(modo) {
+        const btnCodigo = document.getElementById('btn-codigo');
+        const btnDatos = document.getElementById('btn-datos');
+        const input = document.getElementById('codigoInput');
+
+        if (modo === 'codigo') {
+            btnCodigo.style.backgroundColor = '#2c55d0';
+            btnCodigo.style.color = 'white';
+            btnDatos.style.backgroundColor = '#e0e0e0';
+            btnDatos.style.color = 'black';
+            input.placeholder = 'INGRESE CÓDIGO PACIENTE';
+        } else {
+            btnCodigo.style.backgroundColor = '#e0e0e0';
+            btnCodigo.style.color = 'black';
+            btnDatos.style.backgroundColor = '#28a745';
+            btnDatos.style.color = 'white';
+            input.placeholder = 'INGRESE NOMBRE O C.I.';
+        }
+    }
+
     async function buscarInforme() {
+        // Lógica de búsqueda (se mantiene igual, mañana la expandimos para modo DATOS)
         const codigo = document.getElementById('codigoInput').value.toUpperCase();
         const url = `https://historial-clinico-nube.onrender.com/api/informe-consolidado/${codigo}`;
     
         try {
             const response = await fetch(url);
-            if (!response.ok) {
-                alert("Paciente no encontrado o error en el servidor");
-                return;
-            }
+            if (!response.ok) throw new Error();
             const data = await response.json();
             
             document.getElementById('infoPaciente').innerHTML = `<h3>${data.datos_generales.nombre} (${data.datos_generales.codigo})</h3>`;
@@ -68,8 +109,7 @@
             document.getElementById('tablaInforme').style.display = 'table';
     
         } catch (error) {
-            console.error("Error:", error);
-            alert("Error de conexión. Asegúrate de que el backend en Render esté activo.");
+            alert("Paciente no encontrado o error en el servidor");
         }
     }
 </script>
