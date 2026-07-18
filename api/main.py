@@ -966,30 +966,35 @@ async def filtrar_osteomuscular(estado: str, db: Session = Depends(get_db)):
     return [{"codigo": r.codigo_paciente, "nombre": r.nombre_completo, "resultado": r.concepto_aptitud} for r in resultados]
 
 @app.get("/api/informe-consolidado/{codigo_paciente}")
-async def obtener_informe_consolidado(codigo_paciente: str):
-    # En tu lógica, aquí realizarás las 11 consultas (o una consulta JOIN a la BD)
-    # y mapearás los resultados a este objeto:
+async def obtener_informe_consolidado(codigo_paciente: str, db: Session = Depends(get_db)):
+    p = db.query(models.Paciente).filter(models.Paciente.codigo_paciente == codigo_paciente).first()
+    if not p: raise HTTPException(status_code=404, detail="Paciente no encontrado")
     
-    informe_completo = {
-        "datos_generales": {
-            "codigo": codigo_paciente,
-            "nombre": "...", # Extraer de BD
-            "edad": "...",
-            "profesion": "..."
-        },
+    apt = db.query(models.FichaAptitud).filter(models.FichaAptitud.nro_doc_identidad == p.ci).first()
+    fis = db.query(models.FichaAptitudFisica).filter(models.FichaAptitudFisica.codigo_paciente == p.codigo_paciente).first()
+    ost = db.query(models.FichaOsteomuscular).filter(models.FichaOsteomuscular.codigo_paciente == p.codigo_paciente).first()
+    esp = db.query(models.FichaEspirometria).filter(models.FichaEspirometria.paciente_id == p.id).first()
+    oft = db.query(models.FichaOftalmologica).filter(models.FichaOftalmologica.paciente_id == p.id).first()
+    car = db.query(models.FichaCardiologia).filter(models.FichaCardiologia.paciente_id == p.id).first()
+    ele = db.query(models.FichaElectroencefalograma).filter(models.FichaElectroencefalograma.paciente_id == p.id).first()
+    alt = db.query(models.FichaAltura).filter(models.FichaAltura.paciente_id == p.id).first()
+    dec = db.query(models.AntecedentesP2).filter(models.AntecedentesP2.paciente_id == p.id).first()
+    his = db.query(models.HistorialClinico).filter(models.HistorialClinico.paciente_id == p.id).first()
+    psi = db.query(models.FichaPsicologia).filter(models.FichaPsicologia.paciente_id == p.id).first()
+
+    return {
+        "datos_generales": {"codigo": p.codigo_paciente, "nombre": f"{p.nombre} {p.apellido}"},
         "resultados_medicos": {
-            "01_aptitud_ocupacional": "...", # De co_aptitud
-            "02_aptitud_fisica_psicologica": {"fisico": "...", "psico": "..."}, # De co_aptifi
-            "03_osteomuscular": "...",       # De co_osteomuscular
-            "04_espirometria": "...",        # De co_espirometria
-            "05_oftalmologia": "...",        # De co_oftalmologia
-            "06_cardiologia": "...",         # De co_cardiologia
-            "07_electroencefalograma": "...",# De co_electro
-            "08_altura": "...",              # De co_altura
-            "09_declaracion_jurada": [],     # Hallazgos de co_declaracion
-            "10_historial_clinico": "...",   # De co_hiscli
-            "11_psicologia_detallada": "..." # De co_psicologia
+            "01_aptitud_ocupacional": apt.resultado if apt else "N/A",
+            "02_aptitud_fisica_psicologica": {"fisico": fis.resultado_fisico if fis else "N/A", "psico": fis.resultado_psicologico if fis else "N/A"},
+            "03_osteomuscular": ost.concepto_aptitud if ost else "N/A",
+            "04_espirometria": "Registrada" if esp else "N/A",
+            "05_oftalmologia": oft.diagnostico if oft else "N/A",
+            "06_cardiologia": car.diagnostico_recomendaciones if car else "N/A",
+            "07_electroencefalograma": ele.resultado_estudio if ele else "N/A",
+            "08_altura": "Registrada" if alt else "N/A",
+            "09_declaracion_jurada": "Registrada" if dec else "N/A",
+            "10_historial_clinico": "Registrado" if his else "N/A",
+            "11_psicologia_detallada": psi.resultado_psicologico if psi else "N/A"
         }
     }
-    return informe_completo
-
