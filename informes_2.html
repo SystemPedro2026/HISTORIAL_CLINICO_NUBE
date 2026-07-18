@@ -53,34 +53,48 @@
 </div>
 
 <script>
-    async function buscarDetallado() {
-        const params = new URLSearchParams({
-            sexo: document.getElementById('sexo').value,
-            lugar: document.getElementById('lugar').value.toUpperCase(),
-            estado_civil: document.getElementById('estadoCivil').value,
-            profesion: document.getElementById('profesion').value.toUpperCase(),
-            empresa: document.getElementById('empresa').value.toUpperCase(),
-            alc: document.getElementById('hab_alcohol').value,
-            tab: document.getElementById('hab_tabaco').value,
-            dro: document.getElementById('hab_drogas').value,
-            coc: document.getElementById('hab_coca').value
-        });
+  async function buscarDetallado() {
+    // Obtenemos los valores de los inputs
+    const filtros = {
+        sexo: document.getElementById('sexo').value,
+        lugar: document.getElementById('lugar').value.toUpperCase(),
+        estado_civil: document.getElementById('estadoCivil').value,
+        profesion: document.getElementById('profesion').value.toUpperCase(),
+        empresa: document.getElementById('empresa').value.toUpperCase(),
+        alc: document.getElementById('hab_alcohol').value,
+        tab: document.getElementById('hab_tabaco').value,
+        dro: document.getElementById('hab_drogas').value,
+        coc: document.getElementById('hab_coca').value
+    };
 
-        try {
-            const response = await fetch(`https://historial-clinico-nube.onrender.com/api/buscar-paciente-detallado?${params}`);
-            const data = await response.json();
-            
-            // Ficha en MAYÚSCULAS
-            document.getElementById('infoPaciente').innerHTML = `
-                <div class="ficha-paciente">
-                    <div><label>PACIENTE</label><div class="valor-dato">${data.datos_generales.nombre.toUpperCase()}</div></div>
-                    <div><label>CÓDIGO PACIENTE</label><div class="valor-dato">${data.datos_generales.codigo.toUpperCase()}</div></div>
-                </div>`;
-            
-            // ... (la lógica de la tabla que ya validamos)
-            document.getElementById('tablaInforme').style.display = 'table';
-        } catch(e) { alert("NO SE ENCONTRARON PACIENTES CON ESOS FILTROS."); }
+    // Construimos los parámetros SOLAMENTE con campos que tengan valor
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(filtros)) {
+        if (value && value !== "SELECCIONE..." && value !== "CIUDAD/LUGAR" && value !== "PROFESIÓN..." && value !== "NOMBRE DE EMPRESA...") {
+            params.append(key, value);
+        }
     }
+
+    try {
+        // Hacemos la petición al servidor solo con los filtros activos
+        const response = await fetch(`https://historial-clinico-nube.onrender.com/api/buscar-paciente-detallado?${params.toString()}`);
+        
+        if (!response.ok) throw new Error("No se encontraron resultados");
+        
+        const data = await response.json();
+        
+        // Presentación en MAYÚSCULAS
+        document.getElementById('infoPaciente').innerHTML = `
+            <div class="ficha-paciente">
+                <div><label>PACIENTE</label><div class="valor-dato">${data.datos_generales.nombre.toUpperCase()}</div></div>
+                <div><label>CÓDIGO PACIENTE</label><div class="valor-dato">${data.datos_generales.codigo.toUpperCase()}</div></div>
+            </div>`;
+        
+        document.getElementById('tablaInforme').style.display = 'table';
+    } catch(e) { 
+        alert("NO SE ENCONTRARON PACIENTES CON ESOS FILTROS. INTENTE CON MENOS CRITERIOS."); 
+    }
+}  
 </script>
 </body>
 </html>
