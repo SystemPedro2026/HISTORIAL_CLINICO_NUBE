@@ -6,69 +6,30 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .container { background: white; max-width: 900px; margin: auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .logo { height: 60px; }
         .btn-nav { padding: 10px 20px; cursor: pointer; background: #2c55d0; color: white; border: none; border-radius: 6px; font-weight: bold; }
-        
         .titulo-informe { text-align: center; color: #2c55d0; font-weight: bold; text-transform: uppercase; margin-bottom: 25px; border-bottom: 3px solid #2c55d0; padding-bottom: 10px; }
-        
         .selector-box { display: flex; gap: 10px; margin-bottom: 20px; }
         .btn-mode { flex: 1; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        
         .search-box { margin-bottom: 30px; text-align: center; }
         input { padding: 12px; width: 300px; text-transform: uppercase; border: 1px solid #ccc; border-radius: 5px; }
         .btn-buscar { padding: 12px 25px; cursor: pointer; background: #28a745; color: white; border: none; border-radius: 5px; font-weight: bold; }
-        
         .ficha-paciente { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 25px; border-left: 5px solid #2c55d0; }
         .valor-dato { font-size: 1.1em; font-weight: 600; color: #333; }
-        
         table { width: 100%; border-collapse: collapse; }
         th { background-color: #2c55d0 !important; color: white !important; padding: 12px; }
         td { padding: 12px; border-bottom: 1px solid #eee; }
-        
-        /* Indicadores visuales */
         .status-icon { font-weight: bold; font-size: 1.2em; }
         .text-green { color: #28a745; }
         .text-red { color: #dc3545; }
-
         @media print {
-            /* Ocultamos absolutamente todos los controles de la interfaz */
-            .selector-box, .search-box, .btn-nav, button, input { 
-                display: none !important; 
-            }
-            
-            /* Limpiamos contenedores y sombras para un acabado de papel profesional */
-            .container { 
-                box-shadow: none !important; 
-                border: none !important; 
-                width: 100% !important; 
-                padding: 0 !important; 
-            }
-        
-            /* Aseguramos que la tabla se vea impecable */
+            .selector-box, .search-box, .btn-nav, button, input { display: none !important; }
+            .container { box-shadow: none !important; border: none !important; width: 100% !important; padding: 0 !important; }
             table { width: 100%; border: 1px solid #ccc; }
-            
-            /* Mostramos la firma al pie */
-            .footer-firma { 
-                display: block !important; 
-                margin-top: 100px; 
-                text-align: center; 
-            }
-                            /* SECCIÓN DE FIRMA Y SELLO */
-            .footer-firma {
-                display: block !important;
-                margin-top: 80px;
-                text-align: center;
-                width: 100%;
-            }
-            .linea-firma {
-                width: 300px;
-                border-top: 1px solid #000;
-                margin: 0 auto 10px auto;
-            }
+            .footer-firma { display: block !important; margin-top: 80px; text-align: center; width: 100%; }
+            .linea-firma { width: 300px; border-top: 1px solid #000; margin: 0 auto 10px auto; }
         }
-       
     </style>
 </head>
 <body>
@@ -97,23 +58,22 @@
         <thead><tr><th>EXAMEN</th><th>RESULTADO</th><th>ESTADO</th></tr></thead>
         <tbody id="resultadosBody"></tbody>
     </table>
-    <div class="footer-firma" style="display:none;">
+    <div class="footer-firma" id="footerFirma" style="display:none;">
         <div class="linea-firma"></div>
         <p>FIRMA Y SELLO MÉDICO</p>
         <p>HISTORIAL CLÍNICO NUBE</p>
         <br><br><br><p id="fechaImpresion" style="margin-top: 10px; font-size: 0.9em; color: #555;"></p>
     </div>
-    </div>
+</div>
 
 <script>
-function cambiarModo(modo) {
+    function cambiarModo(modo) {
         const btnCodigo = document.getElementById('btn-codigo');
         const btnDatos = document.getElementById('btn-datos');
         const input = document.getElementById('codigoInput');
         if (modo === 'codigo') {
             btnCodigo.style.backgroundColor = '#2c55d0'; btnCodigo.style.color = 'white';
             btnDatos.style.backgroundColor = '#e0e0e0'; btnDatos.style.color = 'black';
-            input.placeholder = 'INGRESE CÓDIGO PACIENTE';
         }
     }
     
@@ -143,6 +103,7 @@ function cambiarModo(modo) {
             const body = document.getElementById('resultadosBody');
             body.innerHTML = '';
             const res = data.resultados_medicos;
+            
             const filas = [
                 ["01. APTITUD OCUPACIONAL", res["01_aptitud_ocupacional"]],
                 ["02. APTITUD FÍSICA", res["02_aptitud_fisica_psicologica"]?.fisico],
@@ -159,22 +120,22 @@ function cambiarModo(modo) {
             ];
 
             filas.forEach(f => {
-                const valorRaw = f[1];
-                // Validación estricta: Solo es válido si tiene contenido real y no es "SIN EXAMEN"
-                const esInvalido = valorRaw === null || valorRaw === undefined || 
-                                   String(valorRaw).trim() === "" || 
-                                   String(valorRaw).toUpperCase() === "SIN EXAMEN" ||
-                                   String(valorRaw).toUpperCase() === "N/A";
+                const val = f[1];
+                // Lógica estricta: solo es válido si no es nulo, vacío ni "SIN EXAMEN"
+                const esValido = (val !== null && val !== undefined && 
+                                 String(val).toUpperCase() !== "SIN EXAMEN" && 
+                                 String(val).trim() !== "");
                 
-                const valorDisplay = esInvalido ? 'SIN EXAMEN' : String(valorRaw).toUpperCase();
-                const icono = esInvalido ? '<span class="status-icon text-red">✘</span>' : '<span class="status-icon text-green">✔</span>';
+                const valorDisplay = esValido ? String(val).toUpperCase() : "SIN EXAMEN";
+                const icono = esValido ? '<span class="status-icon text-green">✔</span>' : '<span class="status-icon text-red">✘</span>';
                 
                 body.innerHTML += `<tr><td>${f[0]}</td><td style="text-align: center">${valorDisplay}</td><td style="text-align: center">${icono}</td></tr>`;
             });
+            
             document.getElementById('tablaInforme').style.display = 'table';
-            document.querySelector('.footer-firma').style.display = 'block';
+            document.getElementById('footerFirma').style.display = 'block';
         } catch (e) { 
-            alert("Error al obtener datos del paciente. Verifique el código."); 
+            alert("Error al cargar los datos del paciente."); 
         }
     }
 </script>
