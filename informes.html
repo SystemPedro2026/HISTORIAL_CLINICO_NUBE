@@ -30,41 +30,44 @@
 <script>
     async function buscarInforme() {
         const codigo = document.getElementById('codigoInput').value.toUpperCase();
-        // APUNTAR A LA URL COMPLETA DE RENDER
         const url = `https://historial-clinico-nube.onrender.com/api/informe-consolidado/${codigo}`;
-        
+    
         try {
             const response = await fetch(url);
-            if (!response.ok) { alert("Paciente no encontrado en la base de datos"); return; }
+            if (!response.ok) {
+                alert("Paciente no encontrado o error en el servidor");
+                return;
+            }
             const data = await response.json();
             
             document.getElementById('infoPaciente').innerHTML = `<h3>${data.datos_generales.nombre} (${data.datos_generales.codigo})</h3>`;
             const body = document.getElementById('resultadosBody');
             body.innerHTML = '';
-            
+    
             const res = data.resultados_medicos;
             const filas = [
-                ["01. Aptitud Ocupacional", res["01_aptitud_ocupacional"]],
-                ["02. Aptitud Física", res["02_aptitud_fisica_psicologica"].fisico],
-                ["03. Aptitud Psicológica", res["02_aptitud_fisica_psicologica"].psico],
-                ["04. Osteomuscular", res["03_osteomuscular"]],
-                ["05. Espirometría", res["04_espirometria"]],
-                ["06. Oftalmología", res["05_oftalmologia"]],
-                ["07. Cardiología", res["06_cardiologia"]],
-                ["08. Electroencefalograma", res["07_electroencefalograma"]],
-                ["09. Altura", res["08_altura"]],
-                ["10. Declaración Jurada", res["09_declaracion_jurada"]],
-                ["11. Historial Clínico", res["10_historial_clinico"]],
-                ["12. Psicología Detallada", res["11_psicologia_detallada"]]
+                ["Aptitud Ocupacional", res["01_aptitud_ocupacional"]],
+                ["Aptitud Física", res["02_aptitud_fisica_psicologica"]?.fisico],
+                ["Aptitud Psicológica", res["02_aptitud_fisica_psicologica"]?.psico],
+                ["Osteomuscular", res["03_osteomuscular"]],
+                ["Espirometría", res["04_espirometria"]],
+                ["Oftalmología", res["05_oftalmologia"]],
+                ["Cardiología", res["06_cardiologia"]],
+                ["Electroencefalograma", res["07_electroencefalograma"]],
+                ["Altura", res["08_altura"]],
+                ["Declaración Jurada", res["09_declaracion_jurada"]],
+                ["Historial Clínico", res["10_historial_clinico"]],
+                ["Psicología Detallada", res["11_psicologia_detallada"]]
             ];
-            
+    
             filas.forEach(f => {
-                body.innerHTML += `<tr><td>${f[0]}</td><td>${f[1]}</td></tr>`;
+                body.innerHTML += `<tr><td>${f[0]}</td><td>${f[1] || 'Sin datos'}</td></tr>`;
             });
-
             document.getElementById('tablaInforme').style.display = 'table';
+    
         } catch (error) {
-            alert("Error de conexión con el servidor");
+            console.error("Error:", error);
+            alert("Error de conexión. Asegúrate de que el backend en Render esté activo.");
         }
     }
 </script>
