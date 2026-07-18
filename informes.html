@@ -4,40 +4,33 @@
     <meta charset="UTF-8">
     <title>Informe Consolidado - Historial Clínico Nube</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .container { background: white; max-width: 900px; margin: auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         
-        /* Cabecera y Logo */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .logo { height: 60px; width: auto; } /* Control de tamaño corregido */
-        .btn-nav { padding: 8px 15px; cursor: pointer; background: #333; color: white; border: none; border-radius: 4px; }
-
+        .logo { height: 60px; }
+        .btn-nav { padding: 10px 20px; cursor: pointer; background: #2c55d0; color: white; border: none; border-radius: 6px; font-weight: bold; }
+        
         .titulo-informe { text-align: center; color: #2c55d0; font-weight: bold; text-transform: uppercase; margin-bottom: 25px; border-bottom: 3px solid #2c55d0; padding-bottom: 10px; }
         
-        /* Selector y Búsqueda */
         .selector-box { display: flex; gap: 10px; margin-bottom: 20px; }
-        .btn-mode { flex: 1; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .search-box { margin-bottom: 20px; text-align: center; }
-        input { padding: 10px; width: 300px; text-transform: uppercase; border: 1px solid #ccc; }
+        .btn-mode { flex: 1; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
         
-        /* Ficha de Paciente */
+        .search-box { margin-bottom: 30px; text-align: center; }
+        input { padding: 12px; width: 300px; text-transform: uppercase; border: 1px solid #ccc; border-radius: 5px; }
+        .btn-buscar { padding: 12px 25px; cursor: pointer; background: #28a745; color: white; border: none; border-radius: 5px; font-weight: bold; }
+        
         .ficha-paciente { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 25px; border-left: 5px solid #2c55d0; }
-        .dato-item { display: flex; flex-direction: column; }
-        .label-dato { font-size: 0.8em; color: #666; text-transform: uppercase; font-weight: bold; }
         .valor-dato { font-size: 1.1em; font-weight: 600; color: #333; }
         
-        /* Tabla */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background-color: #2c55d0 !important; color: white !important; padding: 12px; text-align: left; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background-color: #2c55d0 !important; color: white !important; padding: 12px; }
         td { padding: 12px; border-bottom: 1px solid #eee; }
         
-        /* Impresión */
-        @media print {
-            .header, .selector-box, .search-box, .btn-nav { display: none !important; }
-            .container { box-shadow: none !important; border: none !important; width: 100%; }
-            .footer-firma { display: block !important; margin-top: 100px; text-align: center; }
-            .linea-firma { width: 300px; border-top: 1px solid #000; margin: 0 auto 10px auto; }
-        }
+        /* Indicadores visuales */
+        .status-icon { font-weight: bold; font-size: 1.2em; }
+        .text-green { color: #28a745; }
+        .text-red { color: #dc3545; }
     </style>
 </head>
 <body>
@@ -45,7 +38,7 @@
 <div class="container">
     <div class="header">
         <button class="btn-nav" onclick="history.back()">← VOLVER</button>
-        <img src="logo.png" alt="Logo OHS" class="logo">
+        <img src="logo.png" alt="Logo" class="logo">
         <button class="btn-nav" onclick="window.print()">IMPRIMIR</button>
     </div>
 
@@ -58,20 +51,14 @@
 
     <div class="search-box">
         <input type="text" id="codigoInput" placeholder="INGRESE CÓDIGO PACIENTE">
-        <button onclick="buscarInforme()">BUSCAR</button>
+        <button class="btn-buscar" onclick="buscarInforme()">BUSCAR</button>
     </div>
 
     <div id="infoPaciente"></div>
     <table id="tablaInforme" style="display:none;">
-        <thead><tr><th>EXAMEN</th><th>RESULTADO</th></tr></thead>
+        <thead><tr><th>EXAMEN</th><th>RESULTADO</th><th>ESTADO</th></tr></thead>
         <tbody id="resultadosBody"></tbody>
     </table>
-
-    <div class="footer-firma" style="display:none;">
-        <div class="linea-firma"></div>
-        <p>FIRMA Y SELLO MÉDICO</p>
-        <p>HISTORIAL CLÍNICO NUBE</p>
-    </div>
 </div>
 
 <script>
@@ -95,46 +82,40 @@
         const url = `https://historial-clinico-nube.onrender.com/api/informe-consolidado/${codigo}`;
         try {
             const response = await fetch(url);
-            if (!response.ok) throw new Error();
             const data = await response.json();
             
             document.getElementById('infoPaciente').innerHTML = `
                 <div class="ficha-paciente">
-                    <div class="dato-item">
-                        <span class="label-dato">NOMBRE DEL PACIENTE</span>
-                        <span class="valor-dato">${data.datos_generales.nombre}</span>
-                    </div>
-                    <div class="dato-item">
-                        <span class="label-dato">CÓDIGO DE PACIENTE</span>
-                        <span class="valor-dato">${data.datos_generales.codigo}</span>
-                    </div>
-                </div>
-            `;
+                    <div><span class="label-dato">PACIENTE</span><div class="valor-dato">${data.datos_generales.nombre}</div></div>
+                    <div><span class="label-dato">CÓDIGO</span><div class="valor-dato">${data.datos_generales.codigo}</div></div>
+                </div>`;
             
             const body = document.getElementById('resultadosBody');
             body.innerHTML = '';
             const res = data.resultados_medicos;
             const filas = [
-                ["01. Aptitud Ocupacional", res["01_aptitud_ocupacional"]],
-                ["02. Aptitud Física", res["02_aptitud_fisica_psicologica"]?.fisico],
-                ["03. Aptitud Psicológica", res["02_aptitud_fisica_psicologica"]?.psico],
-                ["04. Osteomuscular", res["03_osteomuscular"]],
-                ["05. Espirometría", res["04_espirometria"]],
-                ["06. Oftalmología", res["05_oftalmologia"]],
-                ["07. Cardiología", res["06_cardiologia"]],
-                ["08. Electroencefalograma", res["07_electroencefalograma"]],
-                ["09. Altura", res["08_altura"]],
-                ["10. Declaración Jurada", res["09_declaracion_jurada"]],
-                ["11. Historial Clínico", res["10_historial_clinico"]],
-                ["12. Psicología Detallada", res["11_psicologia_detallada"]]
+                ["01. APTITUD OCUPACIONAL", res["01_aptitud_ocupacional"]],
+                ["02. APTITUD FÍSICA", res["02_aptitud_fisica_psicologica"]?.fisico],
+                ["03. APTITUD PSICOLÓGICA", res["02_aptitud_fisica_psicologica"]?.psico],
+                ["04. OSTEOMUSCULAR", res["03_osteomuscular"]],
+                ["05. ESPIROMETRÍA", res["04_espirometria"]],
+                ["06. OFTALMOLOGÍA", res["05_oftalmologia"]],
+                ["07. CARDIOLOGÍA", res["06_cardiologia"]],
+                ["08. ELECTROENCEFALOGRAMA", res["07_electroencefalograma"]],
+                ["09. ALTURA", res["08_altura"]],
+                ["10. DECLARACIÓN JURADA", res["09_declaracion_jurada"]],
+                ["11. HISTORIAL CLÍNICO", res["10_historial_clinico"]],
+                ["12. PSICOLOGÍA DETALLADA", res["11_psicologia_detallada"]]
             ];
+
             filas.forEach(f => {
-                body.innerHTML += `<tr><td>${f[0].toUpperCase()}</td><td>${(f[1] || 'SIN DATOS').toUpperCase()}</td></tr>`;
+                const valor = (f[1] || 'SIN EXAMEN').toUpperCase();
+                const esValido = valor !== 'SIN EXAMEN';
+                const icono = esValido ? '<span class="status-icon text-green">✔</span>' : '<span class="status-icon text-red">✘</span>';
+                body.innerHTML += `<tr><td>${f[0]}</td><td>${valor}</td><td style="text-align:center">${icono}</td></tr>`;
             });
             document.getElementById('tablaInforme').style.display = 'table';
-        } catch (error) {
-            alert("Paciente no encontrado o error en el servidor");
-        }
+        } catch (e) { alert("Error al buscar paciente"); }
     }
 </script>
 </body>
