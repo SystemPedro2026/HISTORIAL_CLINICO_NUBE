@@ -964,3 +964,32 @@ async def filtrar_osteomuscular(estado: str, db: Session = Depends(get_db)):
     
     # Mapeamos los campos a lo que espera tu tabla HTML (codigo, nombre, resultado)
     return [{"codigo": r.codigo_paciente, "nombre": r.nombre_completo, "resultado": r.concepto_aptitud} for r in resultados]
+
+@app.get("/api/informe-consolidado/{codigo_paciente}")
+async def obtener_informe_consolidado(codigo_paciente: str):
+    # En tu lógica, aquí realizarás las 11 consultas (o una consulta JOIN a la BD)
+    # y mapearás los resultados a este objeto:
+    
+    informe_completo = {
+        "datos_generales": {
+            "codigo": codigo_paciente,
+            "nombre": "...", # Extraer de BD
+            "edad": "...",
+            "profesion": "..."
+        },
+        "resultados_medicos": {
+            "01_aptitud_ocupacional": "...", # De co_aptitud
+            "02_aptitud_fisica_psicologica": {"fisico": "...", "psico": "..."}, # De co_aptifi
+            "03_osteomuscular": "...",       # De co_osteomuscular
+            "04_espirometria": "...",        # De co_espirometria
+            "05_oftalmologia": "...",        # De co_oftalmologia
+            "06_cardiologia": "...",         # De co_cardiologia
+            "07_electroencefalograma": "...",# De co_electro
+            "08_altura": "...",              # De co_altura
+            "09_declaracion_jurada": [],     # Hallazgos de co_declaracion
+            "10_historial_clinico": "...",   # De co_hiscli
+            "11_psicologia_detallada": "..." # De co_psicologia
+        }
+    }
+    return informe_completo
+
