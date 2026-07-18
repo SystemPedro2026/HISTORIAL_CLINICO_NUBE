@@ -11,6 +11,8 @@
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
         th { background-color: #2c55d0; color: white; }
+        table { text-transform: uppercase; }
+        h2, h3 { text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -61,7 +63,7 @@
             ];
     
             filas.forEach(f => {
-                body.innerHTML += `<tr><td>${f[0]}</td><td>${f[1] || 'Sin datos'}</td></tr>`;
+                body.innerHTML += `<tr><td>${f[0].toUpperCase()}</td><td>${(f[1] || 'SIN DATOS').toUpperCase()}</td></tr>`;
             });
             document.getElementById('tablaInforme').style.display = 'table';
     
