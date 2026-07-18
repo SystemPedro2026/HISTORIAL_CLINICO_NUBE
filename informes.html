@@ -109,13 +109,16 @@
 
             filas.forEach(f => {
                 const nombreExamen = f[0];
-                const esDeclaracion = nombreExamen === "10. DECLARACIÓN JURADA";
+                const valorRaw = f[1];
                 
-                // Forzamos la lógica: SOLO es válido si es Declaración Jurada. 
-                // Todo lo demás se trata como inválido sin importar lo que diga el servidor.
-                const esValido = esDeclaracion;
-                
-                const valorDisplay = esValido ? "COMPLETADA" : "SIN EXAMEN";
+                // Lógica estricta: Solo es válido si hay datos reales
+                // Excluimos explícitamente "SIN EXAMEN" y vacíos
+                const esValido = (valorRaw !== null && 
+                                  valorRaw !== undefined && 
+                                  String(valorRaw).trim().toUpperCase() !== "SIN EXAMEN" && 
+                                  String(valorRaw).trim() !== "");
+
+                const valorDisplay = esValido ? String(valorRaw).toUpperCase() : "SIN EXAMEN";
                 const icono = esValido ? '<span class="status-icon text-green">✔</span>' : '<span class="status-icon text-red">✘</span>';
                 
                 body.innerHTML += `<tr><td>${nombreExamen}</td><td style="text-align: center">${valorDisplay}</td><td style="text-align: center">${icono}</td></tr>`;
