@@ -985,7 +985,7 @@ async def obtener_informe_consolidado(codigo_paciente: str, db: Session = Depend
     return {
         "datos_generales": {"codigo": p.codigo_paciente, "nombre": f"{p.nombre} {p.apellido}"},
         "resultados_medicos": {
-            "01_aptitud_ocupacional": apt.resultado if apt else "Sin examén",
+            "01_aptitud_ocupacional": apt.resultado if apt and apt.resultado else "SIN EXAMEN",
             "02_aptitud_fisica_psicologica": {
                 "fisico": fis.resultado_fisico if fis else "Sin examén", 
                 "psico": fis.resultado_psicologico if fis else "Sin examén"
@@ -994,10 +994,10 @@ async def obtener_informe_consolidado(codigo_paciente: str, db: Session = Depend
             "04_espirometria": "Examen realizado" if esp else "Sin examén",
             "05_oftalmologia": f"LENTES: {oft.lentes or 'NO'}, ESTRABISMO: {oft.estrabismo or 'NO'}, DALTONISMO: {oft.daltonismo or 'NO'}" if oft else "SIN EXAMEN",
             "06_cardiologia": f"NIÑEZ: {car.ninez or 'NO'}, ADOLESCENTE: {car.adolescente or 'NO'}, ADULTEZ: {car.adultez or 'NO'}" if car else "SIN EXAMEN",
-            "07_electroencefalograma": ele.resultado_estudio if ele and ele.resultado_estudio else "Sin examén",
-            "08_altura": "Examen realizado" if alt else "Sin examén",
+            "07_electroencefalograma": f"CEFALEAS: {ele.cefaleas or 'NO'}, EPILEPSIA: {ele.epilepsia or 'NO'}, CONVULSIONES: {ele.convulsiones or 'NO'}" if ele else "SIN EXAMEN",
+            "08_altura": f"SOPLO CARDIACO: {alt.soplo_cardiaco or 'NO'}, ARRITMIAS: {alt.arritmias_cardiacas or 'NO'}" if alt else "SIN EXAMEN",
             "09_declaracion_jurada": "Completada" if dec else "Sin examén",
             "10_historial_clinico": "Completado" if his else "Sin examén",
-            "11_psicologia_detallada": psi.resultado_psicologico if psi and psi.resultado_psicologico else "Sin examén"
+            "11_psicologia_detallada": psi.resultado_psicologico if psi and psi.resultado_psicologico else "SIN EXAMEN"
         }
     }
