@@ -9,21 +9,24 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .btn-nav { padding: 10px 20px; cursor: pointer; background: #2c55d0; color: white; border: none; border-radius: 6px; font-weight: bold; }
         .titulo-informe { text-align: center; color: #2c55d0; font-weight: bold; text-transform: uppercase; margin-bottom: 25px; border-bottom: 3px solid #2c55d0; padding-bottom: 10px; }
-        .search-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 20px; background: #f9f9f9; border-radius: 8px; margin-bottom: 20px; }
+        
+        .search-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 30px; padding: 20px; background: #f9f9f9; border-radius: 8px; margin-bottom: 20px; }
+        .field-group { display: flex; align-items: center; gap: 10px; }
+        .field-group label { min-width: 120px; font-weight: 600; color: #333; font-size: 14px; }
+        .field-group input, .field-group select { flex-grow: 1; padding: 8px; border: 1px solid #999; border-radius: 4px; text-transform: uppercase; }
+        
         .btn-buscar { grid-column: span 2; padding: 15px; background: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; font-size: 14px; border-radius: 5px; }
         
-        /* Ocultar elementos de impresión en pantalla */
-        .print-only { display: none; }
-        
         table { width: 100%; border-collapse: collapse; margin-top: 30px; }
-        th { border-bottom: 2px solid #2c55d0; color: #2c55d0; padding: 10px; text-transform: uppercase; text-align: center; }
+        th { border-bottom: 2px solid #2c55d0; color: #2c55d0; padding: 12px; text-transform: uppercase; text-align: center; }
         td { padding: 12px; border-bottom: 1px solid #eee; text-transform: uppercase; text-align: center; }
-
+        
+        .print-only { display: none; }
         @media print {
             .no-print { display: none !important; }
-            .print-only { display: block !important; }
+            .print-only { display: block !important; text-align: center; }
             .container { box-shadow: none; padding: 0; }
-            .footer-print { margin-top: 50px; text-align: center; font-size: 11px; display: block; }
+            .footer-print { margin-top: 60px; text-align: center; font-size: 11px; }
         }
     </style>
 </head>
@@ -70,7 +73,7 @@
             }
             const now = new Date();
             container.innerHTML = encontrados.length > 0 ? `
-                <div class="print-only"><h2 style="text-align:center;">INFORME DE BÚSQUEDA DE PACIENTES</h2></div>
+                <div class="print-only"><h2>INFORME DE BÚSQUEDA DE PACIENTES</h2></div>
                 <table>
                     <thead><tr><th>PACIENTE</th><th>CÓDIGO PACIENTE</th></tr></thead>
                     <tbody>${encontrados.map(p => `<tr><td>${p.nombre.toUpperCase()}</td><td>${p.codigo.toUpperCase()}</td></tr>`).join('')}</tbody>
