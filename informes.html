@@ -98,11 +98,12 @@
         <tbody id="resultadosBody"></tbody>
     </table>
     <div class="footer-firma" style="display:none;">
-    <div class="linea-firma"></div>
-    <p>FIRMA Y SELLO MÉDICO</p>
-    <p>HISTORIAL CLÍNICO NUBE</p>
+        <div class="linea-firma"></div>
+        <p>FIRMA Y SELLO MÉDICO</p>
+        <p>HISTORIAL CLÍNICO NUBE</p>
+        <br><br><br><p id="fechaImpresion" style="margin-top: 10px; font-size: 0.9em; color: #555;"></p>
     </div>
-</div>
+    </div>
 
 <script>
     function cambiarModo(modo) {
@@ -119,7 +120,15 @@
             input.placeholder = 'INGRESE NOMBRE O C.I.';
         }
     }
-
+    
+    function obtenerFecha() {
+        const ahora = new Date();
+        const fecha = ahora.toLocaleDateString('es-ES');
+        const hora = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('fechaImpresion').innerText = `FECHA: ${fecha} | HORA: ${hora}`;
+    }
+    obtenerFecha();
+    
     async function buscarInforme() {
         const codigo = document.getElementById('codigoInput').value.toUpperCase();
         const url = `https://historial-clinico-nube.onrender.com/api/informe-consolidado/${codigo}`;
