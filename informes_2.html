@@ -106,7 +106,20 @@
     </div>
 
 <script>
-
+    function cambiarModo(modo) {
+        const btnCodigo = document.getElementById('btn-codigo');
+        const btnDatos = document.getElementById('btn-datos');
+        const input = document.getElementById('codigoInput');
+        if (modo === 'codigo') {
+            btnCodigo.style.backgroundColor = '#2c55d0'; btnCodigo.style.color = 'white';
+            btnDatos.style.backgroundColor = '#e0e0e0'; btnDatos.style.color = 'black';
+            input.placeholder = 'INGRESE CÓDIGO PACIENTE';
+        } else {
+            btnCodigo.style.backgroundColor = '#e0e0e0'; btnCodigo.style.color = 'black';
+            btnDatos.style.backgroundColor = '#28a745'; btnDatos.style.color = 'white';
+            input.placeholder = 'INGRESE NOMBRE O C.I.';
+        }
+    }
 </script>
 </body>
 </html>
