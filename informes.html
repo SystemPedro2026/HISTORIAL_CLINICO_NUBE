@@ -31,6 +31,32 @@
         .status-icon { font-weight: bold; font-size: 1.2em; }
         .text-green { color: #28a745; }
         .text-red { color: #dc3545; }
+        
+        @media print {
+            /* Ocultamos absolutamente todos los controles de la interfaz */
+            .header, .selector-box, .search-box, .btn-nav, button, input { 
+                display: none !important; 
+            }
+            
+            /* Limpiamos contenedores y sombras para un acabado de papel profesional */
+            .container { 
+                box-shadow: none !important; 
+                border: none !important; 
+                width: 100% !important; 
+                padding: 0 !important; 
+            }
+        
+            /* Aseguramos que la tabla se vea impecable */
+            table { width: 100%; border: 1px solid #ccc; }
+            
+            /* Mostramos la firma al pie */
+            .footer-firma { 
+                display: block !important; 
+                margin-top: 100px; 
+                text-align: center; 
+            }
+        }
+       
     </style>
 </head>
 <body>
@@ -112,7 +138,7 @@
                 const valor = (f[1] || 'SIN EXAMEN').toUpperCase();
                 const esValido = valor !== 'SIN EXAMEN';
                 const icono = esValido ? '<span class="status-icon text-green">✔</span>' : '<span class="status-icon text-red">✘</span>';
-                body.innerHTML += `<tr><td>${f[0]}</td><td>${valor}</td><td style="text-align:center">${icono}</td></tr>`;
+                body.innerHTML += `<tr><td>${f[0]}</td><td style="text-align: center">${valor}</td><td style="text-align: center">${icono}</td></tr>`;
             });
             document.getElementById('tablaInforme').style.display = 'table';
         } catch (e) { alert("Error al buscar paciente"); }
