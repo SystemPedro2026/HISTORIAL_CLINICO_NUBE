@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe Consolidado - Historial Clínico Nube</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
+        .container { background: white; max-width: 900px; margin: auto; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .search-box { margin-bottom: 20px; }
+        input { padding: 10px; width: 200px; text-transform: uppercase; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
+        th { background-color: #2c55d0; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>INFORME CONSOLIDADO</h2>
+    <div class="search-box">
+        <input type="text" id="codigoInput" placeholder="CÓDIGO PACIENTE">
+        <button onclick="buscarInforme()">BUSCAR</button>
+    </div>
+    <div id="infoPaciente"></div>
+    <table id="tablaInforme" style="display:none;">
+        <thead><tr><th>EXAMEN</th><th>RESULTADO</th></tr></thead>
+        <tbody id="resultadosBody"></tbody>
+    </table>
+</div>
+
+<script>
+    async function buscarInforme() {
+        const codigo = document.getElementById('codigoInput').value.toUpperCase();
+        const response = await fetch(`/api/informe-consolidado/${codigo}`);
+        if (!response.ok) { alert("Paciente no encontrado"); return; }
+        const data = await response.json();
+        
+        document.getElementById('infoPaciente').innerHTML = `<h3>${data.datos_generales.nombre} (${data.datos_generales.codigo})</h3>`;
+        const body = document.getElementById('resultadosBody');
+        body.innerHTML = '';
+        
+        const res = data.resultados_medicos;
+        const filas = [
+            ["Aptitud Ocupacional", res["01_aptitud_ocupacional"]],
+            ["Aptitud Física", res["02_aptitud_fisica_psicologica"].fisico],
+            ["Aptitud Psicológica", res["02_aptitud_fisica_psicologica"].psico],
+            ["Osteomuscular", res["03_osteomuscular"]],
+            ["Espirometría", res["04_espirometria"]],
+            ["Oftalmología", res["05_oftalmologia"]],
+            ["Cardiología", res["06_cardiologia"]],
+            ["Electroencefalograma", res["07_electroencefalograma"]],
+            ["Altura", res["08_altura"]],
+            ["Declaración Jurada", res["09_declaracion_jurada"]],
+            ["Historial Clínico", res["10_historial_clinico"]],
+            ["Psicología Detallada", res["11_psicologia_detallada"]]
+        ];
+        
+        filas.forEach(f => {
+            body.innerHTML += `<tr><td>${f[0]}</td><td>${f[1]}</td></tr>`;
+        });
+        document.getElementById('tablaInforme').style.display = 'table';
+    }
+</script>
+</body>
+</html>
