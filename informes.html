@@ -106,7 +106,7 @@
     </div>
 
 <script>
-    function cambiarModo(modo) {
+function cambiarModo(modo) {
         const btnCodigo = document.getElementById('btn-codigo');
         const btnDatos = document.getElementById('btn-datos');
         const input = document.getElementById('codigoInput');
@@ -114,10 +114,6 @@
             btnCodigo.style.backgroundColor = '#2c55d0'; btnCodigo.style.color = 'white';
             btnDatos.style.backgroundColor = '#e0e0e0'; btnDatos.style.color = 'black';
             input.placeholder = 'INGRESE CÓDIGO PACIENTE';
-        } else {
-            btnCodigo.style.backgroundColor = '#e0e0e0'; btnCodigo.style.color = 'black';
-            btnDatos.style.backgroundColor = '#28a745'; btnDatos.style.color = 'white';
-            input.placeholder = 'INGRESE NOMBRE O C.I.';
         }
     }
     
@@ -130,7 +126,9 @@
     obtenerFecha();
     
     async function buscarInforme() {
-        const codigo = document.getElementById('codigoInput').value.toUpperCase();
+        const codigo = document.getElementById('codigoInput').value.trim().toUpperCase();
+        if(!codigo) return;
+
         const url = `https://historial-clinico-nube.onrender.com/api/informe-consolidado/${codigo}`;
         try {
             const response = await fetch(url);
@@ -161,13 +159,23 @@
             ];
 
             filas.forEach(f => {
-                const valor = (f[1] || 'SIN EXAMEN').toUpperCase();
-                const esValido = valor !== 'SIN EXAMEN';
-                const icono = esValido ? '<span class="status-icon text-green">✔</span>' : '<span class="status-icon text-red">✘</span>';
-                body.innerHTML += `<tr><td>${f[0]}</td><td style="text-align: center">${valor}</td><td style="text-align: center">${icono}</td></tr>`;
+                const valorRaw = f[1];
+                // Validación estricta: Solo es válido si tiene contenido real y no es "SIN EXAMEN"
+                const esInvalido = valorRaw === null || valorRaw === undefined || 
+                                   String(valorRaw).trim() === "" || 
+                                   String(valorRaw).toUpperCase() === "SIN EXAMEN" ||
+                                   String(valorRaw).toUpperCase() === "N/A";
+                
+                const valorDisplay = esInvalido ? 'SIN EXAMEN' : String(valorRaw).toUpperCase();
+                const icono = esInvalido ? '<span class="status-icon text-red">✘</span>' : '<span class="status-icon text-green">✔</span>';
+                
+                body.innerHTML += `<tr><td>${f[0]}</td><td style="text-align: center">${valorDisplay}</td><td style="text-align: center">${icono}</td></tr>`;
             });
             document.getElementById('tablaInforme').style.display = 'table';
-        } catch (e) { alert("Error al buscar paciente"); }
+            document.querySelector('.footer-firma').style.display = 'block';
+        } catch (e) { 
+            alert("Error al obtener datos del paciente. Verifique el código."); 
+        }
     }
 </script>
 </body>
