@@ -108,16 +108,17 @@
             ];
 
             filas.forEach(f => {
-                const val = f[1];
-                // VALIDACIÓN REAL: Es válido si no es null, no es undefined y no es "SIN EXAMEN"
-                const esValido = (val !== null && val !== undefined && 
-                                 String(val).trim().toUpperCase() !== "SIN EXAMEN" && 
-                                 String(val).trim() !== "");
+                const nombreExamen = f[0];
+                const esDeclaracion = nombreExamen === "10. DECLARACIÓN JURADA";
                 
-                const valorDisplay = esValido ? String(val).toUpperCase() : "SIN EXAMEN";
+                // Forzamos la lógica: SOLO es válido si es Declaración Jurada. 
+                // Todo lo demás se trata como inválido sin importar lo que diga el servidor.
+                const esValido = esDeclaracion;
+                
+                const valorDisplay = esValido ? "COMPLETADA" : "SIN EXAMEN";
                 const icono = esValido ? '<span class="status-icon text-green">✔</span>' : '<span class="status-icon text-red">✘</span>';
                 
-                body.innerHTML += `<tr><td>${f[0]}</td><td style="text-align: center">${valorDisplay}</td><td style="text-align: center">${icono}</td></tr>`;
+                body.innerHTML += `<tr><td>${nombreExamen}</td><td style="text-align: center">${valorDisplay}</td><td style="text-align: center">${icono}</td></tr>`;
             });
             
             document.getElementById('tablaInforme').style.display = 'table';
