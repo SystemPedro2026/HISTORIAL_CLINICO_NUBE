@@ -2,35 +2,46 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>BÚSQUEDA AVANZADA - HISTORIAL CLÍNICO NUBE</title>
+    <title>BÚSQUEDA AVANZADA - OHS</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .container { background: white; max-width: 900px; margin: auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .btn-nav { padding: 10px 20px; cursor: pointer; background: #2c55d0; color: white; border: none; border-radius: 6px; font-weight: bold; }
-        .titulo-informe { text-align: center; color: #2c55d0; font-weight: bold; text-transform: uppercase; margin-bottom: 25px; border-bottom: 3px solid #2c55d0; padding-bottom: 10px; }
-        .search-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 20px; background: #f9f9f9; border-radius: 8px; margin-bottom: 20px; }
-        .field-group { display: flex; flex-direction: column; }
-        input, select { padding: 10px; border: 1px solid #ccc; border-radius: 5px; text-transform: uppercase; }
-        .btn-buscar { grid-column: span 2; padding: 15px; background: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; border-radius: 5px; }
-        .ficha-resultado { background: #2c55d0; padding: 15px; border-radius: 8px; color: white; margin-bottom: 10px; text-transform: uppercase; font-weight: bold; }
+        .logo { height: 50px; }
+        .titulo-informe { text-align: center; color: #2c55d0; font-weight: bold; text-transform: uppercase; margin: 20px 0; border-bottom: 2px solid #2c55d0; }
+        .search-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 20px; background: #f9f9f9; border-radius: 8px; }
+        .btn-buscar { grid-column: span 2; padding: 15px; background: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; }
+        
+        /* Estilo de Impresión Elegante */
+        table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+        th { border-bottom: 2px solid #2c55d0; color: #2c55d0; padding: 10px; text-transform: uppercase; }
+        td { padding: 12px; border-bottom: 1px solid #eee; text-transform: uppercase; }
+        .footer-print { margin-top: 50px; text-align: center; font-size: 12px; }
+        
+        @media print { .no-print { display: none; } }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="header">
+    <div class="header no-print">
         <button class="btn-nav" onclick="history.back()">← VOLVER</button>
         <button class="btn-nav" onclick="window.print()">IMPRIMIR</button>
     </div>
-    <h2 class="titulo-informe">BÚSQUEDA AVANZADA</h2>
     
-    <div class="search-grid">
+    <div class="no-print" style="text-align: center;">
+        <img src="https://ingerutonny-ui.github.io/HISTORIAL_CLINICO_NUBE/logo.png" class="logo">
+        <h2 class="titulo-informe">BÚSQUEDA AVANZADA</h2>
+    </div>
+
+    <div class="search-grid no-print">
         <div class="field-group"><label>SEXO</label><select id="sexo"><option value="">SELECCIONE...</option><option value="MASCULINO">MASCULINO</option><option value="FEMENINO">FEMENINO</option></select></div>
         <div class="field-group"><label>LUGAR NACIMIENTO</label><input type="text" id="lugar" placeholder="LUGAR"></div>
         <div class="field-group"><label>ESTADO CIVIL</label><select id="est_civil"><option value="">SELECCIONE...</option><option value="SOLTERO/A">SOLTERO/A</option><option value="CASADO/A">CASADO/A</option></select></div>
         <div class="field-group"><label>PROFESIÓN</label><input type="text" id="profesion" placeholder="PROFESIÓN"></div>
         <button class="btn-buscar" onclick="buscarPacientes()">BUSCAR PACIENTE</button>
     </div>
+
     <div id="resultadosContainer"></div>
 </div>
 
@@ -40,6 +51,7 @@
     async function buscarPacientes() {
         const container = document.getElementById('resultadosContainer');
         container.innerHTML = "BUSCANDO...";
+        
         try {
             const resp = await fetch(`${API}/pacientes/`);
             const pacientes = await resp.json();
@@ -58,9 +70,19 @@
                     encontrados.push({ nombre: `${det.paciente.nombre} ${det.paciente.apellido}`, codigo: det.paciente.codigo_paciente });
                 }
             }
-            container.innerHTML = encontrados.length > 0 ? 
-                encontrados.map(p => `<div class="ficha-resultado">PACIENTE: ${p.nombre.toUpperCase()}<br>CÓDIGO PACIENTE: ${p.codigo.toUpperCase()}</div>`).join('') :
-                "NO SE ENCONTRARON RESULTADOS.";
+
+            const now = new Date();
+            const fechaStr = now.toLocaleDateString('es-ES');
+            const horaStr = now.toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'});
+
+            container.innerHTML = encontrados.length > 0 ? `
+                <table id="tablaPrint">
+                    <thead><tr><th>PACIENTE</th><th>CÓDIGO PACIENTE</th></tr></thead>
+                    <tbody>${encontrados.map(p => `<tr><td>${p.nombre.toUpperCase()}</td><td>${p.codigo.toUpperCase()}</td></tr>`).join('')}</tbody>
+                </table>
+                <div class="footer-print">
+                    <br><br>__________________________<br>FIRMA Y SELLO MÉDICO<br>HISTORIAL CLÍNICO NUBE<br>FECHA: ${fechaStr} | HORA: ${horaStr}
+                </div>` : "NO SE ENCONTRARON RESULTADOS.";
         } catch(e) { container.innerHTML = "ERROR AL BUSCAR."; }
     }
 </script>
