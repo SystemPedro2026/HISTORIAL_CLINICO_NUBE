@@ -4,29 +4,39 @@
     <meta charset="UTF-8">
     <title>Informe Consolidado - Historial Clínico Nube</title>
     <style>
-        /* Estilos generales */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; padding: 20px; }
         .container { background: white; max-width: 900px; margin: auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         
-        /* Título Elegante */
+        /* Cabecera y Logo */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .logo { height: 60px; width: auto; } /* Control de tamaño corregido */
+        .btn-nav { padding: 8px 15px; cursor: pointer; background: #333; color: white; border: none; border-radius: 4px; }
+
         .titulo-informe { text-align: center; color: #2c55d0; font-weight: bold; text-transform: uppercase; margin-bottom: 25px; border-bottom: 3px solid #2c55d0; padding-bottom: 10px; }
         
-        /* Ficha de Datos del Paciente */
+        /* Selector y Búsqueda */
+        .selector-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-mode { flex: 1; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .search-box { margin-bottom: 20px; text-align: center; }
+        input { padding: 10px; width: 300px; text-transform: uppercase; border: 1px solid #ccc; }
+        
+        /* Ficha de Paciente */
         .ficha-paciente { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 25px; border-left: 5px solid #2c55d0; }
         .dato-item { display: flex; flex-direction: column; }
         .label-dato { font-size: 0.8em; color: #666; text-transform: uppercase; font-weight: bold; }
         .valor-dato { font-size: 1.1em; font-weight: 600; color: #333; }
         
-        /* Tabla Estilizada */
+        /* Tabla */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th { background-color: #2c55d0 !important; color: white !important; padding: 12px; text-align: left; }
         td { padding: 12px; border-bottom: 1px solid #eee; }
         
-        /* Media Query de Impresión (Lo que ocultaremos) */
+        /* Impresión */
         @media print {
             .header, .selector-box, .search-box, .btn-nav { display: none !important; }
-            .container { box-shadow: none !important; border: none !important; }
-            .footer-firma { display: block !important; }
+            .container { box-shadow: none !important; border: none !important; width: 100%; }
+            .footer-firma { display: block !important; margin-top: 100px; text-align: center; }
+            .linea-firma { width: 300px; border-top: 1px solid #000; margin: 0 auto 10px auto; }
         }
     </style>
 </head>
@@ -35,7 +45,7 @@
 <div class="container">
     <div class="header">
         <button class="btn-nav" onclick="history.back()">← VOLVER</button>
-        <img src="logo.png" alt="Logo OHS" class="logo"> <!-- Asegúrate de tener tu logo.png -->
+        <img src="logo.png" alt="Logo OHS" class="logo">
         <button class="btn-nav" onclick="window.print()">IMPRIMIR</button>
     </div>
 
@@ -56,12 +66,12 @@
         <thead><tr><th>EXAMEN</th><th>RESULTADO</th></tr></thead>
         <tbody id="resultadosBody"></tbody>
     </table>
+
     <div class="footer-firma" style="display:none;">
         <div class="linea-firma"></div>
         <p>FIRMA Y SELLO MÉDICO</p>
         <p>HISTORIAL CLÍNICO NUBE</p>
     </div>
-    
 </div>
 
 <script>
@@ -69,27 +79,20 @@
         const btnCodigo = document.getElementById('btn-codigo');
         const btnDatos = document.getElementById('btn-datos');
         const input = document.getElementById('codigoInput');
-
         if (modo === 'codigo') {
-            btnCodigo.style.backgroundColor = '#2c55d0';
-            btnCodigo.style.color = 'white';
-            btnDatos.style.backgroundColor = '#e0e0e0';
-            btnDatos.style.color = 'black';
+            btnCodigo.style.backgroundColor = '#2c55d0'; btnCodigo.style.color = 'white';
+            btnDatos.style.backgroundColor = '#e0e0e0'; btnDatos.style.color = 'black';
             input.placeholder = 'INGRESE CÓDIGO PACIENTE';
         } else {
-            btnCodigo.style.backgroundColor = '#e0e0e0';
-            btnCodigo.style.color = 'black';
-            btnDatos.style.backgroundColor = '#28a745';
-            btnDatos.style.color = 'white';
+            btnCodigo.style.backgroundColor = '#e0e0e0'; btnCodigo.style.color = 'black';
+            btnDatos.style.backgroundColor = '#28a745'; btnDatos.style.color = 'white';
             input.placeholder = 'INGRESE NOMBRE O C.I.';
         }
     }
 
     async function buscarInforme() {
-        // Lógica de búsqueda (se mantiene igual, mañana la expandimos para modo DATOS)
         const codigo = document.getElementById('codigoInput').value.toUpperCase();
         const url = `https://historial-clinico-nube.onrender.com/api/informe-consolidado/${codigo}`;
-    
         try {
             const response = await fetch(url);
             if (!response.ok) throw new Error();
@@ -107,28 +110,28 @@
                     </div>
                 </div>
             `;
-    
+            
+            const body = document.getElementById('resultadosBody');
+            body.innerHTML = '';
             const res = data.resultados_medicos;
             const filas = [
-                ["Aptitud Ocupacional", res["01_aptitud_ocupacional"]],
-                ["Aptitud Física", res["02_aptitud_fisica_psicologica"]?.fisico],
-                ["Aptitud Psicológica", res["02_aptitud_fisica_psicologica"]?.psico],
-                ["Osteomuscular", res["03_osteomuscular"]],
-                ["Espirometría", res["04_espirometria"]],
-                ["Oftalmología", res["05_oftalmologia"]],
-                ["Cardiología", res["06_cardiologia"]],
-                ["Electroencefalograma", res["07_electroencefalograma"]],
-                ["Altura", res["08_altura"]],
-                ["Declaración Jurada", res["09_declaracion_jurada"]],
-                ["Historial Clínico", res["10_historial_clinico"]],
-                ["Psicología Detallada", res["11_psicologia_detallada"]]
+                ["01. Aptitud Ocupacional", res["01_aptitud_ocupacional"]],
+                ["02. Aptitud Física", res["02_aptitud_fisica_psicologica"]?.fisico],
+                ["03. Aptitud Psicológica", res["02_aptitud_fisica_psicologica"]?.psico],
+                ["04. Osteomuscular", res["03_osteomuscular"]],
+                ["05. Espirometría", res["04_espirometria"]],
+                ["06. Oftalmología", res["05_oftalmologia"]],
+                ["07. Cardiología", res["06_cardiologia"]],
+                ["08. Electroencefalograma", res["07_electroencefalograma"]],
+                ["09. Altura", res["08_altura"]],
+                ["10. Declaración Jurada", res["09_declaracion_jurada"]],
+                ["11. Historial Clínico", res["10_historial_clinico"]],
+                ["12. Psicología Detallada", res["11_psicologia_detallada"]]
             ];
-    
             filas.forEach(f => {
                 body.innerHTML += `<tr><td>${f[0].toUpperCase()}</td><td>${(f[1] || 'SIN DATOS').toUpperCase()}</td></tr>`;
             });
             document.getElementById('tablaInforme').style.display = 'table';
-    
         } catch (error) {
             alert("Paciente no encontrado o error en el servidor");
         }
