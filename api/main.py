@@ -9,6 +9,7 @@ from .crud import create_doctor, create_enfermera
 from . import models
 from .models import FichaAptitudFisica 
 from .database import get_db
+from sqlalchemy import desc
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -969,8 +970,8 @@ async def filtrar_osteomuscular(estado: str, db: Session = Depends(get_db)):
 async def obtener_informe_consolidado(codigo_paciente: str, db: Session = Depends(get_db)):
     p = db.query(models.Paciente).filter(models.Paciente.codigo_paciente == codigo_paciente).first()
     if not p: raise HTTPException(status_code=404, detail="Paciente no encontrado")
-        
-    apt = db.query(models.FichaAptitud).filter(models.FichaAptitud.paciente_id == p.id).first()
+
+    apt = db.query(models.FichaAptitud).filter(models.FichaAptitud.paciente_id == p.id).order_by(desc(models.FichaAptitud.id)).first()
     fis = db.query(models.FichaAptitudFisica).filter(models.FichaAptitudFisica.codigo_paciente == p.codigo_paciente).first()
     ost = db.query(models.FichaOsteomuscular).filter(models.FichaOsteomuscular.codigo_paciente == p.codigo_paciente).first()
     esp = db.query(models.FichaEspirometria).filter(models.FichaEspirometria.paciente_id == p.id).first()
