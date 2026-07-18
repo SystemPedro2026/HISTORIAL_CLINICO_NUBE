@@ -974,7 +974,7 @@ async def obtener_informe_consolidado(codigo_paciente: str, db: Session = Depend
         (models.FichaAptitud.paciente_id == p.id) | 
         (models.FichaAptitud.codigo_paciente == p.codigo_paciente)
     ).first()
-    apt = db.query(models.FichaAptitud).filter(models.FichaAptitud.paciente_id == p.id).first()
+   
     fis = db.query(models.FichaAptitudFisica).filter(models.FichaAptitudFisica.codigo_paciente == p.codigo_paciente).first()
     ost = db.query(models.FichaOsteomuscular).filter(models.FichaOsteomuscular.codigo_paciente == p.codigo_paciente).first()
     esp = db.query(models.FichaEspirometria).filter(models.FichaEspirometria.paciente_id == p.id).first()
