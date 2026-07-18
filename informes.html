@@ -4,57 +4,30 @@
     <meta charset="UTF-8">
     <title>Informe Consolidado - Historial Clínico Nube</title>
     <style>
-        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
-        .container { background: white; max-width: 900px; margin: auto; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        /* Estilos generales */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; padding: 20px; }
+        .container { background: white; max-width: 900px; margin: auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         
-        /* Cabecera */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .logo { height: 50px; }
-        .btn-nav { padding: 8px 15px; cursor: pointer; background: #333; color: white; border: none; border-radius: 4px; }
+        /* Título Elegante */
+        .titulo-informe { text-align: center; color: #2c55d0; font-weight: bold; text-transform: uppercase; margin-bottom: 25px; border-bottom: 3px solid #2c55d0; padding-bottom: 10px; }
         
-        /* Selector */
-        .selector-box { display: flex; gap: 10px; margin-bottom: 20px; }
-        .btn-mode { flex: 1; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        /* Ficha de Datos del Paciente */
+        .ficha-paciente { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 25px; border-left: 5px solid #2c55d0; }
+        .dato-item { display: flex; flex-direction: column; }
+        .label-dato { font-size: 0.8em; color: #666; text-transform: uppercase; font-weight: bold; }
+        .valor-dato { font-size: 1.1em; font-weight: 600; color: #333; }
         
-        .search-box { margin-bottom: 20px; text-align: center; }
-        input { padding: 10px; width: 300px; text-transform: uppercase; border: 1px solid #ccc; }
+        /* Tabla Estilizada */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background-color: #2c55d0 !important; color: white !important; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; text-transform: uppercase; }
-        th, td { padding: 12px; border-bottom: 1px solid #ddd; }
-        th { background-color: #2c55d0; color: white; }
+        /* Media Query de Impresión (Lo que ocultaremos) */
         @media print {
-            /* Ocultamos todo lo innecesario */
             .header, .selector-box, .search-box, .btn-nav { display: none !important; }
-            
-            /* Configuración de página */
-            @page { size: auto; margin: 20mm; }
-            body { background: white !important; }
-            
-            /* Contenedor principal */
-            .container { box-shadow: none !important; width: 100% !important; }
-        
-            /* Membrete elegante */
-            h2 { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 30px; }
-            
-            /* Tabla profesional */
-            table { border: 1px solid #000; margin-bottom: 50px; }
-            th { background-color: #f2f2f2 !important; color: #000 !important; border: 1px solid #000; }
-            td { border: 1px solid #ccc; padding: 10px; }
-        
-            /* SECCIÓN DE FIRMA Y SELLO */
-            .footer-firma {
-                display: block !important;
-                margin-top: 80px;
-                text-align: center;
-                width: 100%;
-            }
-            .linea-firma {
-                width: 300px;
-                border-top: 1px solid #000;
-                margin: 0 auto 10px auto;
-            }
+            .container { box-shadow: none !important; border: none !important; }
+            .footer-firma { display: block !important; }
         }
-        
     </style>
 </head>
 <body>
@@ -66,7 +39,7 @@
         <button class="btn-nav" onclick="window.print()">IMPRIMIR</button>
     </div>
 
-    <h2>INFORME CONSOLIDADO</h2>
+    <h2 class="titulo-informe">INFORME CONSOLIDADO</h2>
 
     <div class="selector-box">
         <button id="btn-codigo" class="btn-mode" style="background-color: #2c55d0; color: white;" onclick="cambiarModo('codigo')">POR CÓDIGO</button>
@@ -122,9 +95,18 @@
             if (!response.ok) throw new Error();
             const data = await response.json();
             
-            document.getElementById('infoPaciente').innerHTML = `<h3>${data.datos_generales.nombre} (${data.datos_generales.codigo})</h3>`;
-            const body = document.getElementById('resultadosBody');
-            body.innerHTML = '';
+            document.getElementById('infoPaciente').innerHTML = `
+                <div class="ficha-paciente">
+                    <div class="dato-item">
+                        <span class="label-dato">NOMBRE DEL PACIENTE</span>
+                        <span class="valor-dato">${data.datos_generales.nombre}</span>
+                    </div>
+                    <div class="dato-item">
+                        <span class="label-dato">CÓDIGO DE PACIENTE</span>
+                        <span class="valor-dato">${data.datos_generales.codigo}</span>
+                    </div>
+                </div>
+            `;
     
             const res = data.resultados_medicos;
             const filas = [
