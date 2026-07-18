@@ -27,6 +27,7 @@ def get_db():
     try: yield db
     finally: db.close()
 
+
 # ----------- BLOQUE P1: FILIACION -----------
 @app.post("/filiacion/")
 def guardar_filiacion(data: dict, db: Session = Depends(get_db)):
@@ -42,7 +43,22 @@ def obtener_paciente_completo(paciente_id: int, db: Session = Depends(get_db)):
         "antecedentes": db.query(models.AntecedentesP2).filter(models.AntecedentesP2.paciente_id == paciente_id).first(),
         "habitos": db.query(models.HabitosRiesgosP3).filter(models.HabitosRiesgosP3.paciente_id == paciente_id).first()
     }
-
+    
+@app.get("/verificar_estado_paciente/{paciente_id}")
+def verificar_estado_paciente(paciente_id: int, db: Session = Depends(get_db)):
+    return {
+        "aptitud": db.query(models.Aptitud).filter(models.Aptitud.paciente_id == paciente_id).first() is not None,
+        "oftalmo": db.query(models.Oftalmologia).filter(models.Oftalmologia.paciente_id == paciente_id).first() is not None,
+        "psicologia": db.query(models.Psicologia).filter(models.Psicologia.paciente_id == paciente_id).first() is not None,
+        "laboratorio": db.query(models.Laboratorio).filter(models.Laboratorio.paciente_id == paciente_id).first() is not None,
+        "radiografia": db.query(models.Radiografia).filter(models.Radiografia.paciente_id == paciente_id).first() is not None,
+        "odontologia": db.query(models.Odontologia).filter(models.Odontologia.paciente_id == paciente_id).first() is not None,
+        "otorrino": db.query(models.Otorrino).filter(models.Otorrino.paciente_id == paciente_id).first() is not None,
+        "neurologia": db.query(models.Neurologia).filter(models.Neurologia.paciente_id == paciente_id).first() is not None,
+        "cardiologia": db.query(models.Cardiologia).filter(models.Cardiologia.paciente_id == paciente_id).first() is not None,
+        "traumatologia": db.query(models.Traumatologia).filter(models.Traumatologia.paciente_id == paciente_id).first() is not None,
+        "medicina": db.query(models.Medicina).filter(models.Medicina.paciente_id == paciente_id).first() is not None
+    }
 # ----------- BLOQUE P2 y P3 -----------
 @app.post("/p2/")
 def guardar_p2(data: dict, db: Session = Depends(get_db)):
