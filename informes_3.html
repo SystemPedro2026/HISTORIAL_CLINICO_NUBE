@@ -20,7 +20,7 @@
         th { border-bottom: 2px solid #2c55d0; color: #2c55d0; padding: 12px; text-transform: uppercase; text-align: center; }
         td { padding: 12px; border-bottom: 1px solid #eee; text-transform: uppercase; text-align: center; }
         .col-num { width: 50px; text-align: center; }
-        .col-nom { padding-left: 40px !important; text-align: left; }
+        .col-nom { padding-left: 20px !important; text-align: left; }
         
         .print-only { display: none; }
         @media print {
@@ -41,9 +41,42 @@
     <div class="no-print"><h2 class="titulo-informe">BÚSQUEDA PERSONAL</h2></div>
 
     <div class="search-grid no-print">
-        <div class="field-group"><label>TURNO</label><select id="sexo"><option value="">SELECCIONE...</option><option value="MASCULINO">MASCULINO</option><option value="FEMENINO">FEMENINO</option></select></div>
-        <div class="field-group"><label>ESPECIALIDAD</label><input type="text" id="lugar" placeholder="LUGAR"></div>
-        <button class="btn-buscar" onclick="buscarPacientes()">BUSCAR PACIENTE</button>
+        <div class="field-group">
+            <label>PROFESIONAL</label>
+            <select id="tipoProfesional">
+                <option value="">TODOS...</option>
+                <option value="DOCTOR">DOCTOR</option>
+                <option value="ENFERMERA">ENFERMERA</option>
+            </select>
+        </div>
+        <div class="field-group">
+            <label>TURNO</label>
+            <select id="turno">
+                <option value="">TODOS...</option>
+                <option value="MAÑANA">MAÑANA</option>
+                <option value="TARDE">TARDE</option>
+                <option value="NOCHE">NOCHE</option>
+            </select>
+        </div>
+        <div class="field-group" style="grid-column: span 2;">
+            <label>ESPECIALIDAD</label>
+            <select id="especialidad">
+                <option value="">TODAS...</option>
+                <option value="MEDICINA GENERAL">MEDICINA GENERAL</option>
+                <option value="OFTALMOLOGÍA">OFTALMOLOGÍA</option>
+                <option value="PSICOLOGÍA">PSICOLOGÍA</option>
+                <option value="ESPIROMETRÍA">ESPIROMETRÍA</option>
+                <option value="ELECTROENCEFALOGRAMA">ELECTROENCEFALOGRAMA</option>
+                <option value="CARDIOLOGÍA">CARDIOLOGÍA</option>
+                <option value="TRABAJO CON ALTURA">TRABAJO CON ALTURA</option>
+                <option value="APTITUD LABORAL">APTITUD LABORAL</option>
+                <option value="FISICA - PSICOLOGICA">FISICA - PSICOLOGICA</option>
+                <option value="OSTEOMUSCULAR">OSTEOMUSCULAR</option>
+                <option value="ENFERMERIA GENERAL">ENFERMERIA GENERAL</option>
+                <option value="ENFERMERIA INSTRUMENTAL">ENFERMERIA INSTRUMENTAL</option>
+            </select>
+        </div>
+        <button class="btn-buscar" onclick="buscarPersonal()">BUSCAR PERSONAL</button>
     </div>
 
     <div id="resultadosContainer"></div>
@@ -51,40 +84,93 @@
 
 <script>
     const API = 'https://historial-clinico-nube.onrender.com';
-    async function buscarPacientes() {
+    async function buscarPersonal() {
         const container = document.getElementById('resultadosContainer');
         container.innerHTML = "BUSCANDO...";
         try {
-            const resp = await fetch(`${API}/pacientes/`);
-            const pacientes = await resp.json();
+            const tipo = document.getElementById('tipoProfesional').value;
+            const turnoFiltro = document.getElementById('turno').value;
+            const espFiltro = document.getElementById('especialidad').value;
+
             let encontrados = [];
-            for (let p of pacientes) {
-                const det = await fetch(`${API}/api/paciente-completo/${p.id}`).then(r => r.json());
-                const f = det.filiacion || {};
-                if ((!document.getElementById('sexo').value || f.sexo === document.getElementById('sexo').value) &&
-                    (!document.getElementById('lugar').value || (f.lugar_nacimiento && f.lugar_nacimiento.includes(document.getElementById('lugar').value.toUpperCase()))) &&
-                    (!document.getElementById('est_civil').value || f.estado_civil === document.getElementById('est_civil').value) &&
-                    (!document.getElementById('profesion').value || (f.profesion_oficio && f.profesion_oficio.includes(document.getElementById('profesion').value.toUpperCase())))) {
-                    encontrados.push({ nombre: `${det.paciente.nombre} ${det.paciente.apellido}`, codigo: det.paciente.codigo_paciente });
-                }
+
+            if (!tipo || tipo === 'DOCTOR') {
+                try {
+                    const respDoc = await fetch(`${API}/doctores/`);
+                    if (respDoc.ok) {
+                        const doctores = await respDoc.json();
+                        doctores.forEach(d => {
+                            const tDoc = (d.turno_doc || '').toUpperCase();
+                            const eDoc = (d.especialidad || '').toUpperCase();
+                            if ((!turnoFiltro || tDoc === turnoFiltro) && (!espFiltro || eDoc === espFiltro)) {
+                                encontrados.push({
+                                    ci: d.ci_doc || '',
+                                    nombre: `${d.nombre_doc || ''} ${d.appaterno_doc || ''} ${d.apmaterno_doc || ''}`.trim(),
+                                    especialidad: d.especialidad || '',
+                                    turno: d.turno_doc || '',
+                                    tipo: 'DOCTOR'
+                                });
+                            }
+                        });
+                    }
+                } catch(err) {}
+            }
+
+            if (!tipo || tipo === 'ENFERMERA') {
+                try {
+                    const respEnf = await fetch(`${API}/enfermeras/`);
+                    if (respEnf.ok) {
+                        const enfermeras = await respEnf.json();
+                        enfermeras.forEach(e => {
+                            const tEnf = (e.turno_enfe || '').toUpperCase();
+                            const eEnf = (e.especialidad || '').toUpperCase();
+                            if ((!turnoFiltro || tEnf === turnoFiltro) && (!espFiltro || eEnf === espFiltro)) {
+                                encontrados.push({
+                                    ci: e.ci_enfe || '',
+                                    nombre: `${e.nombre_enfe || ''} ${e.appaterno_enfe || ''} ${e.apmaterno_enfe || ''}`.trim(),
+                                    especialidad: e.especialidad || '',
+                                    turno: e.turno_enfe || '',
+                                    tipo: 'ENFERMERA'
+                                });
+                            }
+                        });
+                    }
+                } catch(err) {}
             }
 
             const now = new Date();
             const criterios = [];
-            if (document.getElementById('sexo').value) criterios.push(`SEXO: ${document.getElementById('sexo').value}`);
-            if (document.getElementById('lugar').value) criterios.push(`LUGAR: ${document.getElementById('lugar').value.toUpperCase()}`);
-            if (document.getElementById('est_civil').value) criterios.push(`ESTADO CIVIL: ${document.getElementById('est_civil').value}`);
-            if (document.getElementById('profesion').value) criterios.push(`PROFESIÓN: ${document.getElementById('profesion').value.toUpperCase()}`);
+            if (tipo) criterios.push(`PROFESIONAL: ${tipo}`);
+            if (turnoFiltro) criterios.push(`TURNO: ${turnoFiltro}`);
+            if (espFiltro) criterios.push(`ESPECIALIDAD: ${espFiltro}`);
             const criterioText = criterios.length > 0 ? `<p style="font-size: 11px; color: #555;">FILTROS: ${criterios.join(' | ')}</p>` : "";
 
             container.innerHTML = encontrados.length > 0 ? `
                 <div class="print-only">
-                    <h2>INFORME DE BÚSQUEDA DE PACIENTES</h2>
+                    <h2>INFORME DE BÚSQUEDA DE PERSONAL MÉDICO</h2>
                     ${criterioText}
                 </div>
                 <table>
-                    <thead><tr><th class="col-num">#</th><th class="col-nom">PACIENTE</th><th>CÓDIGO PACIENTE</th></tr></thead>
-                    <tbody>${encontrados.map((p, i) => `<tr><td class="col-num">${i + 1}</td><td class="col-nom">${p.nombre.toUpperCase()}</td><td>${p.codigo.toUpperCase()}</td></tr>`).join('')}</tbody>
+                    <thead>
+                        <tr>
+                            <th class="col-num">#</th>
+                            <th>C.I.</th>
+                            <th class="col-nom">NOMBRE COMPLETO</th>
+                            <th>ESPECIALIDAD / CARGO</th>
+                            <th>TURNO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${encontrados.map((p, i) => `
+                            <tr>
+                                <td class="col-num">${i + 1}</td>
+                                <td>${p.ci.toUpperCase()}</td>
+                                <td class="col-nom">${p.nombre.toUpperCase()}</td>
+                                <td>${p.especialidad.toUpperCase()}</td>
+                                <td>${p.turno.toUpperCase()}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
                 </table>
                 <div class="footer-print print-only">
                     <br><br>__________________________<br>FIRMA Y SELLO MÉDICO<br>HISTORIAL CLÍNICO NUBE<br>FECHA: ${now.toLocaleDateString('es-ES')} | HORA: ${now.toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'})}
