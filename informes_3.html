@@ -62,15 +62,13 @@
             <label>ESPECIALIDAD</label>
             <select id="especialidad">
                 <option value="">TODAS...</option>
-                <option value="GENERAL">MEDICINA GENERAL</option>
+                <option value="MEDICINA GENERAL">MEDICINA GENERAL</option>
                 <option value="OFTALMOLOGÍA">OFTALMOLOGÍA</option>
                 <option value="PSICOLOGÍA">PSICOLOGÍA</option>
                 <option value="ESPIROMETRÍA">ESPIROMETRÍA</option>
                 <option value="ELECTROENCEFALOGRAMA">ELECTROENCEFALOGRAMA</option>
                 <option value="CARDIOLOGÍA">CARDIOLOGÍA</option>
                 <option value="NEUROLOGÍA">NEUROLOGÍA</option>
-                <option value="OSTEOLOGÍA">OSTEOLOGÍA</option>
-                <option value="REUMATOLOGÍA">REUMATOLOGÍA</option>
                 <option value="TRABAJO CON ALTURA">TRABAJO CON ALTURA</option>
                 <option value="APTITUD LABORAL">APTITUD LABORAL</option>
                 <option value="FISICA - PSICOLOGICA">FISICA - PSICOLOGICA</option>
@@ -86,10 +84,8 @@
 </div>
 
 <script>
-  
     const API = 'https://historial-clinico-nube.onrender.com';
 
-    // Función auxiliar para normalizar texto (eliminar tildes y pasar a mayúsculas)
     function normalizar(texto) {
         return (texto || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
     }
@@ -150,7 +146,7 @@
                     <thead>
                         <tr>
                             <th class="col-num">#</th>
-                            <th>C.I.</th>
+                            <th>PROFESIONAL</th>
                             <th class="col-nom">NOMBRE COMPLETO</th>
                             <th>ESPECIALIDAD / CARGO</th>
                             <th>TURNO</th>
@@ -160,7 +156,7 @@
                         ${encontrados.map((p, i) => `
                             <tr>
                                 <td class="col-num">${i + 1}</td>
-                                <td>${p.ci.toUpperCase()}</td>
+                                <td>${p.tipo}</td>
                                 <td class="col-nom">${p.nombre.toUpperCase()}</td>
                                 <td>${p.especialidad.toUpperCase()}</td>
                                 <td>${p.turno.toUpperCase()}</td>
@@ -173,7 +169,6 @@
                 </div>` : "NO SE ENCONTRARON RESULTADOS.";
         } catch(e) { container.innerHTML = "ERROR AL BUSCAR."; }
     }
-
 </script>
 </body>
 </html>
