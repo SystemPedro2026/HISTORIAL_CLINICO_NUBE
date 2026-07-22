@@ -94,9 +94,10 @@
 
             let encontrados = [];
 
+            // Petición unificada ajustada a los endpoints reales del sistema en Render
             if (!tipo || tipo === 'DOCTOR') {
                 try {
-                    const respDoc = await fetch(`${API}/doctores/`);
+                    const respDoc = await fetch(`${API}/doctores`);
                     if (respDoc.ok) {
                         const doctores = await respDoc.json();
                         doctores.forEach(d => {
@@ -118,7 +119,7 @@
 
             if (!tipo || tipo === 'ENFERMERA') {
                 try {
-                    const respEnf = await fetch(`${API}/enfermeras/`);
+                    const respEnf = await fetch(`${API}/enfermeras`);
                     if (respEnf.ok) {
                         const enfermeras = await respEnf.json();
                         enfermeras.forEach(e => {
