@@ -84,14 +84,21 @@
 </div>
 
 <script>
+  
     const API = 'https://historial-clinico-nube.onrender.com';
+
+    // Función auxiliar para normalizar texto (eliminar tildes y pasar a mayúsculas)
+    function normalizar(texto) {
+        return (texto || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
+    }
+
     async function buscarPersonal() {
         const container = document.getElementById('resultadosContainer');
         container.innerHTML = "BUSCANDO...";
         try {
             const tipo = document.getElementById('tipoProfesional').value;
             const turnoFiltro = document.getElementById('turno').value;
-            const espFiltro = document.getElementById('especialidad').value;
+            const espFiltro = normalizar(document.getElementById('especialidad').value);
 
             let encontrados = [];
 
@@ -119,8 +126,8 @@
 
                 encontrados = personalTotal.filter(p => {
                     const matchTipo = !tipo || p.tipo === tipo;
-                    const matchTurno = !turnoFiltro || p.turno.toUpperCase() === turnoFiltro;
-                    const matchEsp = !espFiltro || p.especialidad.toUpperCase() === espFiltro;
+                    const matchTurno = !turnoFiltro || normalizar(p.turno) === turnoFiltro;
+                    const matchEsp = !espFiltro || normalizar(p.especialidad) === espFiltro;
                     return matchTipo && matchTurno && matchEsp;
                 });
             }
@@ -129,7 +136,7 @@
             const criterios = [];
             if (tipo) criterios.push(`PROFESIONAL: ${tipo}`);
             if (turnoFiltro) criterios.push(`TURNO: ${turnoFiltro}`);
-            if (espFiltro) criterios.push(`ESPECIALIDAD: ${espFiltro}`);
+            if (document.getElementById('especialidad').value) criterios.push(`ESPECIALIDAD: ${document.getElementById('especialidad').value.toUpperCase()}`);
             const criterioText = criterios.length > 0 ? `<p style="font-size: 11px; color: #555;">FILTROS: ${criterios.join(' | ')}</p>` : "";
 
             container.innerHTML = encontrados.length > 0 ? `
@@ -164,6 +171,7 @@
                 </div>` : "NO SE ENCONTRARON RESULTADOS.";
         } catch(e) { container.innerHTML = "ERROR AL BUSCAR."; }
     }
+
 </script>
 </body>
 </html>
