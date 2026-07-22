@@ -94,49 +94,34 @@
 
             let encontrados = [];
 
-            // Petición unificada ajustada a los endpoints reales del sistema en Render
-            if (!tipo || tipo === 'DOCTOR') {
-                try {
-                    const respDoc = await fetch(`${API}/doctores`);
-                    if (respDoc.ok) {
-                        const doctores = await respDoc.json();
-                        doctores.forEach(d => {
-                            const tDoc = (d.turno_doc || '').toUpperCase();
-                            const eDoc = (d.especialidad || '').toUpperCase();
-                            if ((!turnoFiltro || tDoc === turnoFiltro) && (!espFiltro || eDoc === espFiltro)) {
-                                encontrados.push({
-                                    ci: d.ci_doc || '',
-                                    nombre: `${d.nombre_doc || ''} ${d.appaterno_doc || ''} ${d.apmaterno_doc || ''}`.trim(),
-                                    especialidad: d.especialidad || '',
-                                    turno: d.turno_doc || '',
-                                    tipo: 'DOCTOR'
-                                });
-                            }
-                        });
-                    }
-                } catch(err) {}
-            }
+            const resp = await fetch(`${API}/personal/`);
+            if (resp.ok) {
+                const data = await resp.json();
+                
+                const doctores = (data.doctores || []).map(d => ({
+                    ci: d.ci_doc || '',
+                    nombre: `${d.nombre_doc || ''} ${d.appaterno_doc || ''} ${d.apmaterno_doc || ''}`.trim(),
+                    especialidad: d.especialidad || '',
+                    turno: d.turno_doc || '',
+                    tipo: 'DOCTOR'
+                }));
 
-            if (!tipo || tipo === 'ENFERMERA') {
-                try {
-                    const respEnf = await fetch(`${API}/enfermeras`);
-                    if (respEnf.ok) {
-                        const enfermeras = await respEnf.json();
-                        enfermeras.forEach(e => {
-                            const tEnf = (e.turno_enfe || '').toUpperCase();
-                            const eEnf = (e.especialidad || '').toUpperCase();
-                            if ((!turnoFiltro || tEnf === turnoFiltro) && (!espFiltro || eEnf === espFiltro)) {
-                                encontrados.push({
-                                    ci: e.ci_enfe || '',
-                                    nombre: `${e.nombre_enfe || ''} ${e.appaterno_enfe || ''} ${e.apmaterno_enfe || ''}`.trim(),
-                                    especialidad: e.especialidad || '',
-                                    turno: e.turno_enfe || '',
-                                    tipo: 'ENFERMERA'
-                                });
-                            }
-                        });
-                    }
-                } catch(err) {}
+                const enfermeras = (data.enfermeras || []).map(e => ({
+                    ci: e.ci_enfe || '',
+                    nombre: `${e.nombre_enfe || ''} ${e.appaterno_enfe || ''} ${e.apmaterno_enfe || ''}`.trim(),
+                    especialidad: e.especialidad || '',
+                    turno: e.turno_enfe || '',
+                    tipo: 'ENFERMERA'
+                }));
+
+                const personalTotal = [...doctores, ...enfermeras];
+
+                encontrados = personalTotal.filter(p => {
+                    const matchTipo = !tipo || p.tipo === tipo;
+                    const matchTurno = !turnoFiltro || p.turno.toUpperCase() === turnoFiltro;
+                    const matchEsp = !espFiltro || p.especialidad.toUpperCase() === espFiltro;
+                    return matchTipo && matchTurno && matchEsp;
+                });
             }
 
             const now = new Date();
